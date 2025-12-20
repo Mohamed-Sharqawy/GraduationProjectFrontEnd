@@ -1,0 +1,182 @@
+<div class="top-bar">
+    <div class="container">
+        <div class="flex-row">
+            <span><i class="fa fa-globe"></i> EN</span>
+            <span><i class="fa fa-cog"></i> Site settings</span>
+        </div>
+        <div class="flex-row">
+            <span><i class="fa fa-heart"></i> Favourite properties</span>
+            <span><i class="fa fa-star"></i> Saved searches</span>
+            <span><i class="fa fa-user"></i> Log in</span>
+        </div>
+    </div>
+</div>
+
+<nav class="navbar">
+    <div class="container">
+        <div class="logo">
+            <span class="logo-icon">H</span> Homey
+        </div>
+        <div class="nav-links">
+            <a href="#">Find my Agent <span class="badge">NEW</span></a>
+            <a href="#">New Projects</a>
+        </div>
+    </div>
+</nav>
+
+<header class="hero-section">
+    <div class="hero-overlay">
+        <h1>Explore Our Hidden Gems for Sale and Rent</h1>
+
+        <div class="toggle-pill">
+            <span class="active">Properties</span>
+            <span>New Projects <span class="badge-small">NEW</span></span>
+        </div>
+
+        <div class="search-container">
+            <div class="search-tabs">
+                <button [class.active]="searchType === 'buy'" (click)="setSearchType('buy')">
+                    Buy
+                </button>
+                <button [class.active]="searchType === 'rent'" (click)="setSearchType('rent')">
+                    Rent
+                </button>
+            </div>
+
+            <div class="search-inputs">
+                <div class="input-group location">
+                    <i class="fa fa-map-marker"></i>
+                    <input type="text" placeholder="Enter location" />
+                </div>
+
+                <button class="search-btn">Search</button>
+            </div>
+
+            <div class="search-filters">
+                <div class="filter-pill active">All</div>
+                <div class="filter-pill">Ready</div>
+                <div class="filter-pill">Off-Plan</div>
+
+                <select class="filter-dropdown">
+                    <option>Residential</option>
+                </select>
+                <select class="filter-dropdown">
+                    <option>Beds & Baths</option>
+                </select>
+
+                @if (searchType === 'buy') {
+                <select class="filter-dropdown">
+                    <option>Price (EGP)</option>
+                </select>
+                } @else {
+                <select class="filter-dropdown">
+                    <option>Rent Frequency</option>
+                </select>
+                }
+            </div>
+
+            <div class="drive-time-banner">
+                <span>Search 2.0</span> Find homes by drive time &gt;
+                <i class="fa fa-car car-icon"></i>
+            </div>
+        </div>
+    </div>
+</header>
+
+<section class="trubroker-banner">
+    <div class="container flex-center">
+        <div class="avatars">
+            <div class="circle"></div>
+            <div class="circle"></div>
+            <div class="circle"></div>
+        </div>
+        <div class="text">
+            <strong>Find a TruBroker™ <span class="badge">NEW</span></strong>
+            <p>Find trusted agents awarded for their excellent performance</p>
+        </div>
+        <button class="btn-outline">Find My Agent &gt;</button>
+    </div>
+</section>
+
+<section class="features-section container">
+    <div class="feature-grid">
+        <div class="feature-card">
+            <div class="card-content">
+                <h3>Find an agency</h3>
+                <p>Explore the diversity of properties from top agencies</p>
+                <a href="#">Find agencies &gt;</a>
+            </div>
+            <div class="card-image illustration-agency"></div>
+        </div>
+
+        <div class="feature-card">
+            <div class="card-content">
+                <h3>Search 2.0</h3>
+                <p>Find homes by drive time</p>
+                <a href="#">Search now &gt;</a>
+            </div>
+            <div class="card-image illustration-car"></div>
+        </div>
+
+        <div class="feature-card">
+            <div class="card-content">
+                <h3>Map View</h3>
+                <p>Search for properties in preferred areas using a map</p>
+                <a href="#">View map &gt;</a>
+            </div>
+            <div class="card-image illustration-map"></div>
+        </div>
+    </div>
+</section>
+
+<section class="discover-section container">
+    <h2>Discover more about the Egypt real estate market</h2>
+
+    <div class="articles-grid">
+        @for (article of blogArticles; track article.id) {
+        <div class="article-card">
+            <img [src]="article.image" [alt]="article.title">
+            <div class="article-text">
+                <p>{{ article.title }}</p>
+            </div>
+        </div>
+        }
+    </div>
+</section>
+
+<section class="app-download">
+    <div class="container">
+        <div class="app-content">
+            <h2>Download Our App</h2>
+            <p>Get the app and search among thousands of verified properties now!</p>
+            <div class="app-buttons">
+                <button class="store-btn">App Store</button>
+                <button class="store-btn">Google Play</button>
+            </div>
+        </div>
+        <div class="app-visual">
+            <div class="phone-mockup">
+                <div class="screen">
+                    <div class="screen-header">Homey</div>
+                    <div class="screen-content"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<footer>
+    <div class="container footer-content">
+        <div class="links">
+            <a href="#">ABOUT US</a> |
+            <a href="#">CONTACT US</a> |
+            <a href="#">TERMS & PRIVACY POLICY</a>
+        </div>
+        <div class="socials">
+            <span>COUNTRY: Egypt</span>
+        </div>
+        <div class="copyright">
+            © 2025 Homey.eg
+        </div>
+    </div>
+</footer>
