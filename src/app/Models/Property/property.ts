@@ -15,4 +15,6 @@ export interface Property {
     agentLogoUrl: string;
     downPayment?: number;
     monthlyInstallment?: number;
+    developer?: string;
+    handoverDate?: string;
 }

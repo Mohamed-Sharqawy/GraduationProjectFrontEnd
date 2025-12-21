@@ -1,4 +1,6 @@
 /* Define your colors at the top using CSS Variables */
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Montserrat:wght@500;600;700;800&display=swap');
+
 :host {
     --primary-green: #28b16d;
     /* The Bayut/Homey green */
@@ -10,7 +12,7 @@
 
     display: block;
     background-color: var(--bg-light);
-    font-family: 'Open Sans', sans-serif;
+    font-family: 'Lato', sans-serif;
     padding-bottom: 50px;
 }
 
@@ -155,43 +157,47 @@
 }
 
 /* 2. Details Section (Right) */
+/* 2. Details Section (Right) */
 .card-details {
     flex: 1;
-    padding: 15px;
+    padding: 20px;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    position: relative;
 }
 
-.details-header {
+.info-top-row {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
+    margin-bottom: 15px;
 }
 
-.details-header .price {
-    font-size: 22px;
-    font-weight: bold;
+.title-section .title {
+    font-size: 20px;
+    font-weight: 700;
     color: var(--text-dark);
+    margin: 0 0 5px;
+}
+
+.title-section .developer {
+    font-size: 14px;
+    color: var(--text-grey);
     margin: 0;
 }
 
-.installment-tag {
-    display: block;
-    font-size: 12px;
-    color: purple;
-    background: #f3e5f5;
-    padding: 2px 5px;
-    border-radius: 3px;
-    margin-top: 5px;
+.title-section .dev-name {
+    font-weight: 700;
+    color: var(--text-dark);
 }
 
 .badge {
-    font-size: 10px;
-    padding: 3px 6px;
-    border-radius: 3px;
+    font-size: 11px;
+    padding: 4px 8px;
+    border-radius: 4px;
     text-transform: uppercase;
-    font-weight: bold;
+    font-weight: 700;
+    letter-spacing: 0.5px;
 }
 
 .badge.premium {
@@ -204,87 +210,69 @@
     color: white;
 }
 
-.specs-row {
-    margin-top: 10px;
-    font-size: 14px;
-    font-weight: bold;
+.info-grid {
     display: flex;
-    gap: 15px;
+    background: #f5f5f5;
+    padding: 10px 15px;
+    border-radius: 6px;
+    margin-bottom: 15px;
     align-items: center;
+    max-width: 400px;
+}
+
+.info-item {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.info-item .label {
+    font-size: 10px;
+    text-transform: uppercase;
+    color: #888;
+    margin-bottom: 3px;
+    font-weight: 600;
+}
+
+.info-item .value {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text-dark);
+}
+
+.divider {
+    width: 1px;
+    height: 30px;
+    background: #e0e0e0;
+    margin: 0 20px;
+}
+
+.info-bottom {
+    margin-top: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
 }
 
 .prop-type {
-    font-weight: 800;
+    font-size: 14px;
     color: var(--text-dark);
 }
 
-.spec-item {
+.prop-location-row {
+    font-size: 13px;
+    color: var(--text-grey);
     display: flex;
     align-items: center;
     gap: 5px;
-    color: var(--text-dark);
 }
 
-.prop-title {
-    margin: 10px 0 5px;
-    font-size: 14px;
-    color: #006169;
-    /* Bayut link color */
-    font-weight: 600;
-}
-
-.prop-desc {
-    font-size: 13px;
-    color: var(--text-grey);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    margin: 0;
-}
-
-.prop-location {
-    font-size: 12px;
-    color: var(--text-grey);
-    margin-top: auto;
-    /* Push to bottom area */
-    margin-bottom: 10px;
-}
-
-.card-footer {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-top: 1px solid #eee;
-    padding-top: 10px;
-}
-
-.action-buttons {
-    display: flex;
-    gap: 8px;
-}
-
-.action-buttons button {
-    border: none;
-    padding: 8px 12px;
-    border-radius: 4px;
-    font-weight: 600;
-    cursor: pointer;
-    font-size: 13px;
-}
-
-.btn-email,
-.btn-call {
-    background: #e0f2f1;
-    color: var(--primary-green);
-}
-
-.btn-whatsapp {
-    background: #25d366;
-    color: white;
-}
-
-.agent-logo {
-    height: 30px;
+.developer-logo {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    height: 40px;
+    max-width: 100px;
     object-fit: contain;
 }
 
