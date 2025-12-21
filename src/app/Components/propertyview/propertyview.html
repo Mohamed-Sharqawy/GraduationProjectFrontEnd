@@ -1,0 +1,63 @@
+<div class="property-container">
+    <nav class="breadcrumbs">
+        Home > Giza > Sheikh Zayed > <span>Ivoire Compound</span>
+    </nav>
+
+    <div class="gallery-grid">
+        <div class="main-image">
+            <img src="https://images.unsplash.com/photo-1564013799919-ab600027ffc6?q=80&w=400"
+                alt="Ivoire Compound Exterior">
+            <span class="badge">Off-Plan</span>
+        </div>
+        <div class="side-images">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQKIc_kss4gmWTk9urJ5yqttq3GnZ1y4ZUKDw&s"
+                alt="Interior Design">
+            <img src="https://tjh.com/wp-content/uploads/2024/11/TJH_HERO_kitchen-design-trends-to-watch-for@2x.webp"
+                alt="Modern Kitchen">
+        </div>
+    </div>
+
+    <div class="content-layout">
+        <main class="property-details">
+            <div class="header-section">
+                <h1>EGP 8,000,000</h1>
+                <p class="down-payment">Down payment: EGP 400,000</p>
+                <h2>Ivoire Compound, Sheikh Zayed, Giza</h2>
+                <div class="specs">
+                    <span>2 Beds</span> | <span>2 Baths</span> | <span>125 Sq. M.</span>
+                </div>
+            </div>
+
+            <section class="info-table">
+                <h3>Property Information</h3>
+                <div class="grid-info">
+                    @for (item of propertySpecs; track item.label) {
+                    <div class="info-item">
+                        <span class="label">{{ item.label }}</span>
+                        <span class="value">{{ item.value }}</span>
+                    </div>
+                    }
+                </div>
+            </section>
+        </main>
+
+        <aside class="sidebar">
+            <div class="broker-card">
+                <div class="broker-header">
+                    <img src="data:image/jpeg;base64,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"
+                        alt="Yasmina Sabry" class="profile-pic">
+                    <div class="broker-info">
+                        <p class="agency-name">Egypt Best Properties (EBP)</p>
+                        <p class="agent-name">Agent: <strong>AndreOnana</strong></p>
+                    </div>
+                </div>
+                <div class="actions">
+                    <button class="btn-email">Email</button>
+                    <button class="btn-call">Call</button>
+                    <button class="btn-whatsapp">WhatsApp</button>
+                </div>
+
+            </div>
+        </aside>
+    </div>
+</div>

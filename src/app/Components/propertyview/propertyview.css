@@ -1,0 +1,103 @@
+.property-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    padding: 20px;
+}
+
+/* Image Gallery Layout */
+.gallery-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 10px;
+    height: 450px;
+    margin-bottom: 20px;
+}
+
+.main-image {
+    position: relative;
+}
+
+.main-image img,
+.side-images img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.side-images {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.badge {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    background: white;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+/* Layout for Sidebar and Content */
+.content-layout {
+    display: grid;
+    grid-template-columns: 1fr 350px;
+    gap: 30px;
+}
+
+/* Broker Card Styling */
+.broker-card {
+    margin-top: 70px;
+    border: 1px solid #cac6c6;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.profile-pic {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border: 2px solid #f0f0f0;
+    margin-bottom: 10px;
+}
+
+.actions button {
+    width: 100%;
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid #ddd;
+    cursor: pointer;
+    background: #fff;
+}
+
+.btn-whatsapp {
+    background: #25d366 !important;
+    color: white;
+    border: none;
+}
+
+/* Property Info Grid */
+.grid-info {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    border-top: 1px solid #eee;
+    padding-top: 20px;
+}
+
+.label {
+    color: #666;
+    font-size: 14px;
+}
+
+.value {
+    font-weight: 600;
+    display: block;
+}

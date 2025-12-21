@@ -19,7 +19,7 @@
         </div>
         <div class="nav-links">
             <a href="#">Find my Agent <span class="badge">NEW</span></a>
-            <a href="#">New Projects</a>
+            <a routerLink="/listingproperties">New Projects</a>
         </div>
     </div>
 </nav>
@@ -35,20 +35,14 @@
 
         <div class="search-container">
             <div class="search-tabs">
-                <button [class.active]="searchType === 'buy'" (click)="setSearchType('buy')">
-                    Buy
-                </button>
-                <button [class.active]="searchType === 'rent'" (click)="setSearchType('rent')">
-                    Rent
-                </button>
+                <button [class.active]="searchType === 'buy'" (click)="setSearchType('buy')">Buy</button>
+                <button [class.active]="searchType === 'rent'" (click)="setSearchType('rent')">Rent</button>
             </div>
 
             <div class="search-inputs">
                 <div class="input-group location">
-                    <i class="fa fa-map-marker"></i>
                     <input type="text" placeholder="Enter location" />
                 </div>
-
                 <button class="search-btn">Search</button>
             </div>
 
@@ -60,9 +54,6 @@
                 <select class="filter-dropdown">
                     <option>Residential</option>
                 </select>
-                <select class="filter-dropdown">
-                    <option>Beds & Baths</option>
-                </select>
 
                 @if (searchType === 'buy') {
                 <select class="filter-dropdown">
@@ -70,33 +61,18 @@
                 </select>
                 } @else {
                 <select class="filter-dropdown">
-                    <option>Rent Frequency</option>
+                    <option>Monthly Rent</option>
                 </select>
                 }
             </div>
 
             <div class="drive-time-banner">
-                <span>Search 2.0</span> Find homes by drive time &gt;
-                <i class="fa fa-car car-icon"></i>
+                <span><strong>Search 2.0</strong> Find homes by drive time</span>
+                <span class="arrow">→</span>
             </div>
         </div>
     </div>
 </header>
-
-<section class="trubroker-banner">
-    <div class="container flex-center">
-        <div class="avatars">
-            <div class="circle"></div>
-            <div class="circle"></div>
-            <div class="circle"></div>
-        </div>
-        <div class="text">
-            <strong>Find a TruBroker™ <span class="badge">NEW</span></strong>
-            <p>Find trusted agents awarded for their excellent performance</p>
-        </div>
-        <button class="btn-outline">Find My Agent &gt;</button>
-    </div>
-</section>
 
 <section class="features-section container">
     <div class="feature-grid">
@@ -104,38 +80,39 @@
             <div class="card-content">
                 <h3>Find an agency</h3>
                 <p>Explore the diversity of properties from top agencies</p>
-                <a href="#">Find agencies &gt;</a>
+                <a href="#">Find agencies →</a>
             </div>
-            <div class="card-image illustration-agency"></div>
+            <div class="card-icon">🏢</div>
         </div>
 
-        <div class="feature-card">
+        <div class="feature-card blue-card">
             <div class="card-content">
                 <h3>Search 2.0</h3>
                 <p>Find homes by drive time</p>
-                <a href="#">Search now &gt;</a>
+                <a href="#">Search now →</a>
             </div>
-            <div class="card-image illustration-car"></div>
+            <div class="card-icon">🚗</div>
         </div>
 
         <div class="feature-card">
             <div class="card-content">
                 <h3>Map View</h3>
                 <p>Search for properties in preferred areas using a map</p>
-                <a href="#">View map &gt;</a>
+                <a href="#">View map →</a>
             </div>
-            <div class="card-image illustration-map"></div>
+            <div class="card-icon">📍</div>
         </div>
     </div>
 </section>
 
 <section class="discover-section container">
     <h2>Discover more about the Egypt real estate market</h2>
-
     <div class="articles-grid">
         @for (article of blogArticles; track article.id) {
         <div class="article-card">
-            <img [src]="article.image" [alt]="article.title">
+            <div class="img-wrapper">
+                <img [src]="article.image" [alt]="article.title">
+            </div>
             <div class="article-text">
                 <p>{{ article.title }}</p>
             </div>
@@ -144,39 +121,11 @@
     </div>
 </section>
 
-<section class="app-download">
-    <div class="container">
-        <div class="app-content">
-            <h2>Download Our App</h2>
-            <p>Get the app and search among thousands of verified properties now!</p>
-            <div class="app-buttons">
-                <button class="store-btn">App Store</button>
-                <button class="store-btn">Google Play</button>
-            </div>
-        </div>
-        <div class="app-visual">
-            <div class="phone-mockup">
-                <div class="screen">
-                    <div class="screen-header">Homey</div>
-                    <div class="screen-content"></div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
 <footer>
     <div class="container footer-content">
         <div class="links">
-            <a href="#">ABOUT US</a> |
-            <a href="#">CONTACT US</a> |
-            <a href="#">TERMS & PRIVACY POLICY</a>
+            <a href="#">ABOUT US</a> | <a href="#">CONTACT US</a> | <a href="#">PRIVACY</a>
         </div>
-        <div class="socials">
-            <span>COUNTRY: Egypt</span>
-        </div>
-        <div class="copyright">
-            © 2025 Homey.eg
-        </div>
+        <div class="copyright">© 2025 Homey.eg</div>
     </div>
 </footer>
