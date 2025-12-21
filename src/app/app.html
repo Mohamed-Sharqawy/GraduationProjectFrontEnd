@@ -1,1 +1,40 @@
-<router-outlet></router-outlet>
+<!-- Top Bar -->
+<div class="bg-[#fcfcfc] border-b border-gray-200 text-xs py-2 text-gray-500 font-sans">
+  <div class="max-w-[1140px] mx-auto px-4 flex justify-between items-center">
+    <div class="flex gap-4 items-center cursor-pointer hover:text-gray-700">
+      <span><i class="fa fa-globe"></i> EN</span>
+      <span><i class="fa fa-cog"></i> Site settings</span>
+    </div>
+    <div class="flex gap-4 items-center cursor-pointer hover:text-gray-700">
+      <span><i class="fa fa-heart"></i> Favourite properties</span>
+      <span><i class="fa fa-star"></i> Saved searches</span>
+      <span><i class="fa fa-user"></i> Log in</span>
+    </div>
+  </div>
+</div>
+
+<!-- Navbar -->
+<nav class="bg-white py-4 font-sans border-b border-transparent">
+  <div class="max-w-[1140px] mx-auto px-4 flex justify-between items-center">
+    <!-- Logo -->
+    <a routerLink="/" class="flex items-center gap-1.5 text-2xl font-bold text-[#28b16d] cursor-pointer no-underline">
+      <span
+        class="bg-[#28b16d] text-white rounded-full w-[30px] h-[30px] flex items-center justify-center text-lg">H</span>
+      Homey
+    </a>
+
+    <!-- Nav Links -->
+    <div class="flex items-center gap-6 font-semibold text-gray-800">
+      <a routerLink="/find-my-agent"
+        class="no-underline hover:text-[#28b16d] transition-colors relative flex items-center gap-1">
+        Find my Agent
+        <span class="bg-red-500 text-white text-[9px] px-1.5 rounded-[3px] align-top">NEW</span>
+      </a>
+      <a href="#" class="no-underline hover:text-[#28b16d] transition-colors">New Projects</a>
+    </div>
+  </div>
+</nav>
+
+<router-outlet>
+
+</router-outlet>
