@@ -1,0 +1,127 @@
+import { Injectable } from '@angular/core';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { environment } from '../../../environments/environments';
+import { API_EndPoints } from '../../../environments/api.config';
+import { PropertyFilterDto } from '../../Models/Property/property-filter.dto';
+import { PropertyListItemDto } from '../../Models/Property/property-list-item.dto';
+import { PagedResultDto } from '../../Models/Property/paged-result.dto';
+import { Property } from '../../Models/Property/property';
+import { PropertyDetailsDto } from '../../Models/Property/property-details.dto';
+
+@Injectable({
+    providedIn: 'root',
+})
+export class PropertyService {
+    private apiUrl = environment.apiUrl + API_EndPoints.properties;
+    private placeholderImage = 'https://images.unsplash.com/photo-1564013799919-ab600027ffc6?q=80&w=400';
+    private placeholderLogo = 'https://marketplace.canva.com/EAGTwK0wOTg/2/0/1600w/canva-black-and-white-minimalistic-real-estate-flat-illustrative-logo-afTi-1EmZtc.jpg';
+
+    constructor(private http: HttpClient) { }
+
+    /**
+     * Fetch properties from the backend API with optional filters
+     */
+    getProperties(filter?: PropertyFilterDto): Observable<PagedResultDto<Property>> {
+        let params = new HttpParams();
+
+        if (filter) {
+            // Add all filter parameters to the query string
+            if (filter.purpose !== undefined) params = params.set('purpose', filter.purpose.toString());
+            if (filter.cityId !== undefined) params = params.set('cityId', filter.cityId.toString());
+            if (filter.districtId !== undefined) params = params.set('districtId', filter.districtId.toString());
+            if (filter.projectId !== undefined) params = params.set('projectId', filter.projectId.toString());
+            if (filter.propertyTypeId !== undefined) params = params.set('propertyTypeId', filter.propertyTypeId.toString());
+            if (filter.minPrice !== undefined) params = params.set('minPrice', filter.minPrice.toString());
+            if (filter.maxPrice !== undefined) params = params.set('maxPrice', filter.maxPrice.toString());
+            if (filter.minRentPrice !== undefined) params = params.set('minRentPrice', filter.minRentPrice.toString());
+            if (filter.maxRentPrice !== undefined) params = params.set('maxRentPrice', filter.maxRentPrice.toString());
+            if (filter.minArea !== undefined) params = params.set('minArea', filter.minArea.toString());
+            if (filter.maxArea !== undefined) params = params.set('maxArea', filter.maxArea.toString());
+            if (filter.minRooms !== undefined) params = params.set('minRooms', filter.minRooms.toString());
+            if (filter.maxRooms !== undefined) params = params.set('maxRooms', filter.maxRooms.toString());
+            if (filter.minBathrooms !== undefined) params = params.set('minBathrooms', filter.minBathrooms.toString());
+            if (filter.status !== undefined) params = params.set('status', filter.status.toString());
+            if (filter.finishingType !== undefined) params = params.set('finishingType', filter.finishingType.toString());
+            if (filter.isFeatured !== undefined) params = params.set('isFeatured', filter.isFeatured.toString());
+            if (filter.searchTerm) params = params.set('searchTerm', filter.searchTerm);
+            if (filter.pageNumber !== undefined) params = params.set('pageNumber', filter.pageNumber.toString());
+            if (filter.pageSize !== undefined) params = params.set('pageSize', filter.pageSize.toString());
+            if (filter.sortBy) params = params.set('sortBy', filter.sortBy);
+            if (filter.sortDescending !== undefined) params = params.set('sortDescending', filter.sortDescending.toString());
+        }
+
+        return this.http.get<PagedResultDto<PropertyListItemDto>>(this.apiUrl, { params }).pipe(
+            map(response => ({
+                ...response,
+                items: response.items.map(item => this.mapToProperty(item))
+            }))
+        );
+    }
+
+    /**
+     * Fetch a single property by ID
+     */
+    getProperty(id: number): Observable<PropertyDetailsDto> {
+        return this.http.get<PropertyDetailsDto>(`${this.apiUrl}/${id}`);
+    }
+
+    /**
+     * Map backend DTO to frontend Property model
+     */
+    private mapToProperty(dto: PropertyListItemDto): Property {
+        return {
+            id: dto.id,
+            price: dto.price,
+            currency: dto.currency || 'EGP',
+            title: dto.title,
+            type: this.mapPropertyType(dto.propertyType),
+            status: this.mapStatus(dto.status),
+            adType: dto.isFeatured ? 'Featured' : 'Standard',
+            bedrooms: dto.bedrooms,
+            bathrooms: dto.bathrooms,
+            area: dto.area,
+            location: dto.location || this.buildLocation(dto.cityName, dto.districtName, dto.projectName),
+            description: dto.description || '',
+            imageUrl: dto.imageUrl || dto.images?.[0] || this.placeholderImage,
+            agentLogoUrl: this.placeholderLogo,
+            downPayment: dto.price * 0.05, // Estimate 5% down payment
+            monthlyInstallment: dto.price / 120, // Estimate 10-year installment
+            developer: dto.ownerName || 'Unknown Developer',
+            handoverDate: 'Q4 2026' // Default handover date
+        };
+    }
+
+    /**
+     * Map property type from backend to frontend format
+     */
+    private mapPropertyType(type?: string): 'Apartment' | 'Villa' | 'Duplex' | 'Townhouse' | 'Studio' {
+        if (!type) return 'Apartment';
+
+        const normalized = type.toLowerCase();
+        if (normalized.includes('villa')) return 'Villa';
+        if (normalized.includes('duplex')) return 'Duplex';
+        if (normalized.includes('townhouse')) return 'Townhouse';
+        if (normalized.includes('studio')) return 'Studio';
+
+        return 'Apartment';
+    }
+
+    /**
+     * Map status code to frontend format
+     */
+    private mapStatus(status?: number): 'Off-Plan' | 'Ready' {
+        // Status: 0=PendingReview, 1=Active, 2=SoldOrRented, 3=Hidden, 4=Rejected
+        // For now, we'll default to 'Off-Plan' but this can be customized
+        return 'Off-Plan';
+    }
+
+    /**
+     * Build location string from city, district, and project
+     */
+    private buildLocation(city?: string, district?: string, project?: string): string {
+        const parts = [project, district, city].filter(Boolean);
+        return parts.join(', ') || 'Egypt';
+    }
+}

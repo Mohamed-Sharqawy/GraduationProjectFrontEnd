@@ -1,12 +1,11 @@
 <div class="property-container">
     <nav class="breadcrumbs">
-        Home > Giza > Sheikh Zayed > <span>Ivoire Compound</span>
+        Home > {{ location }}
     </nav>
 
     <div class="gallery-grid">
         <div class="main-image">
-            <img src="https://images.unsplash.com/photo-1564013799919-ab600027ffc6?q=80&w=400"
-                alt="Ivoire Compound Exterior">
+            <img [src]="mainImageUrl" [alt]="title">
             <span class="badge">Off-Plan</span>
         </div>
         <div class="side-images">
@@ -73,13 +72,13 @@
                 </div>
 
                 <div class="actions">
-                    <button class="btn-email">
+                    <button class="btn-email" (click)="emailAgent()">
                         <i class="icon-email">✉</i> Email
                     </button>
-                    <button class="btn-call">
+                    <button class="btn-call" (click)="callAgent()">
                         <i class="icon-phone">📞</i> Call
                     </button>
-                    <button class="btn-whatsapp">
+                    <button class="btn-whatsapp" (click)="whatsappAgent()">
                         <i class="icon-whatsapp">💬</i>
                     </button>
                 </div>

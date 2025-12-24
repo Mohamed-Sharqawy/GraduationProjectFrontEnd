@@ -1,0 +1,44 @@
+import { Component } from '@angular/core';
+import { AuthService } from '../../Services/Auth-Service/auth-service';
+import { FormsModule } from '@angular/forms';
+import { RouterModule, Router } from '@angular/router';
+
+@Component({
+  selector: 'app-login',
+  imports: [FormsModule, RouterModule],
+  templateUrl: './login.html',
+  styleUrl: './login.css'
+})
+export class Login {
+  email = '';
+  password = '';
+
+  constructor(private authService: AuthService, private router: Router) { }
+
+  login() {
+    console.log('🔐 Login function called!');
+    console.log('📧 Login values:', { email: this.email, password: this.password });
+
+    this.authService.login({
+      email: this.email,
+      password: this.password
+    }).subscribe({
+      next: (response) => {
+        console.log('✅ Login successful:', response);
+
+        // Store authentication data
+        this.authService.storeAuthData(response);
+
+        // Show success message
+        alert(`Welcome back, ${response.fullName}!`);
+
+        // Navigate to home page
+        this.router.navigate(['/home']);
+      },
+      error: (error) => {
+        console.error('❌ Login failed:', error);
+        alert('Login failed: ' + (error.error?.message || error.message || 'Invalid credentials'));
+      }
+    });
+  }
+}
