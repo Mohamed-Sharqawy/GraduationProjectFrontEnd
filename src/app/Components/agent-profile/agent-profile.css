@@ -1,0 +1,491 @@
+.agent-profile-container {
+    max-width: 1140px;
+    margin: 20px auto;
+    font-family: 'Montserrat', sans-serif;
+}
+
+/* Banner */
+.banner {
+    height: 120px;
+    background: linear-gradient(90deg, #0b3d33 0%, #155e51 30%, #208a78 60%, #155e51 100%);
+    border-radius: 8px;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 20px;
+}
+
+.banner::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.03) 0px, rgba(255, 255, 255, 0.03) 2px, transparent 2px, transparent 10px);
+}
+
+.trubroker-text {
+    color: white;
+    font-size: 24px;
+    font-weight: 700;
+    z-index: 1;
+}
+
+/* Header Area */
+.agent-header {
+    display: flex;
+    margin-top: -50px;
+    /* Overlap effect */
+    padding: 0 40px;
+    align-items: flex-start;
+    gap: 25px;
+}
+
+.profile-pic-container {
+    width: 160px;
+    height: 160px;
+    border-radius: 50%;
+    border: 4px solid white;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    background: white;
+    flex-shrink: 0;
+    z-index: 2;
+}
+
+.profile-pic {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Agent Info */
+.agent-info {
+    flex-grow: 1;
+    padding-top: 60px;
+    /* Alignment with overlap */
+}
+
+.agent-name {
+    font-size: 26px;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin: 0;
+}
+
+.agency-status {
+    font-size: 14px;
+    color: #666;
+    margin: 4px 0 15px 0;
+}
+
+/* Badges & Actions Container */
+.badges-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.badges-row {
+    display: flex;
+    gap: 12px;
+}
+
+.badge {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.trubroker-badge {
+    background: linear-gradient(135deg, #0b3d33, #28b16d);
+    color: white;
+}
+
+.quality-badge {
+    background-color: #eaf6fc;
+    color: #007ea8;
+}
+
+.responsive-badge {
+    background-color: #f5f0f9;
+    color: #7d3ca1;
+}
+
+.badge-icon {
+    font-size: 14px;
+}
+
+/* Actions Row */
+.actions-row {
+    display: flex;
+    gap: 10px;
+}
+
+.action-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 20px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.action-btn i {
+    font-size: 16px;
+}
+
+.action-btn.email {
+    background-color: #e8f3f5;
+    color: #4a7c85;
+}
+
+.action-btn.call {
+    background-color: #e8f3f5;
+    color: #4a7c85;
+}
+
+.action-btn.whatsapp {
+    background-color: #e8f8f2;
+    color: #28b16d;
+}
+
+.action-btn:hover {
+    filter: brightness(0.95);
+    transform: translateY(-1px);
+}
+
+/* Body Layout */
+.profile-body {
+    display: flex;
+    gap: 40px;
+    margin-top: 40px;
+    padding: 0 40px;
+}
+
+.active-properties-section {
+    flex: 3;
+}
+
+.about-sidebar {
+    flex: 1;
+    border-left: 1px solid #eeeeee30;
+    padding-left: 20px;
+}
+
+/* Section Titles */
+.section-title,
+.sidebar-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin-bottom: 25px;
+}
+
+/* Filter Bar */
+.filter-bar {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 15px;
+}
+
+.filter-group {
+    position: relative;
+}
+
+.filter-select,
+.filter-input {
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding: 10px 15px;
+    font-size: 14px;
+    color: #666;
+    background: white;
+    min-width: 100px;
+    outline: none;
+}
+
+.filter-group.location {
+    flex-grow: 1;
+    min-width: 250px;
+}
+
+.filter-input {
+    width: 100%;
+    padding-right: 35px;
+}
+
+.location-icon {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #999;
+}
+
+.sorting-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 25px;
+    color: #666;
+    font-size: 13px;
+}
+
+.sort-select {
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding: 5px 10px;
+    font-size: 13px;
+    outline: none;
+}
+
+/* Property Cards */
+.properties-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.property-card {
+    display: flex;
+    border: 1px solid #eee;
+    border-radius: 12px;
+    overflow: hidden;
+    transition: box-shadow 0.3s;
+}
+
+.property-card:hover {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.property-image-container {
+    width: 280px;
+    position: relative;
+    flex-shrink: 0;
+}
+
+.property-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.hot-badge {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: white;
+    color: #f6a1a1;
+    font-size: 10px;
+    font-weight: 800;
+    padding: 2px 8px;
+    border-radius: 4px;
+    border: 1px solid #f6a1a1;
+}
+
+.fav-btn {
+    position: absolute;
+    bottom: 15px;
+    right: 15px;
+    background: transparent;
+    color: white;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
+}
+
+.property-details {
+    flex-grow: 1;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.property-price {
+    font-size: 22px;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin: 0 0 10px 0;
+}
+
+.property-price .period {
+    font-size: 14px;
+    font-weight: 400;
+    color: #666;
+}
+
+.property-specs {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    margin-bottom: 12px;
+    font-size: 14px;
+    color: #333;
+}
+
+.property-specs .type {
+    font-weight: 700;
+}
+
+.property-specs .specs i {
+    color: #999;
+    margin-right: 4px;
+}
+
+.property-specs .area {
+    color: #666;
+    border-left: 1px solid #ddd;
+    padding-left: 15px;
+}
+
+.property-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: #007ea8;
+    margin: 0 0 10px 0;
+    cursor: pointer;
+}
+
+.property-location {
+    font-size: 13px;
+    color: #666;
+    margin: 0 0 20px 0;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.property-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: auto;
+}
+
+.prop-action-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 15px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+}
+
+.prop-action-btn.email {
+    background-color: #208e7b15;
+    color: #1a7465;
+}
+
+.prop-action-btn.call {
+    background-color: #208e7b15;
+    color: #1a7465;
+}
+
+.prop-action-btn.whatsapp {
+    background-color: #28b16d15;
+    color: #28b16d;
+    padding: 8px 12px;
+}
+
+/* About Sidebar Styles */
+.about-info-item {
+    margin-bottom: 25px;
+}
+
+.about-info-item .label {
+    font-size: 14px;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin: 0 0 5px 0;
+}
+
+.about-info-item .value {
+    font-size: 14px;
+    color: #666;
+    line-height: 1.5;
+    margin: 0;
+}
+
+.underline-links span {
+    text-decoration: underline;
+    cursor: pointer;
+    margin-right: 5px;
+}
+
+.rtl-desc {
+    direction: rtl;
+    text-align: right;
+}
+
+.read-more {
+    color: #28b16d;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 1024px) {
+    .profile-body {
+        flex-direction: column;
+    }
+
+    .about-sidebar {
+        border-left: none;
+        border-top: 1px solid #eee;
+        padding-left: 0;
+        padding-top: 30px;
+    }
+}
+
+@media (max-width: 768px) {
+    .agent-header {
+        flex-direction: column;
+        align-items: center;
+        padding: 0 20px;
+        text-align: center;
+    }
+
+    .agent-info {
+        padding-top: 15px;
+        width: 100%;
+    }
+
+    .badges-actions {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .badges-row,
+    .actions-row {
+        justify-content: center;
+        width: 100%;
+        flex-wrap: wrap;
+    }
+
+    .property-card {
+        flex-direction: column;
+    }
+
+    .property-image-container {
+        width: 100%;
+        height: 200px;
+    }
+}

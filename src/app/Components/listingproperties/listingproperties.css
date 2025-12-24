@@ -1,9 +1,7 @@
-/* Define your colors at the top using CSS Variables */
-@import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Montserrat:wght@500;600;700;800&display=swap');
+/* @import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Montserrat:wght@500;600;700;800&display=swap');
 
 :host {
     --primary-green: #28b16d;
-    /* The Bayut/Homey green */
     --bg-light: #f7f9fa;
     --text-dark: #222;
     --text-grey: #666;
@@ -16,7 +14,6 @@
     padding-bottom: 50px;
 }
 
-/* --- Navbar & Search --- */
 .navbar {
     display: flex;
     justify-content: space-between;
@@ -79,7 +76,6 @@
     margin-left: auto;
 }
 
-/* --- Main Grid Layout --- */
 .main-container {
     display: flex;
     gap: 20px;
@@ -90,12 +86,10 @@
 
 .property-list {
     flex: 3;
-    /* Takes up 75% width */
 }
 
 .sidebar {
     flex: 1;
-    /* Takes up 25% width */
 }
 
 .list-header {
@@ -110,10 +104,10 @@
     margin: 0;
 }
 
-/* --- Property Card Styles --- */
+
 .property-card {
     display: flex;
-    /* Horizontal layout */
+    
     background: white;
     border: 1px solid var(--border-color);
     border-radius: 8px;
@@ -121,7 +115,6 @@
     margin-bottom: 20px;
     transition: box-shadow 0.3s;
     height: 280px;
-    /* Fixed height for consistency */
 }
 
 .property-card:hover {
@@ -132,10 +125,9 @@
     border: 1px solid var(--gold);
 }
 
-/* 1. Image Section (Left) */
 .card-image {
     flex: 0 0 40%;
-    /* 40% width */
+    
     position: relative;
 }
 
@@ -156,8 +148,7 @@
     font-size: 12px;
 }
 
-/* 2. Details Section (Right) */
-/* 2. Details Section (Right) */
+
 .card-details {
     flex: 1;
     padding: 20px;
@@ -276,7 +267,7 @@
     object-fit: contain;
 }
 
-/* --- Sidebar Card --- */
+
 .drive-time-card {
     background: white;
     border-radius: 8px;
@@ -306,7 +297,7 @@
     margin: 0;
 }
 
-/* Mobile Responsive */
+Mobile Responsive
 @media (max-width: 768px) {
     .main-container {
         flex-direction: column;
@@ -320,4 +311,4 @@
     .card-image {
         height: 200px;
     }
-}
+} */
