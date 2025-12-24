@@ -1,0 +1,187 @@
+<div class="agent-profile-container">
+    @if (isLoading) {
+    <div style="text-align: center; padding: 50px;">
+        <p>Loading Profile...</p>
+    </div>
+    } @else {
+    @if (agent) {
+    <!-- Banner Section -->
+    <div class="banner">
+        <div class="banner-content">
+            <span class="trubroker-text">TruBroker™</span>
+        </div>
+    </div>
+
+    <!-- Agent Details Section -->
+    <div class="agent-header">
+        <div class="profile-pic-container">
+            <img [src]="agent.profileImageUrl || 'https://placehold.co/400x400?text=No+Image'" [alt]="agent.fullName"
+                class="profile-pic">
+        </div>
+
+        <div class="agent-info">
+            <div class="name-agency">
+                <h1 class="agent-name">{{ agent.fullName }}</h1>
+                <p class="agency-status">Active Agent</p>
+            </div>
+
+            <div class="badges-actions">
+                <!-- Badges -->
+                <div class="badges-row">
+                    <div class="badge trubroker-badge">
+                        <span class="badge-icon">™</span>
+                        <span class="badge-text">TruBroker™</span>
+                    </div>
+                    <div class="badge quality-badge">
+                        <i class="fas fa-gem"></i>
+                        <span class="badge-text">Quality Lister</span>
+                    </div>
+                    <div class="badge responsive-badge">
+                        <i class="fas fa-bolt"></i>
+                        <span class="badge-text">Responsive Broker</span>
+                    </div>
+                </div>
+
+                <!-- Actions -->
+                <div class="actions-row">
+                    <button class="action-btn email" (click)="agent && agent.email ? openEmail(agent.email) : null">
+                        <i class="far fa-envelope"></i>
+                        <span>Email</span>
+                    </button>
+                    <button class="action-btn call" (click)="agent && agent.phone ? openCall(agent.phone) : null">
+                        <i class="fas fa-phone-alt"></i>
+                        <span>Call</span>
+                    </button>
+                    <button class="action-btn whatsapp"
+                        (click)="agent && agent.whatsAppNumber ? openWhatsApp(agent.whatsAppNumber) : null">
+                        <i class="fab fa-whatsapp"></i>
+                        <span>WhatsApp</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Profile Body Wrapper -->
+    <div class="profile-body">
+        <!-- Left Content: Active Properties -->
+        <div class="active-properties-section">
+            <div class="section-header">
+                <h2 class="section-title">Active Properties</h2>
+
+                <!-- Filter Bar -->
+                <div class="filter-bar">
+                    <div class="filter-group">
+                        <select class="filter-select">
+                            <option>All</option>
+                        </select>
+                    </div>
+                    <div class="filter-group location">
+                        <input type="text" placeholder="Enter location" class="filter-input">
+                        <i class="fas fa-map-marker-alt location-icon"></i>
+                    </div>
+                    <div class="filter-group">
+                        <select class="filter-select">
+                            <option>Any Type</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <select class="filter-select">
+                            <option>Beds & Baths</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <select class="filter-select">
+                            <option>Price (EGP)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Sorting Info -->
+                <div class="sorting-row">
+                    <p class="results-count">Showing {{ agent.properties.length }} Properties</p>
+                    <select class="sort-select">
+                        <option>Popular</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Properties List -->
+            <div class="properties-list">
+                @for (prop of agent.properties; track prop.id) {
+                <div class="property-card" [routerLink]="['/propertyview', prop.id]" style="cursor: pointer;">
+                    <div class="property-image-container">
+                        <img [src]="prop.mainImageUrl || 'https://placehold.co/600x400?text=No+Image'"
+                            [alt]="prop.title" class="property-image">
+                        @if (prop.isFeatured) {
+                        <span class="hot-badge">HOT</span>
+                        }
+                        <button class="fav-btn"><i class="far fa-heart"></i></button>
+                    </div>
+                    <div class="property-details">
+                        <h3 class="property-price">EGP {{ prop.price | number }} <span class="period"></span>
+                        </h3>
+                        <p class="property-specs">
+                            <span class="type">{{ prop.propertyType }}</span>
+                            <span class="specs"><i class="fas fa-bed"></i> {{ prop.rooms }}</span>
+                            <span class="specs"><i class="fas fa-bath"></i> {{ prop.bathrooms }}</span>
+                            <span class="area">Area: {{ prop.area }} Sq. M.</span>
+                        </p>
+                        <h4 class="property-title">{{ prop.title }}</h4>
+                        <p class="property-location"><i class="fas fa-map-marker-alt"></i> {{ prop.location }}</p>
+
+                        <div class="property-actions">
+                            <button class="prop-action-btn email"><i class="far fa-envelope"></i> Email</button>
+                            <button class="prop-action-btn call"><i class="fas fa-phone-alt"></i> Call</button>
+                            <button class="prop-action-btn whatsapp"><i class="fab fa-whatsapp"></i></button>
+                        </div>
+                    </div>
+                </div>
+                } @empty {
+                <p>No active properties found for this agent.</p>
+                }
+            </div>
+        </div>
+
+        <!-- Right Content: About Sidebar -->
+        <aside class="about-sidebar">
+            <h2 class="sidebar-title">About</h2>
+
+            <div class="about-info-item">
+                <h3 class="label">Language(s):</h3>
+                <!-- Hardcoded for now as it's not in the new model, or assumed default -->
+                <p class="value">Arabic, English</p>
+            </div>
+
+            <div class="about-info-item">
+                <h3 class="label">Expertise:</h3>
+                <!-- Hardcoded or derived -->
+                <p class="value">Residential Sales, Rentals</p>
+            </div>
+
+            <div class="about-info-item">
+                <h3 class="label">Service Areas:</h3>
+                <p class="value underline-links">
+                    <span>Active Properties ({{ agent.activePropertiesCount }}),</span>
+                    <span>Total ({{ agent.totalPropertiesCount }})</span>
+                </p>
+            </div>
+
+            <div class="about-info-item">
+                <h3 class="label">Since:</h3>
+                <p class="value rtl-desc">{{ agent.createdAt | date:'mediumDate' }}</p>
+            </div>
+
+            <div class="about-info-item">
+                <h3 class="label">Verification:</h3>
+                <p class="value">{{ agent.isVerified ? 'Verified Agent' : 'Not Verified' }}</p>
+            </div>
+        </aside>
+    </div>
+    } @else {
+    <div style="text-align: center; padding: 50px;">
+        <p>Agent not found.</p>
+    </div>
+    }
+    }
+</div>

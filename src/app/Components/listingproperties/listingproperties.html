@@ -1,119 +1,172 @@
-<!-- <header class="navbar">
-    <div class="logo">Homey</div>
-    <div class="nav-links">
-        <span>Find my Agent <span class="badge-new">NEW</span></span>
-        <span>New Projects</span>
+<div class="min-h-screen bg-[#f7f9fa] font-sans pb-10">
+
+    <!-- Navbar -->
+    <!-- <header class="bg-white border-b border-gray-200 py-4 px-6 sticky top-0 z-40 shadow-sm">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div class="text-[#28b16d] text-2xl font-bold tracking-tight">Homey</div>
+            <div class="flex gap-6 text-[15px] font-medium text-gray-700">
+                <span class="cursor-pointer hover:text-[#28b16d] transition-colors relative">
+                    Find my Agent
+                    <span class="bg-[#ff5722] text-white text-[9px] px-1.5 py-0.5 rounded ml-1 align-top">NEW</span>
+                </span>
+                <span class="cursor-pointer hover:text-[#28b16d] transition-colors">New Projects</span>
+            </div>
+        </div>
+    </header> -->
+
+    <!-- Search / Filter Bar -->
+    <!-- <section class="bg-white py-4 px-6 shadow-sm mb-6">
+        <div class="max-w-7xl mx-auto flex flex-wrap gap-3 items-center">
+            <button
+                class="px-4 py-2 border border-gray-300 rounded hover:border-[#28b16d] bg-white text-gray-700 text-sm font-medium transition-colors">Buy
+                ▾</button>
+            <input type="text" placeholder="Enter location"
+                class="flex-1 min-w-[200px] border border-gray-300 rounded px-4 py-2 text-sm focus:outline-none focus:border-[#28b16d] transition-colors">
+
+            <div class="flex border border-gray-300 rounded overflow-hidden">
+                <button
+                    class="px-4 py-2 bg-white text-gray-600 text-sm font-medium hover:bg-gray-50 border-r border-gray-300">All</button>
+                <button
+                    class="px-4 py-2 bg-white text-gray-600 text-sm font-medium hover:bg-gray-50 border-r border-gray-300">Ready</button>
+                <button class="px-4 py-2 bg-[#e6f7ef] text-[#28b16d] text-sm font-bold">Off-Plan</button>
+            </div>
+
+            <button
+                class="px-4 py-2 border border-gray-300 rounded hover:border-[#28b16d] bg-white text-gray-700 text-sm font-medium transition-colors">Residential
+                ▾</button>
+            <button
+                class="px-4 py-2 border border-gray-300 rounded hover:border-[#28b16d] bg-white text-gray-700 text-sm font-medium transition-colors">Beds
+                & Baths ▾</button>
+            <button class="ml-auto text-[#28b16d] text-sm font-bold hover:underline">More Filters ⚙</button>
+        </div>
+    </section> -->
+
+    <div class="max-w-7xl mx-auto px-4 flex flex-col lg:flex-row gap-8">
+
+        <!-- Property List -->
+        <div class="flex-1">
+            <div class="flex justify-between items-center mb-6">
+                <h1 class="text-2xl font-bold text-gray-900">Properties for sale in Egypt</h1>
+                <div class="flex items-center gap-4">
+                    <span class="text-sm font-bold text-gray-700 cursor-pointer">Popular ▾</span>
+                    <div class="flex border border-gray-300 rounded overflow-hidden">
+                        <button class="px-3 py-1.5 bg-[#e6f7ef] text-[#28b16d] text-sm font-bold">List</button>
+                        <button class="px-3 py-1.5 bg-white text-gray-600 text-sm hover:bg-gray-50">Map</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Loading State -->
+            @if (isLoading) {
+            <div class="text-center py-12">
+                <div
+                    class="inline-block w-10 h-10 border-4 border-gray-200 border-t-[#28b16d] rounded-full animate-spin mb-4">
+                </div>
+                <p class="text-gray-500">Loading properties...</p>
+            </div>
+            }
+
+            <!-- Error State -->
+            @if (errorMessage && !isLoading) {
+            <div class="text-center py-12 bg-white rounded-lg border border-gray-200">
+                <p class="text-red-600 mb-4">{{ errorMessage }}</p>
+                <button (click)="loadProperties()"
+                    class="px-6 py-2 bg-[#28b16d] hover:bg-[#229959] text-white rounded font-bold transition-colors">Retry</button>
+            </div>
+            }
+
+            <!-- Property Cards -->
+            @if (!isLoading && !errorMessage) {
+            @for (prop of properties; track prop.id) {
+            <div [routerLink]="['/propertyview', prop.id]"
+                class="bg-white border border-gray-200 rounded-lg overflow-hidden mb-6 flex flex-col sm:flex-row min-h-[240px] hover:shadow-lg transition-all duration-300 cursor-pointer group relative"
+                [class.border-[#d4af37]]="prop.adType === 'Premium'">
+
+                <!-- Image Section -->
+                <div class="w-full sm:w-[40%] relative bg-gray-100 overflow-hidden">
+                    <img [src]="prop.imageUrl" [alt]="prop.title"
+                        class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                    <span class="absolute top-3 left-3 bg-black/60 text-white text-[11px] font-bold px-2 py-1 rounded">
+                        {{ prop.status }}
+                    </span>
+                    <div class="absolute bottom-3 right-3 text-white">
+                        <i class="opacity-80 hover:opacity-100 cursor-pointer text-xl">♥</i>
+                    </div>
+                </div>
+
+                <!-- Content Section -->
+                <div class="flex-1 p-5 flex flex-col relative">
+
+                    <!-- Title & Developer -->
+                    <div class="flex justify-between items-start mb-2">
+                        <div>
+                            <h2
+                                class="text-lg font-bold text-gray-900 leading-tight mb-1 group-hover:text-[#28b16d] transition-colors">
+                                {{ prop.title }}
+                            </h2>
+                            <p class="text-xs text-gray-500">by <span class="text-gray-900 font-bold">{{ prop.developer
+                                    || 'Unknown Developer' }}</span></p>
+                        </div>
+                        @switch (prop.adType) {
+                        @case ('Premium') { <span
+                            class="bg-[#d4af37] text-white text-[10px] font-bold px-2 py-0.5 rounded uppercase tracking-wide">Premium</span>
+                        }
+                        @case ('Featured') { <span
+                            class="bg-[#ff5722] text-white text-[10px] font-bold px-2 py-0.5 rounded uppercase tracking-wide">Featured</span>
+                        }
+                        }
+                    </div>
+
+                    <!-- Price & Handover Grid -->
+                    <div class="bg-gray-50 rounded-md p-3 flex items-center justify-between mb-4 max-w-sm">
+                        <div class="flex flex-col">
+                            <span class="text-[10px] font-bold text-gray-400 uppercase">Launch Price</span>
+                            <span class="text-base font-bold text-gray-800">{{ prop.price | currency: prop.currency
+                                :'symbol':'1.0-0' }}</span>
+                        </div>
+                        <div class="w-px h-8 bg-gray-200 mx-4"></div>
+                        <div class="flex flex-col text-right">
+                            <span class="text-[10px] font-bold text-gray-400 uppercase">Handover</span>
+                            <span class="text-base font-bold text-gray-800">{{ prop.handoverDate || 'Q4 2026' }}</span>
+                        </div>
+                    </div>
+
+                    <!-- Footer: Type & Location -->
+                    <div class="mt-auto flex flex-col gap-1">
+                        <span class="text-sm font-medium text-gray-900">{{ prop.type }}</span>
+                        <div class="text-xs text-gray-500 flex items-center gap-1">
+                            <span>📍</span> {{ prop.location }}
+                        </div>
+                    </div>
+
+                    <!-- Developer Logo -->
+                    <img [src]="prop.agentLogoUrl" alt="Developer Logo"
+                        class="absolute bottom-5 right-5 h-8 max-w-[80px] object-contain opacity-80">
+
+                </div>
+            </div>
+            } @empty {
+            <div class="text-center py-12 bg-white rounded-lg border border-gray-200">
+                <p class="text-gray-500">No properties found matching your criteria.</p>
+            </div>
+            }
+            }
+        </div>
+
+        <!-- Sidebar -->
+        <aside class="hidden lg:block w-80 flex-shrink-0">
+            <div
+                class="bg-white border border-gray-200 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow cursor-pointer text-center group">
+                <div class="h-32 overflow-hidden">
+                    <img src="assets/home-illustration.jpg" alt="Homey Drive Time"
+                        class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                </div>
+                <div class="p-4">
+                    <h3 class="font-bold text-gray-900 mb-1">Find Homes by Drive Time</h3>
+                    <p class="text-xs text-gray-500">Search for properties based on commute time.</p>
+                </div>
+            </div>
+        </aside>
+
     </div>
-</header> -->
-
-<section class="search-bar">
-    <div class="search-inputs">
-        <button class="dropdown-btn">Buy ▾</button>
-        <input type="text" placeholder="Enter location" class="location-input">
-        <div class="status-toggles">
-            <button>All</button>
-            <button>Ready</button>
-            <button class="active">Off-Plan</button>
-        </div>
-        <button class="dropdown-btn">Residential ▾</button>
-        <button class="dropdown-btn">Beds & Baths ▾</button>
-        <button class="filter-btn">More Filters ⚙</button>
-    </div>
-</section>
-
-<div class="main-container">
-
-    <div class="property-list">
-        <div class="list-header">
-            <h1>Properties for sale in Egypt</h1>
-            <div class="view-controls">
-                <span class="sort-label">Popular ▾</span>
-                <div class="view-toggle">
-                    <button class="active">List</button>
-                    <button>Map</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Loading State -->
-        @if (isLoading) {
-        <div class="loading-container">
-            <div class="spinner"></div>
-            <p>Loading properties...</p>
-        </div>
-        }
-
-        <!-- Error State -->
-        @if (errorMessage && !isLoading) {
-        <div class="error-container">
-            <p class="error-message">{{ errorMessage }}</p>
-            <button class="retry-btn" (click)="loadProperties()">Retry</button>
-        </div>
-        }
-
-        <!-- Property Cards -->
-        @if (!isLoading && !errorMessage) {
-        @for (prop of properties; track prop.id) {
-        <div class="property-card" [class.premium-border]="prop.adType === 'Premium'"
-            [routerLink]="['/propertyview', prop.id]" style="cursor: pointer">
-
-            <div class="card-image">
-                <img [src]="prop.imageUrl" [alt]="prop.title">
-                <span class="status-tag">{{ prop.status }}</span>
-                <div class="image-overlay-icons">
-                    <i class="heart-icon">♥</i>
-                </div>
-            </div>
-
-            <div class="card-details">
-                <div class="info-top-row">
-                    <div class="title-section">
-                        <h2 class="title">{{ prop.title }}</h2>
-                        <p class="developer">by <span class="dev-name">{{ prop.developer || 'Unknown Developer'
-                                }}</span></p>
-                    </div>
-                    @switch (prop.adType) {
-                    @case ('Premium') { <span class="badge premium">Premium</span> }
-                    @case ('Featured') { <span class="badge featured">Featured</span> }
-                    }
-                </div>
-
-                <div class="info-grid">
-                    <div class="info-item">
-                        <span class="label">LAUNCH PRICE</span>
-                        <span class="value">{{ prop.price | currency: prop.currency :'symbol':'1.0-0' }}</span>
-                    </div>
-                    <div class="divider"></div>
-                    <div class="info-item">
-                        <span class="label">HANDOVER</span>
-                        <span class="value">{{ prop.handoverDate || 'Q4 2026' }}</span>
-                    </div>
-                </div>
-
-                <div class="info-bottom">
-                    <span class="prop-type">{{ prop.type }}</span>
-                    <div class="prop-location-row">
-                        <i class="icon-pin">📍</i> {{ prop.location }}
-                    </div>
-                </div>
-
-                <img [src]="prop.agentLogoUrl" alt="Developer Logo" class="developer-logo">
-            </div>
-        </div>
-        } @empty {
-        <p>No properties found matching your criteria.</p>
-        }
-        }
-    </div>
-
-    <aside class="sidebar">
-        <div class="drive-time-card">
-            <div class="card-content">
-                <img src="assets/home-illustration.jpg" alt="Homey Drive Time" class="drive-img">
-                <h3>Find Homes by Drive Time</h3>
-                <p>Search for properties based on commute time.</p>
-            </div>
-        </div>
-    </aside>
-
 </div>

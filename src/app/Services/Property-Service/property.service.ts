@@ -73,23 +73,45 @@ export class PropertyService {
     private mapToProperty(dto: PropertyListItemDto): Property {
         return {
             id: dto.id,
-            price: dto.price,
-            currency: dto.currency || 'EGP',
             title: dto.title,
-            type: this.mapPropertyType(dto.propertyType),
-            status: this.mapStatus(dto.status),
-            adType: dto.isFeatured ? 'Featured' : 'Standard',
-            bedrooms: dto.bedrooms,
-            bathrooms: dto.bathrooms,
+            price: dto.price,
+            rentPriceMonthly: dto.rentPrice || 0,
+            currency: dto.currency || 'EGP',
+            propertyType: dto.propertyType || 'Apartment',
+            propertyTypeEn: dto.propertyType || 'Apartment',
+            city: dto.cityName || '',
+            cityEn: dto.cityName || '',
+            district: dto.districtName || '',
+            districtEn: dto.districtName || '',
+            projectName: dto.projectName || '',
             area: dto.area,
+            rooms: dto.bedrooms,
+            bathrooms: dto.bathrooms,
+            mainImageUrl: dto.imageUrl || dto.images?.[0] || this.placeholderImage,
+            isFeatured: dto.isFeatured || false,
+            status: this.mapStatus(dto.status),
+            purpose: this.mapPurpose(dto.purpose),
+            finishingType: this.mapFinishingType(dto.finishingType),
             location: dto.location || this.buildLocation(dto.cityName, dto.districtName, dto.projectName),
+            viewCount: 0,
+            createdAt: dto.createdAt || new Date().toISOString(),
+
+            // Optional fields
+            adType: dto.isFeatured ? 'Featured' : 'Standard',
+            type: this.mapPropertyType(dto.propertyType),
+            bedrooms: dto.bedrooms,
             description: dto.description || '',
             imageUrl: dto.imageUrl || dto.images?.[0] || this.placeholderImage,
             agentLogoUrl: this.placeholderLogo,
             downPayment: dto.price * 0.05, // Estimate 5% down payment
             monthlyInstallment: dto.price / 120, // Estimate 10-year installment
             developer: dto.ownerName || 'Unknown Developer',
-            handoverDate: 'Q4 2026' // Default handover date
+            handoverDate: 'Q4 2026', // Default handover date
+
+            // Agent fields
+            agentId: '',
+            agentName: dto.ownerName || 'Unknown Agent',
+            agentProfileImage: this.placeholderLogo
         };
     }
 
@@ -115,6 +137,24 @@ export class PropertyService {
         // Status: 0=PendingReview, 1=Active, 2=SoldOrRented, 3=Hidden, 4=Rejected
         // For now, we'll default to 'Off-Plan' but this can be customized
         return 'Off-Plan';
+    }
+
+    private mapPurpose(purpose?: number): string {
+        switch (purpose) {
+            case 1: return 'Buy';
+            case 2: return 'Rent';
+            case 3: return 'Both';
+            default: return 'Buy';
+        }
+    }
+
+    private mapFinishingType(type?: number): string {
+        switch (type) {
+            case 0: return 'None';
+            case 1: return 'Semi';
+            case 2: return 'Full';
+            default: return 'None';
+        }
     }
 
     /**

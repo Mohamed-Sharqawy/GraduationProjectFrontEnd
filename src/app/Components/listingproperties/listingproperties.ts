@@ -50,7 +50,7 @@ export class Listingproperties implements OnInit {
         console.log('✅ Properties loaded successfully:', response);
         this.properties = response.items.sort((a, b) => {
           const priority: { [key: string]: number } = { 'Premium': 0, 'Featured': 1, 'Standard': 2 };
-          return (priority[a.adType] || 2) - (priority[b.adType] || 2);
+          return (priority[a.adType || 'Standard'] || 2) - (priority[b.adType || 'Standard'] || 2);
         });
         this.totalCount = response.totalCount;
         this.pageNumber = response.pageNumber;
