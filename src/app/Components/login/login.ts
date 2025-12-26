@@ -26,8 +26,8 @@ export class Login {
       next: (response) => {
         console.log('✅ Login successful:', response);
 
-        // Store authentication data
-        this.authService.storeAuthData(response);
+        // Store authentication data - handled in service
+        // this.authService.storeAuthData(response);
 
         // Show success message
         alert(`Welcome back, ${response.fullName}!`);

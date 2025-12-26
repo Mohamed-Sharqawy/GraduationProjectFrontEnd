@@ -3,13 +3,19 @@
   <div class="max-w-[1140px] mx-auto px-4 flex justify-between items-center">
     <div class="flex gap-4 items-center cursor-pointer hover:text-gray-700">
       <span><i class="fa fa-globe"></i> EN</span>
-      <span><i class="fa fa-cog"></i> Site settings</span>
     </div>
     <div class="flex gap-4 items-center cursor-pointer hover:text-gray-700">
-      <span><i class="fa fa-heart"></i> Favourite properties</span>
-      <span><i class="fa fa-star"></i> Saved searches</span>
+      @if (authService.currentUser()) {
+      <span class="text-gray-700 font-semibold"><i class="fa fa-user"></i> Welcome, {{
+        authService.currentUser()?.fullName }}</span>
+      <button (click)="logout()"
+        class="text-gray-500 hover:text-red-500 transition-colors bg-transparent border-none cursor-pointer">
+        <i class="fa fa-sign-out"></i> Logout
+      </button>
+      } @else {
       <a routerLink="/login" class="no-underline text-gray-500 hover:text-gray-700"><i class="fa fa-user"></i> Log
         in</a>
+      }
     </div>
   </div>
 </div>
@@ -43,3 +49,6 @@
 <router-outlet>
 
 </router-outlet>
+
+<!-- Global Footer -->
+<app-footer></app-footer>

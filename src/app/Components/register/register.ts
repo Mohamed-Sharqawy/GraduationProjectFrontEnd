@@ -63,8 +63,8 @@ export class Register {
       next: (response) => {
         console.log('✅ Registration successful:', response);
 
-        // Store authentication data
-        this.authService.storeAuthData(response);
+        // Store authentication data - handled in service
+        // this.authService.storeAuthData(response);
 
         // Show success message
         alert(`Welcome to Homey, ${response.fullName}! Your account has been created.`);

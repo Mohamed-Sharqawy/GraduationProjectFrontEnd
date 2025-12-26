@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 import { Observable, of, throwError, delay } from 'rxjs';
 import { Loginrequest } from '../../Models/loginrequest';
 import { User } from '../../Models/user';
@@ -69,9 +69,18 @@ export class MockAuthService {
         'admin@homey.com'
     ]);
 
+    // Create a writable signal for the current user
+    currentUser = signal<User | null>(null);
+
     constructor() {
         console.log('🧪 MockAuthService initialized - Using test data');
         console.log('📧 Test credentials:', Array.from(this.testCredentials.entries()));
+
+        // Initialize user state from local storage
+        const storedUser = this.getStoredUser();
+        if (storedUser) {
+            this.currentUser.set(storedUser);
+        }
     }
 
     /**
@@ -105,6 +114,10 @@ export class MockAuthService {
 
                 const user = this.emailToUser.get(data.email)!;
                 console.log('✅ Login successful:', user);
+
+                // Store auth data (important side effect)
+                this.storeAuthData(user);
+
                 return of(user);
             })
         );
@@ -155,6 +168,10 @@ export class MockAuthService {
                 this.testCredentials.set(data.email, data.password);
 
                 console.log('✅ Registration successful:', newUser);
+
+                // Store auth data
+                this.storeAuthData(newUser);
+
                 return of(newUser);
             })
         );
@@ -163,8 +180,18 @@ export class MockAuthService {
     /**
      * Mock getCurrentUser - returns user from token
      */
+    /**
+     * Mock getCurrentUser - returns user from token
+     */
     getCurrentUser(): Observable<User> {
         console.log('🧪 MockAuthService.getCurrentUser called');
+
+        if (typeof localStorage === 'undefined') {
+            return throwError(() => ({
+                error: { message: 'Not authenticated (SSR)' },
+                status: 401
+            }));
+        }
 
         const token = localStorage.getItem('token');
         if (!token) {
@@ -193,17 +220,26 @@ export class MockAuthService {
      * Store authentication data after successful login/register
      */
     storeAuthData(user: User) {
-        if (user.token) {
-            localStorage.setItem('token', user.token);
+        if (typeof localStorage !== 'undefined') {
+            if (user.token) {
+                localStorage.setItem('token', user.token);
+            }
+            localStorage.setItem('user', JSON.stringify(user));
+            console.log('✅ Mock Auth data stored:', { token: user.token, user: user.fullName });
         }
-        localStorage.setItem('user', JSON.stringify(user));
-        console.log('✅ Mock Auth data stored:', { token: user.token, user: user.fullName });
+
+        // Update the signal
+        this.currentUser.set(user);
     }
 
     /**
      * Get stored user data from localStorage
      */
     getStoredUser(): User | null {
+        if (typeof localStorage === 'undefined') {
+            return null;
+        }
+
         const userJson = localStorage.getItem('user');
         if (userJson) {
             try {
@@ -217,12 +253,19 @@ export class MockAuthService {
     }
 
     get token() {
+        if (typeof localStorage === 'undefined') {
+            return null;
+        }
         return localStorage.getItem('token');
     }
 
     logout() {
         console.log('🧪 MockAuthService.logout called');
-        localStorage.clear();
+        if (typeof localStorage !== 'undefined') {
+            localStorage.clear();
+        }
+        // Clear the signal
+        this.currentUser.set(null);
     }
 
     isLoggedIn() {

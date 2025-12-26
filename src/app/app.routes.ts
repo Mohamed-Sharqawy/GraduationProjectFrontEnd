@@ -10,11 +10,11 @@ import { authGuard } from './Gaurds/auth-guard';
 export const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' }, // Added default route
   { path: 'home', component: Home },
-  { path: 'find-my-agent', component: FindMyAgentComponent },
-  { path: 'listingproperties', component: Listingproperties },
+  { path: 'find-my-agent', component: FindMyAgentComponent, canActivate: [authGuard] },
+  { path: 'listingproperties', component: Listingproperties, canActivate: [authGuard] },
   { path: 'propertyview/:id', component: Propertyview },
   { path: 'agent-profile/:id', component: AgentProfile },
-  { path: 'user-dashboard', component: UserDashboard },
+  { path: 'user-dashboard', component: UserDashboard, canActivate: [authGuard] },
   {
     path: 'login', loadComponent: () =>
       import('./Components/login/login').then(m => m.Login)

@@ -1,131 +1,125 @@
-<!-- <div class="top-bar">
-    <div class="container">
-        <div class="flex-row">
-            <span><i class="fa fa-globe"></i> EN</span>
-            <span><i class="fa fa-cog"></i> Site settings</span>
-        </div>
-        <div class="flex-row">
-            <span><i class="fa fa-heart"></i> Favourite properties</span>
-            <span><i class="fa fa-star"></i> Saved searches</span>
-            <span><i class="fa fa-user"></i> Log in</span>
-        </div>
+<!-- Slider Hero Section -->
+<header class="hero-slider">
+    @for (image of heroImages; track $index) {
+    <div class="slide" [class.active]="$index === currentSlide" [style.background-image]="'url(' + image + ')'">
     </div>
-</div> -->
+    }
 
-<!-- <nav class="navbar">
-    <div class="container">
-        <div class="logo">
-            <span class="logo-icon">H</span> Homey
-        </div>
-        <div class="nav-links">
-            <a routerLink="/find-my-agent">Find my Agent </a>
-            <a routerLink="/listingproperties">New Projects</a>
-        </div>
-    </div>
-</nav> -->
-
-<header class="hero-section">
-    <div class="hero-overlay">
+    <div class="slider-overlay">
         <h1>Explore Our Hidden Gems for Sale and Rent</h1>
+    </div>
 
-        <div class="toggle-pill">
-            <span class="active">Properties</span>
-            <span>New Projects </span>
-        </div>
-
-        <div class="search-container">
-            <div class="search-tabs">
-                <button [class.active]="searchType === 'buy'" (click)="setSearchType('buy')">Buy</button>
-                <button [class.active]="searchType === 'rent'" (click)="setSearchType('rent')">Rent</button>
-            </div>
-
-            <div class="search-inputs">
-                <div class="input-group location">
-                    <input type="text" placeholder="Enter location" />
-                </div>
-                <button class="search-btn">Search</button>
-            </div>
-
-            <div class="search-filters">
-                <div class="filter-pill active">All</div>
-                <div class="filter-pill">Ready</div>
-                <div class="filter-pill">Off-Plan</div>
-
-                <select class="filter-dropdown">
-                    <option>Residential</option>
-                </select>
-
-                @if (searchType === 'buy') {
-                <select class="filter-dropdown">
-                    <option>Price (EGP)</option>
-                </select>
-                } @else {
-                <select class="filter-dropdown">
-                    <option>Monthly Rent</option>
-                </select>
-                }
-            </div>
-
-            <div class="drive-time-banner">
-                <span><strong>Search 2.0</strong> Find homes by drive time</span>
-                <span class="arrow">→</span>
-            </div>
-        </div>
+    <div class="slider-dots">
+        @for (image of heroImages; track $index) {
+        <span class="dot" [class.active]="$index === currentSlide" (click)="currentSlide = $index">
+        </span>
+        }
     </div>
 </header>
 
+<!-- Services Section -->
 <section class="features-section container">
+    <div class="section-header">
+        <h2>Our Services</h2>
+        <p>Everything you need for your property journey</p>
+    </div>
+
     <div class="feature-grid">
+        <!-- Feature 1: Finding a Property -->
         <div class="feature-card">
             <div class="card-content">
-                <h3>Find an agency</h3>
-                <p>Explore the diversity of properties from top agencies</p>
-                <a href="#">Find agencies →</a>
+                <h3>Find a Property</h3>
+                <p>Explore our wide range of properties for sale and rent.</p>
+                <a routerLink="/listingproperties">Browse Properties →</a>
             </div>
-            <div class="card-icon">🏢</div>
+            <div class="card-icon">🏠</div>
         </div>
 
+        <!-- Feature 2: Finding an Agent -->
         <div class="feature-card blue-card">
             <div class="card-content">
-                <h3>Search 2.0</h3>
-                <p>Find homes by drive time</p>
-                <a href="#">Search now →</a>
+                <h3>Find an Agent</h3>
+                <p>Connect with top real estate agents to help you.</p>
+                <a routerLink="/find-my-agent">Find Agents →</a>
             </div>
-            <div class="card-icon">🚗</div>
+            <div class="card-icon">🤵</div>
         </div>
 
+        <!-- Feature 3: Sell Your Property -->
         <div class="feature-card">
             <div class="card-content">
-                <h3>Map View</h3>
-                <p>Search for properties in preferred areas using a map</p>
-                <a href="#">View map →</a>
+                <h3>Sell Your Property</h3>
+                <p>List your property with us and reach thousands of buyers.</p>
+                <a routerLink="/user-dashboard">List Property →</a>
             </div>
-            <div class="card-icon">📍</div>
+            <div class="card-icon">🔑</div>
         </div>
     </div>
 </section>
 
-<section class="discover-section container">
-    <h2>Discover more about the Egypt real estate market</h2>
-    <div class="articles-grid">
-        @for (article of blogArticles; track article.id) {
-        <div class="article-card">
-            <div class="img-wrapper">
-                <img [src]="article.image" [alt]="article.title">
-            </div>
-            <div class="article-text">
-                <p>{{ article.title }}</p>
-            </div>
+<!-- About Us Section -->
+<section class="about-section container" style="margin-top: 4rem; margin-bottom: 4rem;">
+    <div class="section-content" style="display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center;">
+        <div class="about-text">
+            <h2 style="font-size: 2rem; color: #333; margin-bottom: 1.5rem;">About Homey</h2>
+            <p style="color: #666; line-height: 1.6; margin-bottom: 1rem;">
+                Homey is your premier destination for finding the perfect property. We bridge the gap between dream
+                homes and eager buyers, providing a seamless platform for real estate transactions.
+            </p>
+            <p style="color: #666; line-height: 1.6;">
+                Whether you're looking to buy your first home, rent a luxury apartment, or sell your property to the
+                right buyer, Homey makes the process simple, transparent, and efficient.
+            </p>
         </div>
-        }
+        <div class="about-image"
+            style="background-color: #f0fdf4; padding: 2rem; border-radius: 1rem; text-align: center;">
+            <span style="font-size: 5rem;">🏙️</span>
+        </div>
     </div>
 </section>
 
-<footer>
-    <div class="container footer-content">
-        <div class="links">
-            <a href="#">ABOUT US</a> | <a href="#">CONTACT US</a> | <a href="#">PRIVACY</a>
+<!-- Our Vision Section -->
+<section class="vision-section" style="background-color: #f9f9f9; padding: 4rem 0;">
+    <div class="container">
+        <div class="section-header">
+            <h2>Why Choose Us</h2>
+            <p>We're redefining the real estate experience</p>
         </div>
-        <div class="copyright">© 2025 Homey.eg</div>
+
+        <div class="vision-grid"
+            style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-top: 3rem;">
+            <!-- Vision 1 -->
+            <div class="vision-card"
+                style="background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
+                <div class="icon" style="font-size: 2.5rem; margin-bottom: 1rem;">🎯</div>
+                <h3 style="font-size: 1.25rem; margin-bottom: 1rem; color: #333;">Our Vision</h3>
+                <p style="color: #666; line-height: 1.6;">
+                    To create a world where every person can find their perfect home with ease and confidence, powered
+                    by technology and trust.
+                </p>
+            </div>
+
+            <!-- Vision 2 -->
+            <div class="vision-card"
+                style="background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
+                <div class="icon" style="font-size: 2.5rem; margin-bottom: 1rem;">🤝</div>
+                <h3 style="font-size: 1.25rem; margin-bottom: 1rem; color: #333;">Trusted Network</h3>
+                <p style="color: #666; line-height: 1.6;">
+                    We work with only the best certified agents and verified listings to ensure your safety and
+                    satisfaction.
+                </p>
+            </div>
+
+            <!-- Vision 3 -->
+            <div class="vision-card"
+                style="background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
+                <div class="icon" style="font-size: 2.5rem; margin-bottom: 1rem;">🚀</div>
+                <h3 style="font-size: 1.25rem; margin-bottom: 1rem; color: #333;">Innovation</h3>
+                <p style="color: #666; line-height: 1.6;">
+                    leveraging cutting-edge technology to provide market insights, virtual tours, and seamless
+                    communication.
+                </p>
+            </div>
+        </div>
     </div>
-</footer>
+</section>
