@@ -1,60 +1,37 @@
 <div class="min-h-screen bg-[#f7f9fa] font-sans pb-10">
 
-    <!-- Navbar -->
-    <!-- <header class="bg-white border-b border-gray-200 py-4 px-6 sticky top-0 z-40 shadow-sm">
-        <div class="max-w-7xl mx-auto flex justify-between items-center">
-            <div class="text-[#28b16d] text-2xl font-bold tracking-tight">Homey</div>
-            <div class="flex gap-6 text-[15px] font-medium text-gray-700">
-                <span class="cursor-pointer hover:text-[#28b16d] transition-colors relative">
-                    Find my Agent
-                    <span class="bg-[#ff5722] text-white text-[9px] px-1.5 py-0.5 rounded ml-1 align-top">NEW</span>
-                </span>
-                <span class="cursor-pointer hover:text-[#28b16d] transition-colors">New Projects</span>
+    <div class="max-w-7xl mx-auto px-4 flex flex-col gap-8 pt-8">
+
+        <!-- Header & Search Section -->
+        <div class="flex flex-col gap-6 mb-4">
+            <h1 class="text-3xl font-bold text-gray-900 text-center">Find Your Dream Home</h1>
+
+            <div
+                class="flex flex-col md:flex-row gap-3 ml-auto w-full md:w-auto items-center justify-center max-w-4xl mx-auto">
+                <!-- Location Input -->
+                <div class="relative w-full md:min-w-[400px]">
+                    <input type="text" placeholder="Search by location (e.g. Cairo)"
+                        class="w-full border border-gray-300 text-gray-700 placeholder-gray-500 py-3 px-4 pr-10 rounded-[6px] focus:outline-none focus:ring-1 focus:ring-bayut-green focus:border-bayut-green transition-all">
+                    <span class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5">
+                            <path fill-rule="evenodd"
+                                d="M11.54 22.351l.07.04.028.016a.76.76 0 00.723 0l.028-.015.071-.041a16.975 16.975 0 001.144-.742 19.58 19.58 0 002.683-2.282c1.944-1.99 3.963-4.98 3.963-8.827a8.25 8.25 0 00-16.5 0c0 3.846 2.02 6.837 3.963 8.827a19.58 19.58 0 002.682 2.282 16.975 16.975 0 001.145.742zM12 13.5a3 3 0 100-6 3 3 0 000 6z"
+                                clip-rule="evenodd" />
+                        </svg>
+                    </span>
+                </div>
+
+                <!-- Find Button -->
+                <button
+                    class="w-full md:w-auto bg-[#28b16d] hover:bg-[#229959] text-white font-bold py-3 px-8 rounded-[6px] transition-colors duration-200 focus:outline-none">
+                    Find
+                </button>
             </div>
         </div>
-    </header> -->
 
-    <!-- Search / Filter Bar -->
-    <!-- <section class="bg-white py-4 px-6 shadow-sm mb-6">
-        <div class="max-w-7xl mx-auto flex flex-wrap gap-3 items-center">
-            <button
-                class="px-4 py-2 border border-gray-300 rounded hover:border-[#28b16d] bg-white text-gray-700 text-sm font-medium transition-colors">Buy
-                ▾</button>
-            <input type="text" placeholder="Enter location"
-                class="flex-1 min-w-[200px] border border-gray-300 rounded px-4 py-2 text-sm focus:outline-none focus:border-[#28b16d] transition-colors">
-
-            <div class="flex border border-gray-300 rounded overflow-hidden">
-                <button
-                    class="px-4 py-2 bg-white text-gray-600 text-sm font-medium hover:bg-gray-50 border-r border-gray-300">All</button>
-                <button
-                    class="px-4 py-2 bg-white text-gray-600 text-sm font-medium hover:bg-gray-50 border-r border-gray-300">Ready</button>
-                <button class="px-4 py-2 bg-[#e6f7ef] text-[#28b16d] text-sm font-bold">Off-Plan</button>
-            </div>
-
-            <button
-                class="px-4 py-2 border border-gray-300 rounded hover:border-[#28b16d] bg-white text-gray-700 text-sm font-medium transition-colors">Residential
-                ▾</button>
-            <button
-                class="px-4 py-2 border border-gray-300 rounded hover:border-[#28b16d] bg-white text-gray-700 text-sm font-medium transition-colors">Beds
-                & Baths ▾</button>
-            <button class="ml-auto text-[#28b16d] text-sm font-bold hover:underline">More Filters ⚙</button>
-        </div>
-    </section> -->
-
-    <div class="max-w-7xl mx-auto px-4 flex flex-col lg:flex-row gap-8">
 
         <!-- Property List -->
         <div class="flex-1">
-            <div class="flex justify-between items-center mb-6">
-                <h1 class="text-2xl font-bold text-gray-900">Properties for sale in Egypt</h1>
-                <div class="flex items-center gap-4">
-                    <span class="text-sm font-bold text-gray-700 cursor-pointer">Popular ▾</span>
-                    <div class="flex border border-gray-300 rounded overflow-hidden">
-                        <button class="px-3 py-1.5 bg-[#e6f7ef] text-[#28b16d] text-sm font-bold">List</button>
-                        <button class="px-3 py-1.5 bg-white text-gray-600 text-sm hover:bg-gray-50">Map</button>
-                    </div>
-                </div>
-            </div>
 
             <!-- Loading State -->
             @if (isLoading) {
@@ -132,10 +109,25 @@
                     </div>
 
                     <!-- Footer: Type & Location -->
-                    <div class="mt-auto flex flex-col gap-1">
-                        <span class="text-sm font-medium text-gray-900">{{ prop.type }}</span>
-                        <div class="text-xs text-gray-500 flex items-center gap-1">
-                            <span>📍</span> {{ prop.location }}
+                    <div class="mt-auto flex flex-col gap-3">
+                        <div class="flex flex-col gap-1">
+                            <span class="text-sm font-medium text-gray-900">{{ prop.type }}</span>
+                            <div class="text-xs text-gray-500 flex items-center gap-1">
+                                <span>📍</span> {{ prop.location }}
+                            </div>
+                        </div>
+
+                        <!-- Analytics Footer (Social Style) -->
+                        <div
+                            class="border-t border-gray-100 pt-3 flex items-center gap-6 text-gray-400 text-xs font-medium">
+                            <div class="flex items-center gap-1.5" title="Total Views">
+                                <i class="fa fa-eye"></i>
+                                <span>{{ (prop.id | number) || 124 }}</span> <!-- Mock number based on ID -->
+                            </div>
+                            <div class="flex items-center gap-1.5" title="WhatsApp Clicks">
+                                <i class="fa fa-mouse-pointer"></i>
+                                <span>{{ (prop.id | number) ? 12 : 5 }}</span> <!-- Mock number -->
+                            </div>
                         </div>
                     </div>
 
@@ -152,21 +144,6 @@
             }
             }
         </div>
-
-        <!-- Sidebar -->
-        <aside class="hidden lg:block w-80 flex-shrink-0">
-            <div
-                class="bg-white border border-gray-200 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow cursor-pointer text-center group">
-                <div class="h-32 overflow-hidden">
-                    <img src="assets/home-illustration.jpg" alt="Homey Drive Time"
-                        class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-                </div>
-                <div class="p-4">
-                    <h3 class="font-bold text-gray-900 mb-1">Find Homes by Drive Time</h3>
-                    <p class="text-xs text-gray-500">Search for properties based on commute time.</p>
-                </div>
-            </div>
-        </aside>
 
     </div>
 </div>

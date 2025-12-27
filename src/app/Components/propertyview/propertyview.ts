@@ -29,6 +29,10 @@ export class Propertyview implements OnInit {
     area: 0
   };
 
+  // Analytics (Mock Data)
+  viewCount = 142; // Static random number
+  whatsappClickCount = 15;
+
   description: string[] = [];
 
   propertySpecs: { label: string; value: string }[] = [];
@@ -181,6 +185,9 @@ export class Propertyview implements OnInit {
 
   whatsappAgent() {
     if (this.agent.whatsapp) {
+      // Mock tracking click
+      this.whatsappClickCount++;
+
       const url = `https://wa.me/${this.agent.whatsapp}`;
       window.open(url, '_blank');
     }

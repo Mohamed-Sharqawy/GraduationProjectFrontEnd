@@ -1,11 +1,13 @@
 import { Injectable, signal } from '@angular/core';
 import { tap } from 'rxjs/operators';
+import { of } from 'rxjs';
 import { API_EndPoints } from '../../../environments/api.config';
 import { environment } from '../../../environments/environments';
 import { HttpClient } from '@angular/common/http';
 import { Loginrequest } from '../../Models/loginrequest';
 import { User } from '../../Models/user';
 import { Registerrequest } from '../../Models/registerrequest';
+import { UserRole } from '../../Models/user-role';
 
 @Injectable({
   providedIn: 'root',
@@ -25,15 +27,43 @@ export class AuthService {
   }
 
   login(data: Loginrequest) {
-    return this.http.post<User>(this.apiUrl + API_EndPoints.login, data).pipe(
-      tap(user => this.storeAuthData(user))
-    );
+    // Mock Login for UI testing
+    const mockUser: User = {
+      id: 'mock-id-123',
+      fullName: 'Test User',
+      email: data.email,
+      phoneNumber: '1234567890',
+      role: UserRole.Owner, // Default to Owner (Regular User)
+      isVerified: true,
+      token: 'mock-jwt-token'
+    };
+
+    this.storeAuthData(mockUser);
+    return of(mockUser);
+
+    // return this.http.post<User>(this.apiUrl + API_EndPoints.login, data).pipe(
+    //   tap(user => this.storeAuthData(user))
+    // );
   }
 
   register(data: Registerrequest) {
-    return this.http.post<User>(this.apiUrl + API_EndPoints.register, data).pipe(
-      tap(user => this.storeAuthData(user))
-    );
+    // Mock Register for UI testing
+    const mockUser: User = {
+      id: 'mock-id-new',
+      fullName: data.fullName,
+      email: data.email,
+      phoneNumber: data.phoneNumber,
+      role: UserRole.Owner,
+      isVerified: true,
+      token: 'mock-jwt-token'
+    };
+
+    this.storeAuthData(mockUser);
+    return of(mockUser);
+
+    // return this.http.post<User>(this.apiUrl + API_EndPoints.register, data).pipe(
+    //   tap(user => this.storeAuthData(user))
+    // );
   }
 
   getCurrentUser() {

@@ -1,0 +1,202 @@
+<div class="user-profile-container flex min-h-screen bg-gray-50 font-sans">
+
+    <!-- Sidebar -->
+    <aside class="w-64 bg-white shadow-md flex-shrink-0">
+        <div class="p-6 border-b border-gray-100">
+            <div class="flex items-center gap-3">
+                <div class="relative cursor-pointer group" (click)="fileInput.click()">
+                    <div
+                        class="w-12 h-12 rounded-full overflow-hidden bg-green-100 flex items-center justify-center text-green-600 font-bold text-xl border-2 border-transparent group-hover:border-green-400 transition-all">
+                        <img *ngIf="authService.currentUser()?.profileImageUrl"
+                            [src]="authService.currentUser()?.profileImageUrl" class="w-full h-full object-cover"
+                            alt="Profile">
+                        <span *ngIf="!authService.currentUser()?.profileImageUrl">{{
+                            authService.currentUser()?.fullName?.charAt(0) || 'U' }}</span>
+                    </div>
+                    <div
+                        class="absolute inset-0 bg-black/30 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                        <i class="fa fa-camera text-white text-xs"></i>
+                    </div>
+                    <input #fileInput type="file" class="hidden" (change)="onFileSelected($event)" accept="image/*">
+                </div>
+                <div>
+                    <h3 class="font-bold text-gray-800 m-0 text-sm">{{ authService.currentUser()?.fullName }}</h3>
+                    <span class="text-xs text-gray-500">{{ authService.currentUser()?.email }}</span>
+                </div>
+            </div>
+        </div>
+
+        <nav class="p-4 space-y-2">
+            <button (click)="setActiveTab('published')" [class.bg-green-50]="activeTab === 'published'"
+                [class.text-green-600]="activeTab === 'published'"
+                class="w-full text-left px-4 py-2.5 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-50 flex items-center gap-3 transition-colors border-none cursor-pointer bg-transparent">
+                <i class="fa fa-home border-none"></i> Published Properties
+            </button>
+
+            <button (click)="setActiveTab('saved')" [class.bg-green-50]="activeTab === 'saved'"
+                [class.text-green-600]="activeTab === 'saved'"
+                class="w-full text-left px-4 py-2.5 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-50 flex items-center gap-3 transition-colors border-none cursor-pointer bg-transparent">
+                <i class="fa fa-heart border-none"></i> Saved Properties
+            </button>
+
+            <button (click)="setActiveTab('subscription')" [class.bg-green-50]="activeTab === 'subscription'"
+                [class.text-green-600]="activeTab === 'subscription'"
+                class="w-full text-left px-4 py-2.5 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-50 flex items-center gap-3 transition-colors border-none cursor-pointer bg-transparent">
+                <i class="fa fa-credit-card border-none"></i> Subscription
+            </button>
+
+            <button (click)="setActiveTab('personal-info')" [class.bg-green-50]="activeTab === 'personal-info'"
+                [class.text-green-600]="activeTab === 'personal-info'"
+                class="w-full text-left px-4 py-2.5 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-50 flex items-center gap-3 transition-colors border-none cursor-pointer bg-transparent">
+                <i class="fa fa-user border-none"></i> Personal Info
+            </button>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 p-8">
+
+        <!-- Published Properties Tab -->
+        <div *ngIf="activeTab === 'published'">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6">My Published Properties</h2>
+            <div class="bg-white p-8 rounded-xl shadow-sm border border-gray-100 text-center py-20">
+                <div class="text-gray-400 mb-3 text-5xl"><i class="fa fa-building-o"></i></div>
+                <h3 class="text-lg font-medium text-gray-800 mb-2">No properties published yet</h3>
+                <p class="text-gray-500 mb-6">Start selling your properties today.</p>
+                <button
+                    class="bg-[#28b16d] text-white px-6 py-2.5 rounded-lg font-medium hover:bg-[#209e60] transition-colors border-none cursor-pointer">
+                    List a Property
+                </button>
+            </div>
+        </div>
+
+
+        <!-- Saved Properties Tab -->
+        <div *ngIf="activeTab === 'saved'">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6">Saved Properties</h2>
+            <div class="bg-white p-8 rounded-xl shadow-sm border border-gray-100 text-center py-20">
+                <div class="text-gray-400 mb-3 text-5xl"><i class="fa fa-heart-o"></i></div>
+                <h3 class="text-lg font-medium text-gray-800 mb-2">No saved properties</h3>
+                <p class="text-gray-500">Properties you like will appear here.</p>
+            </div>
+        </div>
+
+        <!-- Subscription Tab -->
+        <div *ngIf="activeTab === 'subscription'">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6">My Subscription</h2>
+
+            <!-- Active Subscription Status -->
+            <div *ngIf="currentSubscription" class="bg-white p-6 rounded-xl shadow-sm border border-green-200 mb-8">
+                <div class="flex justify-between items-start mb-6">
+                    <div>
+                        <span
+                            class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide">Active</span>
+                        <h3 class="text-xl font-bold text-gray-800 mt-2">{{ currentSubscription.package.name }} Plan
+                        </h3>
+                    </div>
+                    <button class="text-gray-400 hover:text-gray-600 bg-transparent border-none cursor-pointer"><i
+                            class="fa fa-ellipsis-h"></i></button>
+                </div>
+
+                <div class="grid grid-cols-3 gap-6">
+                    <div class="bg-gray-50 p-4 rounded-lg text-center">
+                        <div class="text-2xl font-bold text-gray-800">{{ remainingAdsDisplay.standard }}</div>
+                        <div class="text-xs text-gray-500 uppercase font-semibold mt-1">Standard Ads</div>
+                    </div>
+                    <div class="bg-gray-50 p-4 rounded-lg text-center">
+                        <div class="text-2xl font-bold text-gray-800">{{ remainingAdsDisplay.featured }}</div>
+                        <div class="text-xs text-gray-500 uppercase font-semibold mt-1">Featured Ads</div>
+                    </div>
+                    <div class="bg-gray-50 p-4 rounded-lg text-center">
+                        <div class="text-2xl font-bold text-gray-800">{{ remainingAdsDisplay.premium }}</div>
+                        <div class="text-xs text-gray-500 uppercase font-semibold mt-1">Premium Ads</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Packages Grid -->
+            <h3 class="text-lg font-bold text-gray-800 mb-4" *ngIf="currentSubscription">Upgrade Plan</h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div *ngFor="let pkg of packages"
+                    class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow relative flex flex-col">
+                    <!-- Top Border for Plans -->
+                    <div class="h-1 w-full"
+                        [ngClass]="{'bg-orange-400': pkg.type === 'bronze', 'bg-gray-400': pkg.type === 'silver', 'bg-yellow-400': pkg.type === 'gold'}">
+                    </div>
+
+                    <div class="p-6 flex-1 flex flex-col">
+                        <h3 class="text-xl font-bold text-gray-800 mb-2">{{ pkg.name }}</h3>
+                        <div class="text-3xl font-bold text-gray-800 mb-6">{{ pkg.price }}</div>
+
+                        <ul class="space-y-3 mb-8 flex-1 pl-0">
+                            <li *ngFor="let feat of pkg.features" class="flex items-center gap-3 text-sm text-gray-600">
+                                <i class="fa fa-check text-green-500 text-xs"></i> {{ feat }}
+                            </li>
+                        </ul>
+
+                        <button (click)="subscribe(pkg)"
+                            class="w-full py-2.5 rounded-lg font-medium transition-colors border-none cursor-pointer"
+                            [ngClass]="{'bg-gray-800 text-white hover:bg-gray-900': !currentSubscription || currentSubscription.package.name !== pkg.name, 'bg-gray-100 text-gray-400 cursor-not-allowed': currentSubscription && currentSubscription.package.name === pkg.name}"
+                            [disabled]="currentSubscription && currentSubscription.package.name === pkg.name">
+                            {{ currentSubscription && currentSubscription.package.name === pkg.name ? 'Current Plan' :
+                            'Subscribe' }}
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mock Dashboard Access Button (Only visible if subscribed) -->
+            <div *ngIf="currentSubscription" class="mt-8 text-center">
+                <button routerLink="/user-dashboard"
+                    class="bg-[#28b16d] text-white px-8 py-3 rounded-lg font-bold text-lg hover:bg-[#21965c] transition-colors border-none cursor-pointer flex items-center gap-2 mx-auto">
+                    Go to Dashboard <i class="fa fa-arrow-right"></i>
+                </button>
+            </div>
+
+        </div>
+
+        <!-- Personal Info Tab -->
+        <div *ngIf="activeTab === 'personal-info'">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6">Personal Information</h2>
+            <div class="bg-white p-8 rounded-xl shadow-sm border border-gray-100 max-w-2xl">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Full Name -->
+                    <div class="col-span-2">
+                        <label class="block text-sm font-bold text-gray-700 mb-2">Full Name</label>
+                        <input type="text" [(ngModel)]="formData.fullName"
+                            class="w-full border border-gray-300 rounded-lg px-4 py-3 text-gray-700 focus:outline-none focus:border-green-500 transition-colors">
+                    </div>
+
+                    <!-- Email -->
+                    <div class="col-span-2">
+                        <label class="block text-sm font-bold text-gray-700 mb-2">Email Address</label>
+                        <input type="email" [(ngModel)]="formData.email"
+                            class="w-full border border-gray-300 rounded-lg px-4 py-3 text-gray-700 focus:outline-none focus:border-green-500 transition-colors">
+                    </div>
+
+                    <!-- Phone -->
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 mb-2">Phone Number</label>
+                        <input type="tel" [(ngModel)]="formData.phone"
+                            class="w-full border border-gray-300 rounded-lg px-4 py-3 text-gray-700 focus:outline-none focus:border-green-500 transition-colors">
+                    </div>
+
+                    <!-- WhatsApp -->
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 mb-2">WhatsApp Number</label>
+                        <input type="tel" [(ngModel)]="formData.whatsapp"
+                            class="w-full border border-gray-300 rounded-lg px-4 py-3 text-gray-700 focus:outline-none focus:border-green-500 transition-colors">
+                    </div>
+                </div>
+
+                <div class="mt-8 pt-6 border-t border-gray-100 flex justify-end">
+                    <button (click)="saveProfile()"
+                        class="bg-[#28b16d] text-white px-8 py-3 rounded-lg font-bold hover:bg-[#209e60] transition-colors border-none cursor-pointer shadow-sm hover:shadow-md">
+                        Save Changes
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </main>
+</div>

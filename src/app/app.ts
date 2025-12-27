@@ -1,5 +1,5 @@
 import { Component, signal, inject } from '@angular/core';
-import { RouterLink, RouterOutlet } from '@angular/router';
+import { RouterLink, RouterOutlet, Router } from '@angular/router';
 import { AuthService } from './Services/Auth-Service/auth-service';
 import { Footer } from './Components/footer/footer';
 
@@ -13,11 +13,10 @@ import { Footer } from './Components/footer/footer';
 export class App {
   protected readonly title = signal('HomeyUI');
   protected readonly authService = inject(AuthService);
+  private readonly router = inject(Router);
 
   logout() {
     this.authService.logout();
-    // Optional: Redirect to login or home after logout if needed, 
-    // but the requirement just says "logout button to use to logout"
-    // The auth service clears the signal which will update the UI.
+    this.router.navigate(['/home']);
   }
 }

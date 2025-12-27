@@ -19,6 +19,7 @@ export class MockAuthService {
         {
             id: '1',
             fullName: 'Test Owner',
+            email: 'owner@homey.com',
             phoneNumber: '1234567890',
             whatsappNumber: '1234567890',
             role: UserRole.Owner,
@@ -28,6 +29,7 @@ export class MockAuthService {
         {
             id: '2',
             fullName: 'Test Agent',
+            email: 'agent@homey.com',
             phoneNumber: '0987654321',
             whatsappNumber: '0987654321',
             role: UserRole.Agent,
@@ -37,6 +39,7 @@ export class MockAuthService {
         {
             id: '3',
             fullName: 'Test Admin',
+            email: 'admin@homey.com',
             phoneNumber: '5555555555',
             whatsappNumber: '5555555555',
             role: UserRole.Admin,
@@ -155,6 +158,7 @@ export class MockAuthService {
                 const newUser: User = {
                     id: `mock-${Date.now()}`,
                     fullName: data.fullName,
+                    email: data.email,
                     phoneNumber: data.phoneNumber,
                     whatsappNumber: data.whatsappNumber,
                     role: data.role,

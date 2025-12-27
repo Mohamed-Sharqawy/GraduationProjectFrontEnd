@@ -6,15 +6,18 @@ import { Propertyview } from './Components/propertyview/propertyview';
 import { AgentProfile } from './Components/agent-profile/agent-profile';
 import { UserDashboard } from './Components/userdashboard/userdashboard';
 import { authGuard } from './Gaurds/auth-guard';
+import { agentGuard } from './Gaurds/agent-guard';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' }, // Added default route
   { path: 'home', component: Home },
-  { path: 'find-my-agent', component: FindMyAgentComponent, canActivate: [authGuard] },
-  { path: 'listingproperties', component: Listingproperties, canActivate: [authGuard] },
+  { path: 'find-my-agent', component: FindMyAgentComponent },
+  { path: 'listingproperties', component: Listingproperties },
   { path: 'propertyview/:id', component: Propertyview },
   { path: 'agent-profile/:id', component: AgentProfile },
-  { path: 'user-dashboard', component: UserDashboard, canActivate: [authGuard] },
+  { path: 'user-profile', loadComponent: () => import('./Components/user-profile/user-profile').then(m => m.UserProfile) },
+  // Dashboard initially restricted to Agents, or handled by component logic for subscribers
+  { path: 'user-dashboard', component: UserDashboard, canActivate: [agentGuard] },
   {
     path: 'login', loadComponent: () =>
       import('./Components/login/login').then(m => m.Login)
@@ -27,7 +30,7 @@ export const routes: Routes = [
   {
     path: 'dashboard',
     component: Home, // Using Home component as placeholder for testing
-    canActivate: [authGuard]
+    canActivate: [agentGuard]
   }
 ];
 

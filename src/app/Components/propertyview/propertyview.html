@@ -88,6 +88,26 @@
                     <a href="#" class="view-all-link">View all properties ></a>
                 </div>
             </div>
+
+            <!-- Analytics Card -->
+            <div class="analytics-card"
+                style="background: white; padding: 20px; border-radius: 12px; margin-top: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
+                <h3 style="margin-top: 0; color: #374151; font-size: 16px; margin-bottom: 15px;">Property Analytics</h3>
+                <div style="display: flex; flex-direction: column; gap: 12px;">
+                    <div
+                        style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 12px; border-bottom: 1px solid #f3f4f6;">
+                        <span style="color: #6b7280; display: flex; align-items: center; gap: 8px;"><i
+                                class="fa fa-eye"></i>
+                            Total Views</span>
+                        <span style="font-weight: bold; color: #111827;">{{ viewCount }}</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <span style="color: #6b7280; display: flex; align-items: center; gap: 8px;"><i
+                                class="fa fa-whatsapp"></i> WhatsApp Leads</span>
+                        <span style="font-weight: bold; color: #28b16d;">{{ whatsappClickCount }}</span>
+                    </div>
+                </div>
+            </div>
         </aside>
     </div>
 </div>
