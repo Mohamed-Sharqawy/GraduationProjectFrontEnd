@@ -8,7 +8,8 @@ import { PropertyFilterDto } from '../../Models/Property/property-filter.dto';
 import { PropertyListItemDto } from '../../Models/Property/property-list-item.dto';
 import { PagedResultDto } from '../../Models/Property/paged-result.dto';
 import { Property } from '../../Models/Property/property';
-import { PropertyDetailsDto } from '../../Models/Property/property-details.dto';
+import { PropertyDetailsDto, PropertyCardDto } from '../../Models/Property/PropertyDtos'; // Updated import
+import { PaginatedResponse } from '../../Models/GenericPagination';
 
 @Injectable({
     providedIn: 'root',
@@ -66,6 +67,43 @@ export class PropertyService {
     getProperty(id: number): Observable<PropertyDetailsDto> {
         return this.http.get<PropertyDetailsDto>(`${this.apiUrl}/${id}`);
     }
+
+    // === NEW Methods for Agent Dashboard ===
+
+    /**
+     * Get agent's own properties
+     */
+    getMyProperties(filter: any): Observable<PaginatedResponse<PropertyCardDto>> {
+        let params = new HttpParams();
+        for (const key in filter) {
+            if (filter[key] !== null && filter[key] !== undefined && filter[key] !== '') {
+                params = params.set(key, filter[key].toString());
+            }
+        }
+        return this.http.get<PaginatedResponse<PropertyCardDto>>(`${this.apiUrl}/my-properties`, { params });
+    }
+
+    /**
+     * Create a new property
+     */
+    createProperty(formData: FormData): Observable<any> {
+        return this.http.post(this.apiUrl, formData);
+    }
+
+    /**
+     * Update an existing property
+     */
+    updateProperty(id: number, formData: FormData): Observable<any> {
+        return this.http.put(`${this.apiUrl}/${id}`, formData);
+    }
+
+    /**
+     * Delete a property
+     */
+    deleteProperty(id: number): Observable<any> {
+        return this.http.delete(`${this.apiUrl}/${id}`);
+    }
+
 
     /**
      * Map backend DTO to frontend Property model
