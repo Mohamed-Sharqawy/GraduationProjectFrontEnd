@@ -2,7 +2,7 @@ import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { AgentsService } from '../../Services/AgentServices/AgentsService';
+import { AgentService } from '../../Services/Agent-Service/agent.service';
 import { Agent } from '../../Models/Agents/Agents';
 import { AgentFilterDto } from '../../Models/Agents/agent-filter.dto';
 
@@ -30,7 +30,7 @@ export class FindMyAgentComponent implements OnInit {
   };
 
   constructor(
-    private agentsService: AgentsService,
+    private agentsService: AgentService,
     private cdr: ChangeDetectorRef
   ) { }
 

@@ -7,10 +7,10 @@
                 <div class="relative cursor-pointer group" (click)="fileInput.click()">
                     <div
                         class="w-12 h-12 rounded-full overflow-hidden bg-green-100 flex items-center justify-center text-green-600 font-bold text-xl border-2 border-transparent group-hover:border-green-400 transition-all">
-                        <img *ngIf="authService.currentUser()?.profileImageUrl"
-                            [src]="authService.currentUser()?.profileImageUrl" class="w-full h-full object-cover"
-                            alt="Profile">
-                        <span *ngIf="!authService.currentUser()?.profileImageUrl">{{
+                        <img *ngIf="filePreviewUrl || authService.currentUser()?.profileImageUrl"
+                            [src]="filePreviewUrl || authService.currentUser()?.profileImageUrl"
+                            class="w-full h-full object-cover" alt="Profile">
+                        <span *ngIf="!filePreviewUrl && !authService.currentUser()?.profileImageUrl">{{
                             authService.currentUser()?.fullName?.charAt(0) || 'U' }}</span>
                     </div>
                     <div
@@ -50,6 +50,8 @@
                 class="w-full text-left px-4 py-2.5 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-50 flex items-center gap-3 transition-colors border-none cursor-pointer bg-transparent">
                 <i class="fa fa-user border-none"></i> Personal Info
             </button>
+
+
         </nav>
     </aside>
 
@@ -63,7 +65,7 @@
                 <div class="text-gray-400 mb-3 text-5xl"><i class="fa fa-building-o"></i></div>
                 <h3 class="text-lg font-medium text-gray-800 mb-2">No properties published yet</h3>
                 <p class="text-gray-500 mb-6">Start selling your properties today.</p>
-                <button
+                <button (click)="handleListProperty()"
                     class="bg-[#28b16d] text-white px-6 py-2.5 rounded-lg font-medium hover:bg-[#209e60] transition-colors border-none cursor-pointer">
                     List a Property
                 </button>
@@ -74,10 +76,67 @@
         <!-- Saved Properties Tab -->
         <div *ngIf="activeTab === 'saved'">
             <h2 class="text-2xl font-bold text-gray-800 mb-6">Saved Properties</h2>
-            <div class="bg-white p-8 rounded-xl shadow-sm border border-gray-100 text-center py-20">
+
+            <!-- Loading State -->
+            <div *ngIf="isLoadingSaved" class="text-center py-12">
+                <div
+                    class="inline-block w-10 h-10 border-4 border-gray-200 border-t-[#28b16d] rounded-full animate-spin mb-4">
+                </div>
+                <p class="text-gray-500">Loading saved properties...</p>
+            </div>
+
+            <!-- Empty State -->
+            <div *ngIf="!isLoadingSaved && savedProperties.length === 0"
+                class="bg-white p-8 rounded-xl shadow-sm border border-gray-100 text-center py-20">
                 <div class="text-gray-400 mb-3 text-5xl"><i class="fa fa-heart-o"></i></div>
                 <h3 class="text-lg font-medium text-gray-800 mb-2">No saved properties</h3>
-                <p class="text-gray-500">Properties you like will appear here.</p>
+                <p class="text-gray-500 mb-6">Properties you like will appear here.</p>
+                <button routerLink="/listingproperties"
+                    class="bg-[#28b16d] text-white px-6 py-2.5 rounded-lg font-medium hover:bg-[#209e60] transition-colors border-none cursor-pointer">
+                    Browse Properties
+                </button>
+            </div>
+
+            <!-- Saved Properties Grid -->
+            <div *ngIf="!isLoadingSaved && savedProperties.length > 0"
+                class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div *ngFor="let saved of savedProperties"
+                    class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow relative">
+
+                    <!-- Property Image -->
+                    <div class="relative h-48 bg-gray-100">
+                        <img [src]="saved.property.imageUrl || 'https://images.unsplash.com/photo-1564013799919-ab600027ffc6?q=80&w=400'"
+                            [alt]="saved.property.title" class="w-full h-full object-cover">
+                        <button (click)="unsaveProperty(saved.property.id)"
+                            class="absolute top-3 right-3 bg-white/90 hover:bg-red-100 text-red-500 rounded-full w-8 h-8 flex items-center justify-center transition-all border-none cursor-pointer"
+                            title="Remove from saved">
+                            <i class="fa fa-heart"></i>
+                        </button>
+                    </div>
+
+                    <!-- Property Details -->
+                    <div class="p-4">
+                        <h3 class="font-bold text-gray-800 mb-1 truncate">{{ saved.property.title }}</h3>
+                        <p class="text-sm text-gray-500 mb-2">{{ saved.property.location || saved.property.cityName }}
+                        </p>
+                        <div class="flex items-center justify-between">
+                            <span class="text-lg font-bold text-[#28b16d]">{{ saved.property.price | currency:
+                                (saved.property.currency || 'EGP') :'symbol':'1.0-0' }}</span>
+                            <a [routerLink]="['/propertyview', saved.property.id]"
+                                class="text-sm text-[#28b16d] hover:underline font-medium">
+                                View Details →
+                            </a>
+                        </div>
+                        <div class="flex gap-4 mt-3 text-xs text-gray-500">
+                            <span *ngIf="saved.property.bedrooms"><i class="fa fa-bed mr-1"></i>{{
+                                saved.property.bedrooms }} Beds</span>
+                            <span *ngIf="saved.property.bathrooms"><i class="fa fa-bath mr-1"></i>{{
+                                saved.property.bathrooms }} Baths</span>
+                            <span *ngIf="saved.property.area"><i class="fa fa-expand mr-1"></i>{{ saved.property.area }}
+                                m²</span>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -85,68 +144,98 @@
         <div *ngIf="activeTab === 'subscription'">
             <h2 class="text-2xl font-bold text-gray-800 mb-6">My Subscription</h2>
 
+            <!-- Loading State -->
+            <div *ngIf="isLoadingSubscription || isLoadingPackages" class="text-center py-12">
+                <div
+                    class="inline-block w-10 h-10 border-4 border-gray-200 border-t-[#28b16d] rounded-full animate-spin mb-4">
+                </div>
+                <p class="text-gray-500">Loading subscription info...</p>
+            </div>
+
             <!-- Active Subscription Status -->
-            <div *ngIf="currentSubscription" class="bg-white p-6 rounded-xl shadow-sm border border-green-200 mb-8">
+            <div *ngIf="!isLoadingSubscription && hasActiveSubscription"
+                class="bg-white p-6 rounded-xl shadow-sm border border-green-200 mb-8">
                 <div class="flex justify-between items-start mb-6">
                     <div>
                         <span
                             class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide">Active</span>
-                        <h3 class="text-xl font-bold text-gray-800 mt-2">{{ currentSubscription.package.name }} Plan
-                        </h3>
+                        <h3 class="text-xl font-bold text-gray-800 mt-2">{{ subscriptionStatus?.packageName }} Plan</h3>
+                        <p class="text-sm text-gray-500 mt-1">{{ subscriptionStatus?.daysRemaining }} days remaining</p>
                     </div>
-                    <button class="text-gray-400 hover:text-gray-600 bg-transparent border-none cursor-pointer"><i
-                            class="fa fa-ellipsis-h"></i></button>
                 </div>
 
-                <div class="grid grid-cols-3 gap-6">
+                <div class="grid grid-cols-2 gap-6">
                     <div class="bg-gray-50 p-4 rounded-lg text-center">
                         <div class="text-2xl font-bold text-gray-800">{{ remainingAdsDisplay.standard }}</div>
-                        <div class="text-xs text-gray-500 uppercase font-semibold mt-1">Standard Ads</div>
+                        <div class="text-xs text-gray-500 uppercase font-semibold mt-1">Properties Remaining</div>
                     </div>
                     <div class="bg-gray-50 p-4 rounded-lg text-center">
                         <div class="text-2xl font-bold text-gray-800">{{ remainingAdsDisplay.featured }}</div>
-                        <div class="text-xs text-gray-500 uppercase font-semibold mt-1">Featured Ads</div>
-                    </div>
-                    <div class="bg-gray-50 p-4 rounded-lg text-center">
-                        <div class="text-2xl font-bold text-gray-800">{{ remainingAdsDisplay.premium }}</div>
-                        <div class="text-xs text-gray-500 uppercase font-semibold mt-1">Premium Ads</div>
+                        <div class="text-xs text-gray-500 uppercase font-semibold mt-1">Featured Remaining</div>
                     </div>
                 </div>
             </div>
 
+            <!-- No Subscription Message -->
+            <div *ngIf="!isLoadingSubscription && !hasActiveSubscription"
+                class="bg-yellow-50 border border-yellow-200 p-4 rounded-lg mb-6">
+                <div class="flex items-center gap-3">
+                    <i class="fa fa-exclamation-triangle text-yellow-600"></i>
+                    <p class="text-yellow-800 font-medium">You don't have an active subscription. Subscribe to a plan to
+                        list properties and access the dashboard.</p>
+                </div>
+            </div>
+
             <!-- Packages Grid -->
-            <h3 class="text-lg font-bold text-gray-800 mb-4" *ngIf="currentSubscription">Upgrade Plan</h3>
+            <h3 class="text-lg font-bold text-gray-800 mb-4">{{ hasActiveSubscription ? 'Upgrade Plan' : 'Choose a Plan'
+                }}</h3>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div *ngFor="let pkg of packages"
-                    class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow relative flex flex-col">
-                    <!-- Top Border for Plans -->
-                    <div class="h-1 w-full"
-                        [ngClass]="{'bg-orange-400': pkg.type === 'bronze', 'bg-gray-400': pkg.type === 'silver', 'bg-yellow-400': pkg.type === 'gold'}">
-                    </div>
+                    class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow relative flex flex-col"
+                    [class.border-[#28b16d]]="hasActiveSubscription && subscriptionStatus?.packageName === pkg.name">
+                    <!-- Top Border -->
+                    <div class="h-1 w-full bg-gradient-to-r from-[#28b16d] to-[#21965c]"></div>
 
                     <div class="p-6 flex-1 flex flex-col">
                         <h3 class="text-xl font-bold text-gray-800 mb-2">{{ pkg.name }}</h3>
-                        <div class="text-3xl font-bold text-gray-800 mb-6">{{ pkg.price }}</div>
+                        <div class="text-3xl font-bold text-gray-800 mb-2">{{ pkg.price |
+                            currency:'EGP':'symbol':'1.0-0' }}</div>
+                        <p class="text-sm text-gray-500 mb-6">{{ pkg.durationDays }} days</p>
 
                         <ul class="space-y-3 mb-8 flex-1 pl-0">
-                            <li *ngFor="let feat of pkg.features" class="flex items-center gap-3 text-sm text-gray-600">
-                                <i class="fa fa-check text-green-500 text-xs"></i> {{ feat }}
+                            <li class="flex items-center gap-3 text-sm text-gray-600">
+                                <i class="fa fa-check text-green-500 text-xs"></i> {{ pkg.maxProperties }} Properties
+                            </li>
+                            <li class="flex items-center gap-3 text-sm text-gray-600">
+                                <i class="fa fa-check text-green-500 text-xs"></i> {{ pkg.maxFeatured }} Featured
+                                Properties
+                            </li>
+                            <li *ngIf="pkg.canBumpUp" class="flex items-center gap-3 text-sm text-gray-600">
+                                <i class="fa fa-check text-green-500 text-xs"></i> Bump Up Available
                             </li>
                         </ul>
 
                         <button (click)="subscribe(pkg)"
                             class="w-full py-2.5 rounded-lg font-medium transition-colors border-none cursor-pointer"
-                            [ngClass]="{'bg-gray-800 text-white hover:bg-gray-900': !currentSubscription || currentSubscription.package.name !== pkg.name, 'bg-gray-100 text-gray-400 cursor-not-allowed': currentSubscription && currentSubscription.package.name === pkg.name}"
-                            [disabled]="currentSubscription && currentSubscription.package.name === pkg.name">
-                            {{ currentSubscription && currentSubscription.package.name === pkg.name ? 'Current Plan' :
-                            'Subscribe' }}
+                            [ngClass]="{
+                                'bg-[#28b16d] text-white hover:bg-[#21965c]': !hasActiveSubscription || subscriptionStatus?.packageName !== pkg.name,
+                                'bg-gray-100 text-gray-400 cursor-not-allowed': hasActiveSubscription && subscriptionStatus?.packageName === pkg.name
+                            }"
+                            [disabled]="(hasActiveSubscription && subscriptionStatus?.packageName === pkg.name) || isProcessingPayment">
+                            <span *ngIf="isProcessingPayment && selectedPackageId === pkg.id">
+                                <i class="fa fa-spinner fa-spin mr-2"></i> Processing...
+                            </span>
+                            <span *ngIf="!isProcessingPayment || selectedPackageId !== pkg.id">
+                                {{ hasActiveSubscription && subscriptionStatus?.packageName === pkg.name ? 'Current
+                                Plan' : 'Subscribe' }}
+                            </span>
                         </button>
                     </div>
                 </div>
             </div>
 
-            <!-- Mock Dashboard Access Button (Only visible if subscribed) -->
-            <div *ngIf="currentSubscription" class="mt-8 text-center">
+            <!-- Dashboard Access Button (Only visible if subscribed) -->
+            <div *ngIf="hasActiveSubscription" class="mt-8 text-center">
                 <button routerLink="/user-dashboard"
                     class="bg-[#28b16d] text-white px-8 py-3 rounded-lg font-bold text-lg hover:bg-[#21965c] transition-colors border-none cursor-pointer flex items-center gap-2 mx-auto">
                     Go to Dashboard <i class="fa fa-arrow-right"></i>
@@ -158,7 +247,7 @@
         <!-- Personal Info Tab -->
         <div *ngIf="activeTab === 'personal-info'">
             <h2 class="text-2xl font-bold text-gray-800 mb-6">Personal Information</h2>
-            <div class="bg-white p-8 rounded-xl shadow-sm border border-gray-100 max-w-2xl">
+            <div class="bg-white p-8 rounded-xl shadow-sm border border-gray-100 w-full h-full">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <!-- Full Name -->
                     <div class="col-span-2">
@@ -169,9 +258,16 @@
 
                     <!-- Email -->
                     <div class="col-span-2">
-                        <label class="block text-sm font-bold text-gray-700 mb-2">Email Address</label>
+                        <label class="block text-sm font-bold text-gray-700 mb-2 flex items-center justify-between">
+                            Email Address
+                            <span
+                                class="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full flex items-center gap-1">
+                                <i class="fa fa-check-circle"></i> Verified
+                            </span>
+                        </label>
                         <input type="email" [(ngModel)]="formData.email"
-                            class="w-full border border-gray-300 rounded-lg px-4 py-3 text-gray-700 focus:outline-none focus:border-green-500 transition-colors">
+                            class="w-full border border-gray-300 rounded-lg px-4 py-3 text-gray-700 focus:outline-none focus:border-green-500 transition-colors"
+                            [disabled]="true" title="Email cannot be changed">
                     </div>
 
                     <!-- Phone -->
@@ -197,6 +293,9 @@
                 </div>
             </div>
         </div>
+
+        <!-- Verification Tab -->
+
 
     </main>
 </div>

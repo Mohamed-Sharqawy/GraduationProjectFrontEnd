@@ -26,31 +26,34 @@
 
     <div class="feature-grid">
         <!-- Feature 1: Finding a Property -->
-        <div class="feature-card">
+        <div class="feature-card cursor-pointer" routerLink="/listingproperties">
             <div class="card-content">
                 <h3>Find a Property</h3>
                 <p>Explore our wide range of properties for sale and rent.</p>
-                <a routerLink="/listingproperties">Browse Properties →</a>
+                <a routerLink="/listingproperties" class="text-[#28b16d] font-bold no-underline hover:underline">Browse
+                    Properties →</a>
             </div>
             <div class="card-icon">🏠</div>
         </div>
 
         <!-- Feature 2: Finding an Agent -->
-        <div class="feature-card blue-card">
+        <div class="feature-card blue-card cursor-pointer" routerLink="/find-my-agent">
             <div class="card-content">
                 <h3>Find an Agent</h3>
                 <p>Connect with top real estate agents to help you.</p>
-                <a routerLink="/find-my-agent">Find Agents →</a>
+                <a routerLink="/find-my-agent" class="text-[#28b16d] font-bold no-underline hover:underline">Find Agents
+                    →</a>
             </div>
             <div class="card-icon">🤵</div>
         </div>
 
         <!-- Feature 3: Sell Your Property -->
-        <div class="feature-card">
+        <div class="feature-card cursor-pointer" (click)="handleSellProperty()">
             <div class="card-content">
                 <h3>Sell Your Property</h3>
                 <p>List your property with us and reach thousands of buyers.</p>
-                <a routerLink="/user-dashboard">List Property →</a>
+                <a (click)="$event.stopPropagation(); handleSellProperty()"
+                    class="text-[#28b16d] font-bold no-underline hover:underline cursor-pointer">List Property →</a>
             </div>
             <div class="card-icon">🔑</div>
         </div>

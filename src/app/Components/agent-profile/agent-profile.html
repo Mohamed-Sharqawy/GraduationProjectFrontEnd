@@ -111,8 +111,8 @@
                 @for (prop of agent.properties; track prop.id) {
                 <div class="property-card" [routerLink]="['/propertyview', prop.id]" style="cursor: pointer;">
                     <div class="property-image-container">
-                        <img [src]="prop.mainImageUrl || 'https://placehold.co/600x400?text=No+Image'"
-                            [alt]="prop.title" class="property-image">
+                        <img [src]="prop.imageUrl || 'https://placehold.co/600x400?text=No+Image'" [alt]="prop.title"
+                            class="property-image">
                         @if (prop.isFeatured) {
                         <span class="hot-badge">HOT</span>
                         }
@@ -123,12 +123,13 @@
                         </h3>
                         <p class="property-specs">
                             <span class="type">{{ prop.propertyType }}</span>
-                            <span class="specs"><i class="fas fa-bed"></i> {{ prop.rooms }}</span>
+                            <span class="specs"><i class="fas fa-bed"></i> {{ prop.bedrooms }}</span>
                             <span class="specs"><i class="fas fa-bath"></i> {{ prop.bathrooms }}</span>
                             <span class="area">Area: {{ prop.area }} Sq. M.</span>
                         </p>
                         <h4 class="property-title">{{ prop.title }}</h4>
-                        <p class="property-location"><i class="fas fa-map-marker-alt"></i> {{ prop.location }}</p>
+                        <p class="property-location"><i class="fas fa-map-marker-alt"></i> {{ prop.location ||
+                            prop.cityName }}</p>
 
                         <div class="property-actions">
                             <button class="prop-action-btn email"><i class="far fa-envelope"></i> Email</button>

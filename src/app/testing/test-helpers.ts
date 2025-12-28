@@ -8,7 +8,7 @@ import { MockAuthService } from '../Services/Auth-Service/mock-auth.service';
  */
 
 // Set to true to use mock service for testing
-export const USE_MOCK_AUTH = true;
+export const USE_MOCK_AUTH = false;
 
 /**
  * Get the auth service provider based on configuration

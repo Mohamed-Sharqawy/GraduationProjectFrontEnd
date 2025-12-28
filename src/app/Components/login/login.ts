@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { AuthService } from '../../Services/Auth-Service/auth-service';
 import { FormsModule } from '@angular/forms';
 import { RouterModule, Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-login',
@@ -13,7 +14,11 @@ export class Login {
   email = '';
   password = '';
 
-  constructor(private authService: AuthService, private router: Router) { }
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+    private toastr: ToastrService
+  ) { }
 
   login() {
     console.log('🔐 Login function called!');
@@ -30,15 +35,16 @@ export class Login {
         // this.authService.storeAuthData(response);
 
         // Show success message
-        alert(`Welcome back, ${response.fullName}!`);
+        this.toastr.success(`Welcome back, ${response.fullName}!`, 'Login Successful');
 
         // Navigate to home page
         this.router.navigate(['/home']);
       },
       error: (error) => {
         console.error('❌ Login failed:', error);
-        alert('Login failed: ' + (error.error?.message || error.message || 'Invalid credentials'));
+        this.toastr.error(error.error?.message || error.message || 'Invalid credentials', 'Login Failed');
       }
     });
   }
 }
+

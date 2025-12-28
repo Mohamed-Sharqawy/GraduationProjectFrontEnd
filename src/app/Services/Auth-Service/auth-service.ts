@@ -1,13 +1,11 @@
 import { Injectable, signal } from '@angular/core';
 import { tap } from 'rxjs/operators';
-import { of } from 'rxjs';
 import { API_EndPoints } from '../../../environments/api.config';
 import { environment } from '../../../environments/environments';
 import { HttpClient } from '@angular/common/http';
 import { Loginrequest } from '../../Models/loginrequest';
 import { User } from '../../Models/user';
 import { Registerrequest } from '../../Models/registerrequest';
-import { UserRole } from '../../Models/user-role';
 
 @Injectable({
   providedIn: 'root',
@@ -27,47 +25,68 @@ export class AuthService {
   }
 
   login(data: Loginrequest) {
-    // Mock Login for UI testing
-    const mockUser: User = {
-      id: 'mock-id-123',
-      fullName: 'Test User',
-      email: data.email,
-      phoneNumber: '1234567890',
-      role: UserRole.Owner, // Default to Owner (Regular User)
-      isVerified: true,
-      token: 'mock-jwt-token'
-    };
-
-    this.storeAuthData(mockUser);
-    return of(mockUser);
-
-    // return this.http.post<User>(this.apiUrl + API_EndPoints.login, data).pipe(
-    //   tap(user => this.storeAuthData(user))
-    // );
+    return this.http.post<User>(this.apiUrl + API_EndPoints.login, data).pipe(
+      tap(user => this.storeAuthData(user))
+    );
   }
 
   register(data: Registerrequest) {
-    // Mock Register for UI testing
-    const mockUser: User = {
-      id: 'mock-id-new',
-      fullName: data.fullName,
-      email: data.email,
-      phoneNumber: data.phoneNumber,
-      role: UserRole.Owner,
-      isVerified: true,
-      token: 'mock-jwt-token'
-    };
-
-    this.storeAuthData(mockUser);
-    return of(mockUser);
-
-    // return this.http.post<User>(this.apiUrl + API_EndPoints.register, data).pipe(
-    //   tap(user => this.storeAuthData(user))
-    // );
+    return this.http.post<User>(this.apiUrl + API_EndPoints.register, data).pipe(
+      tap(user => this.storeAuthData(user))
+    );
   }
 
   getCurrentUser() {
     return this.http.get<User>(this.apiUrl + API_EndPoints.getCurrentUser);
+  }
+
+  updateProfile(data: Partial<User>) {
+    return this.http.put<User>(this.apiUrl + API_EndPoints.updateProfile, data).pipe(
+      tap(updatedUser => {
+        // Merge with existing user data to preserve token and other fields
+        const currentUser = this.currentUser();
+        if (currentUser) {
+          const mergedUser = { ...currentUser, ...updatedUser };
+          this.storeAuthData(mergedUser);
+        }
+      })
+    );
+  }
+
+  uploadProfileImage(file: File) {
+    const formData = new FormData();
+    formData.append('file', file);
+
+    return this.http.post<{ imageUrl: string }>(this.apiUrl + API_EndPoints.uploadPhoto, formData).pipe(
+      tap(response => {
+        const currentUser = this.currentUser();
+        if (currentUser) {
+          const updatedUser = { ...currentUser, profileImageUrl: response.imageUrl };
+          this.storeAuthData(updatedUser);
+        }
+      })
+    );
+  }
+
+  updateAgentProfile(formData: FormData) {
+    // using environment.apiUrl + '/Agents' + '/profile' as discussed
+    // This assumes environment.apiUrl ends with /api usually, but let's check environment.ts if possible or safe bet
+    // Existing code uses environment.apiUrl + API_EndPoints.account
+    // API_EndPoints.account is '/Account'
+    // So environment.apiUrl is likely 'http://.../api' or 'http://...'
+    // I'll reuse the pattern.
+    const agentsUrl = environment.apiUrl + API_EndPoints.agents + '/profile';
+    return this.http.put(agentsUrl, formData).pipe(
+      tap(() => {
+        // We need to fetch the updated user data or update the signal locally
+        // Since the response might not return the full user, we might want to reload "me"
+        // But for now let's hope it returns OK and we can update from the formData if needed
+        // Or better, fetch current user again to be safe
+        this.getCurrentUser().subscribe(user => {
+          this.storeAuthData(user);
+        });
+      })
+    );
   }
 
   /**

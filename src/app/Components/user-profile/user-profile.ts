@@ -1,9 +1,14 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, inject, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { RouterModule, ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '../../Services/Auth-Service/auth-service';
 import { FormsModule } from '@angular/forms';
 import { UserRole } from '../../Models/user-role';
+import { SubscriptionService } from '../../Services/Subscription-Service/subscription.service';
+import { SavedPropertyService } from '../../Services/SavedProperty-Service/saved-property.service';
+import { PackageDto, SubscriptionStatusDto } from '../../Models/Subscription/subscription.models';
+import { SavedPropertyDto } from '../../Models/SavedProperty/saved-property.models';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
     selector: 'app-user-profile',
@@ -12,8 +17,10 @@ import { UserRole } from '../../Models/user-role';
     templateUrl: './user-profile.html',
     styleUrl: './user-profile.css'
 })
-export class UserProfile {
+export class UserProfile implements OnInit {
     activeTab: 'published' | 'subscription' | 'saved' | 'personal-info' = 'published';
+
+
 
     // Personal Info Form Data
     formData = {
@@ -23,122 +30,332 @@ export class UserProfile {
         whatsapp: ''
     };
 
-    // Static subscription data
-    packages = [
-        {
-            name: 'Bronze',
-            type: 'bronze',
-            price: 'Free',
-            features: ['5 Standard Ads', '0 Featured Ads', '0 Premium Ads'],
-            quota: { standard: 5, featured: 0, premium: 0 }
-        },
-        {
-            name: 'Silver',
-            type: 'silver',
-            price: '$29/mo',
-            features: ['15 Standard Ads', '5 Featured Ads', '1 Premium Ad'],
-            quota: { standard: 15, featured: 5, premium: 1 }
-        },
-        {
-            name: 'Gold',
-            type: 'gold',
-            price: '$99/mo',
-            features: ['Unlimited Standard Ads', '20 Featured Ads', '10 Premium Ads'],
-            quota: { standard: 999, featured: 20, premium: 10 }
-        }
-    ];
+    // Packages from API
+    packages: PackageDto[] = [];
+    isLoadingPackages = false;
 
-    // Mock User Subscription State
-    currentSubscription: any = null;
+    // Subscription Status from API
+    subscriptionStatus: SubscriptionStatusDto | null = null;
+    isLoadingSubscription = false;
 
-    constructor(public authService: AuthService) {
-        // Initialize form data with current user
-        const user = this.authService.currentUser();
-        if (user) {
-            this.formData = {
-                fullName: user.fullName || '',
-                email: user.email || '',
-                phone: user.phoneNumber || '',
-                whatsapp: user.whatsappNumber || ''
-            };
-        }
+    // Saved Properties from API
+    savedProperties: SavedPropertyDto[] = [];
+    isLoadingSaved = false;
+
+    // PayPal payment state
+    isProcessingPayment = false;
+    selectedPackageId: number | null = null;
+
+    public authService = inject(AuthService);
+    private subscriptionService = inject(SubscriptionService);
+    private savedPropertyService = inject(SavedPropertyService);
+    private route = inject(ActivatedRoute);
+    private router = inject(Router);
+    private cdr = inject(ChangeDetectorRef);
+    private toastr = inject(ToastrService);
+
+    constructor() {
+        // Initialize form data with current user using effect to stay in sync
+        effect(() => {
+            const user = this.authService.currentUser();
+            if (user) {
+                this.formData = {
+                    fullName: user.fullName || '',
+                    email: user.email || '',
+                    phone: user.phoneNumber || '',
+                    whatsapp: user.whatsappNumber || ''
+                };
+
+
+            }
+        });
+    }
+
+    ngOnInit() {
+        // Check for tab query param
+        this.route.queryParams.subscribe(params => {
+            if (params['tab']) {
+                this.setActiveTab(params['tab'] as any);
+            }
+        });
+
+        // Check for PayPal callback
+        this.route.queryParams.subscribe(params => {
+            if (params['token'] && params['PayerID']) {
+                // PayPal returned with payment approval
+                this.handlePayPalCallback(params['token'], params['PayerID']);
+            }
+        });
+
+        // Load packages on init
+        this.loadPackages();
+        this.loadSubscriptionStatus();
     }
 
     setActiveTab(tab: 'published' | 'subscription' | 'saved' | 'personal-info') {
         this.activeTab = tab;
-    }
 
-    subscribe(pkg: any) {
-        if (confirm(`Do you want to subscribe to the ${pkg.name} package? (Mock Payment)`)) {
-            // Mock successful payment
-            this.currentSubscription = {
-                package: pkg,
-                remainingAds: { ...pkg.quota },
-                startDate: new Date()
-            };
-
-            // Mock upgrading the user to Agent so they can access the dashboard
-            const currentUser = this.authService.currentUser();
-            if (currentUser) {
-                const updatedUser = { ...currentUser, role: UserRole.Agent };
-                this.authService.currentUser.set(updatedUser);
-
-                // Also update local storage for persistence if needed
-                if (typeof localStorage !== 'undefined') {
-                    localStorage.setItem('user', JSON.stringify(updatedUser));
-                }
-            }
-
-            alert('Subscription Successful! You have been upgraded to Agent status and can now access the dashboard.');
+        // Load data when switching tabs
+        if (tab === 'saved') {
+            this.loadSavedProperties();
+        } else if (tab === 'subscription') {
+            this.loadPackages();
+            this.loadSubscriptionStatus();
         }
     }
 
-    get remainingAdsDisplay() {
-        if (!this.currentSubscription) return null;
-        return this.currentSubscription.remainingAds;
+    /**
+     * Load available packages from API
+     */
+    loadPackages() {
+        this.isLoadingPackages = true;
+        this.subscriptionService.getPackages().subscribe({
+            next: (packages) => {
+                console.log('API Response Packages:', packages);
+                if (packages && packages.length > 0) {
+                    console.log('First package sample:', packages[0]);
+                } else {
+                    console.warn('API returned empty packages array');
+                }
+                this.packages = packages;
+                this.isLoadingPackages = false;
+                this.cdr.detectChanges();
+            },
+            error: (error) => {
+                console.error('Failed to load packages:', error);
+                this.isLoadingPackages = false;
+                this.cdr.detectChanges();
+            }
+        });
     }
+
+    /**
+     * Load subscription status from API
+     */
+    loadSubscriptionStatus() {
+        if (!this.authService.isLoggedIn()) return;
+
+        this.isLoadingSubscription = true;
+        this.subscriptionService.getSubscriptionStatus().subscribe({
+            next: (status) => {
+                this.subscriptionStatus = status;
+                this.isLoadingSubscription = false;
+                this.cdr.detectChanges();
+            },
+            error: (error) => {
+                console.error('Failed to load subscription status:', error);
+                this.isLoadingSubscription = false;
+                this.cdr.detectChanges();
+            }
+        });
+    }
+
+    /**
+     * Load saved properties from API
+     */
+    loadSavedProperties() {
+        if (!this.authService.isLoggedIn()) return;
+
+        this.isLoadingSaved = true;
+        this.savedPropertyService.getMySavedProperties().subscribe({
+            next: (properties) => {
+                this.savedProperties = properties;
+                this.isLoadingSaved = false;
+                this.cdr.detectChanges();
+            },
+            error: (error) => {
+                console.error('Failed to load saved properties:', error);
+                this.isLoadingSaved = false;
+                this.cdr.detectChanges();
+            }
+        });
+    }
+
+    /**
+     * Subscribe to a package via PayPal
+     */
+    subscribe(pkg: PackageDto) {
+        if (this.isProcessingPayment) return;
+
+        this.isProcessingPayment = true;
+        this.selectedPackageId = pkg.id;
+
+        this.subscriptionService.createPayPalOrder(pkg.id).subscribe({
+            next: (response) => {
+                // Store package ID for capture callback
+                if (typeof localStorage !== 'undefined') {
+                    localStorage.setItem('pendingPackageId', pkg.id.toString());
+                }
+                // Redirect to PayPal
+                window.location.href = response.approvalUrl;
+            },
+            error: (error) => {
+                console.error('Failed to create PayPal order:', error);
+                alert('FAILED to start PayPal payment.\n\nError details: ' + JSON.stringify(error, null, 2));
+
+                this.isProcessingPayment = false;
+                this.selectedPackageId = null;
+                this.cdr.detectChanges();
+            }
+        });
+    }
+
+    /**
+     * Handle PayPal callback after user approval
+     */
+    handlePayPalCallback(orderId: string, payerId: string) {
+        const packageIdStr = typeof localStorage !== 'undefined' ? localStorage.getItem('pendingPackageId') : null;
+        if (!packageIdStr) {
+            console.error('No pending package ID found');
+            return;
+        }
+
+        const packageId = parseInt(packageIdStr, 10);
+        this.isProcessingPayment = true;
+
+        this.subscriptionService.capturePayment({
+            packageId,
+            payPalOrderId: orderId,
+            payPalPayerId: payerId
+        }).subscribe({
+            next: (response) => {
+                if (response.success) {
+                    // Clear pending package ID
+                    if (typeof localStorage !== 'undefined') {
+                        localStorage.removeItem('pendingPackageId');
+                    }
+
+                    // Update user role to Agent
+                    const currentUser = this.authService.currentUser();
+                    if (currentUser) {
+                        const updatedUser = { ...currentUser, role: UserRole.Agent };
+                        this.authService.currentUser.set(updatedUser);
+                        if (typeof localStorage !== 'undefined') {
+                            localStorage.setItem('user', JSON.stringify(updatedUser));
+                        }
+                    }
+
+                    // Reload subscription status
+                    this.loadSubscriptionStatus();
+                    this.toastr.success('You now have an active subscription!', '🎉 Payment Successful');
+
+                    // Redirect to dashboard after a short delay
+                    setTimeout(() => {
+                        this.router.navigate(['/user-dashboard']);
+                    }, 1500);
+                } else {
+                    this.toastr.error('Payment failed: ' + response.message, 'Payment Error');
+                }
+                this.isProcessingPayment = false;
+                this.cdr.detectChanges();
+            },
+            error: (error) => {
+                console.error('Failed to capture payment:', error);
+                this.isProcessingPayment = false;
+                this.toastr.error('Failed to complete payment. Please contact support.', 'Payment Error');
+                this.cdr.detectChanges();
+            }
+        });
+    }
+
+    /**
+     * Unsave a property from saved list
+     */
+    unsaveProperty(propertyId: number) {
+        this.savedPropertyService.unsaveProperty(propertyId).subscribe({
+            next: () => {
+                this.savedProperties = this.savedProperties.filter(sp => sp.property.id !== propertyId);
+                this.cdr.detectChanges();
+            },
+            error: (error) => {
+                console.error('Failed to unsave property:', error);
+            }
+        });
+    }
+
+    /**
+     * Check if user has active subscription
+     */
+    get hasActiveSubscription(): boolean {
+        return this.subscriptionStatus?.hasActiveSubscription ?? false;
+    }
+
+    /**
+     * Get remaining ads display data
+     */
+    get remainingAdsDisplay() {
+        if (!this.subscriptionStatus || !this.subscriptionStatus.hasActiveSubscription) {
+            return { standard: 0, featured: 0, remaining: 0 };
+        }
+        return {
+            standard: this.subscriptionStatus.propertiesRemaining,
+            featured: this.subscriptionStatus.featuredRemaining,
+            remaining: this.subscriptionStatus.daysRemaining
+        };
+    }
+
+    selectedFile: File | null = null;
+    filePreviewUrl: string | null = null; // For local preview before upload
 
     onFileSelected(event: any) {
         const file = event.target.files[0];
         if (file) {
+            this.selectedFile = file;
+
+            // Create preview
             const reader = new FileReader();
-            reader.onload = (e: any) => {
-                const imageUrl = e.target.result;
-
-                // Update user state
-                const currentUser = this.authService.currentUser();
-                if (currentUser) {
-                    const updatedUser = { ...currentUser, profileImageUrl: imageUrl };
-                    this.authService.currentUser.set(updatedUser);
-
-                    // Persist to local storage
-                    if (typeof localStorage !== 'undefined') {
-                        localStorage.setItem('user', JSON.stringify(updatedUser));
-                    }
-                }
+            reader.onload = () => {
+                this.filePreviewUrl = reader.result as string;
+                this.cdr.detectChanges(); // Update view with new image
             };
             reader.readAsDataURL(file);
         }
     }
+
     saveProfile() {
-        const currentUser = this.authService.currentUser();
-        if (currentUser) {
-            const updatedUser = {
-                ...currentUser,
-                fullName: this.formData.fullName,
-                email: this.formData.email,
-                phoneNumber: this.formData.phone,
-                whatsappNumber: this.formData.whatsapp
-            };
+        const formData = new FormData();
 
-            this.authService.currentUser.set(updatedUser);
+        // Append text fields
+        // The API likely expects key 'FullName' etc. matching the DTO properties.
+        // Based on the user's screenshot: FullName, PhoneNumber, WhatsAppNumber, ProfileImage
+        formData.append('FullName', this.formData.fullName);
+        if (this.formData.phone) formData.append('PhoneNumber', this.formData.phone);
+        if (this.formData.whatsapp) formData.append('WhatsAppNumber', this.formData.whatsapp); // Double check if it is WhatsAppNumber or WhatsappNumber. Screenshot says WhatsAppNumber.
 
-            // Persist to local storage
-            if (typeof localStorage !== 'undefined') {
-                localStorage.setItem('user', JSON.stringify(updatedUser));
+        // Append file if selected
+        if (this.selectedFile) {
+            formData.append('ProfileImage', this.selectedFile);
+        }
+
+        this.authService.updateAgentProfile(formData).subscribe({
+            next: () => {
+                this.toastr.success('Profile updated successfully!', 'Success');
+                // Reset selected file after success since it should be part of user profile now
+                this.selectedFile = null;
+                this.filePreviewUrl = null;
+            },
+            error: (error) => {
+                console.error('Failed to update profile:', error);
+                this.toastr.error('Failed to update profile information.', 'Error');
             }
+        });
+    }
 
-            alert('Personal information updated successfully!');
+    /**
+     * Handle "List a Property" button click
+     * Checks subscription status and redirects accordingly
+     */
+    handleListProperty() {
+        if (!this.hasActiveSubscription) {
+            // No active subscription - redirect to subscription tab
+            this.setActiveTab('subscription');
+            this.toastr.warning('You need an active subscription to list properties. Please subscribe to a plan first.', 'Subscription Required');
+        } else {
+            // Has subscription - redirect to dashboard/property creation
+            window.location.href = '/user-dashboard';
         }
     }
+
+
 }
+

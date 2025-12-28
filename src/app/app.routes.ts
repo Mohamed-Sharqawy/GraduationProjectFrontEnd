@@ -7,6 +7,7 @@ import { AgentProfile } from './Components/agent-profile/agent-profile';
 import { UserDashboard } from './Components/userdashboard/userdashboard';
 import { authGuard } from './Gaurds/auth-guard';
 import { agentGuard } from './Gaurds/agent-guard';
+import { subscriptionGuard } from './Gaurds/subscription-guard';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' }, // Added default route
@@ -16,8 +17,8 @@ export const routes: Routes = [
   { path: 'propertyview/:id', component: Propertyview },
   { path: 'agent-profile/:id', component: AgentProfile },
   { path: 'user-profile', loadComponent: () => import('./Components/user-profile/user-profile').then(m => m.UserProfile) },
-  // Dashboard initially restricted to Agents, or handled by component logic for subscribers
-  { path: 'user-dashboard', component: UserDashboard, canActivate: [agentGuard] },
+  // Dashboard requires authentication AND active subscription
+  { path: 'user-dashboard', component: UserDashboard, canActivate: [authGuard, subscriptionGuard] },
   {
     path: 'login', loadComponent: () =>
       import('./Components/login/login').then(m => m.Login)
@@ -26,11 +27,11 @@ export const routes: Routes = [
     path: 'register', loadComponent: () =>
       import('./Components/register/register').then(m => m.Register)
   },
-  // Protected route for testing auth guard
+  // Protected dashboard route
   {
     path: 'dashboard',
     component: Home, // Using Home component as placeholder for testing
-    canActivate: [agentGuard]
+    canActivate: [authGuard, subscriptionGuard]
   }
 ];
 

@@ -1,17 +1,20 @@
 import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { UserRole } from '../../Models/user-role';
 import { Registerrequest } from '../../Models/registerrequest';
 import { AuthService } from '../../Services/Auth-Service/auth-service';
 import { FormsModule } from '@angular/forms';
 import { RouterModule, Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-register',
-  imports: [FormsModule, RouterModule],
+  imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './register.html',
   styleUrl: './register.css',
 })
 export class Register {
+  UserRole = UserRole; // Expose enum to template
   fullName = '';
   phoneNumber = '';
   whatsAppNumber?: string;
@@ -20,7 +23,11 @@ export class Register {
   email = '';
   role: UserRole = UserRole.Owner; // Use UserRole enum type instead of string
 
-  constructor(private authService: AuthService, private router: Router) { }
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+    private toastr: ToastrService
+  ) { }
 
   register() {
     console.log('📝 Register function called!');
@@ -36,13 +43,13 @@ export class Register {
 
     // Validate password match
     if (this.password !== this.confirmPassword) {
-      alert('Passwords do not match!');
+      this.toastr.error('Passwords do not match!', 'Validation Error');
       return;
     }
 
     // Validate required fields
     if (!this.fullName || !this.email || !this.phoneNumber || !this.password) {
-      alert('Please fill in all required fields!');
+      this.toastr.error('Please fill in all required fields!', 'Validation Error');
       return;
     }
 
@@ -67,15 +74,16 @@ export class Register {
         // this.authService.storeAuthData(response);
 
         // Show success message
-        alert(`Welcome to Homey, ${response.fullName}! Your account has been created.`);
+        this.toastr.success(`Welcome to Homey, ${response.fullName}! Your account has been created.`, 'Registration Successful');
 
         // Navigate to home page
         this.router.navigate(['/home']);
       },
       error: (error) => {
         console.error('❌ Registration failed:', error);
-        alert('Registration failed: ' + (error.error?.message || error.message || 'Unknown error'));
+        this.toastr.error(error.error?.message || error.message || 'Unknown error', 'Registration Failed');
       }
     });
   }
 }
+

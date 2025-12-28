@@ -4,6 +4,8 @@ import { ActivatedRoute } from '@angular/router';
 import { PropertyService } from '../../Services/Property-Service/property.service';
 import { AgentService } from '../../Services/Agent-Service/agent.service';
 import { PropertyDetailsDto } from '../../Models/Property/property-details.dto';
+import { SavedPropertyService } from '../../Services/SavedProperty-Service/saved-property.service';
+import { AuthService } from '../../Services/Auth-Service/auth-service';
 
 @Component({
   selector: 'app-propertyview',
@@ -29,9 +31,13 @@ export class Propertyview implements OnInit {
     area: 0
   };
 
-  // Analytics (Mock Data)
-  viewCount = 142; // Static random number
-  whatsappClickCount = 15;
+  // Analytics
+  viewCount = 0;
+  whatsappClickCount = 0;
+
+  // Saved property state
+  isSaved = false;
+  propertyId: number | null = null;
 
   description: string[] = [];
 
@@ -59,13 +65,17 @@ export class Propertyview implements OnInit {
     private route: ActivatedRoute,
     private propertyService: PropertyService,
     private agentService: AgentService,
+    private savedPropertyService: SavedPropertyService,
+    public authService: AuthService,
     private cdr: ChangeDetectorRef
   ) { }
 
   ngOnInit() {
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
-      this.loadProperty(Number(id));
+      this.propertyId = Number(id);
+      this.loadProperty(this.propertyId);
+      this.checkIfSaved(this.propertyId);
     } else {
       this.errorMessage = 'Invalid property ID.';
       this.isLoading = false;
@@ -191,5 +201,46 @@ export class Propertyview implements OnInit {
       const url = `https://wa.me/${this.agent.whatsapp}`;
       window.open(url, '_blank');
     }
+  }
+
+  /**
+   * Check if this property is saved by the current user
+   */
+  checkIfSaved(propertyId: number) {
+    if (!this.authService.isLoggedIn()) {
+      return;
+    }
+
+    this.savedPropertyService.isPropertySaved(propertyId).subscribe({
+      next: (response) => {
+        this.isSaved = response.isSaved;
+        this.cdr.detectChanges();
+      },
+      error: (error) => {
+        console.error('Failed to check saved status:', error);
+      }
+    });
+  }
+
+  /**
+   * Toggle save/unsave this property
+   */
+  toggleSave() {
+    if (!this.authService.isLoggedIn()) {
+      window.location.href = '/login';
+      return;
+    }
+
+    if (this.propertyId === null) return;
+
+    this.savedPropertyService.toggleSaveProperty(this.propertyId).subscribe({
+      next: (response) => {
+        this.isSaved = response.isSaved;
+        this.cdr.detectChanges();
+      },
+      error: (error) => {
+        console.error('Failed to toggle save:', error);
+      }
+    });
   }
 }

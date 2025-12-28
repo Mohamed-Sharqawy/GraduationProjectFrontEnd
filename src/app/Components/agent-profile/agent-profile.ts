@@ -1,8 +1,8 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { AgentsService } from '../../Services/AgentServices/AgentsService';
-import { AgentProfile as AgentProfileModel } from '../../Models/Agents/Agents';
+import { AgentService } from '../../Services/Agent-Service/agent.service';
+import { AgentProfileDto } from '../../Models/Agent/agent-profile.dto';
 
 @Component({
   selector: 'app-agent-profile',
@@ -13,12 +13,12 @@ import { AgentProfile as AgentProfileModel } from '../../Models/Agents/Agents';
 })
 export class AgentProfile implements OnInit {
   agentId: string | null = null;
-  agent: AgentProfileModel | null = null;
+  agent: AgentProfileDto | null = null;
   isLoading: boolean = true;
 
   constructor(
     private route: ActivatedRoute,
-    private agentsService: AgentsService,
+    private agentsService: AgentService,
     private cdr: ChangeDetectorRef
   ) { }
 

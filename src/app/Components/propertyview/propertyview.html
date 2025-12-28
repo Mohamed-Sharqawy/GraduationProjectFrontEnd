@@ -89,6 +89,19 @@
                 </div>
             </div>
 
+            <!-- Save Property Button -->
+            <div class="save-property-card"
+                style="background: white; padding: 16px; border-radius: 12px; margin-top: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
+                <button (click)="toggleSave()"
+                    class="w-full py-3 px-4 rounded-lg font-medium flex items-center justify-center gap-2 transition-all"
+                    [style.background]="isSaved ? '#fee2e2' : '#f3f4f6'" [style.color]="isSaved ? '#dc2626' : '#374151'"
+                    style="border: none; cursor: pointer;">
+                    <i class="fa" [class.fa-heart]="isSaved" [class.fa-heart-o]="!isSaved"
+                        [style.color]="isSaved ? '#dc2626' : '#6b7280'"></i>
+                    {{ isSaved ? 'Remove from Saved' : 'Save Property' }}
+                </button>
+            </div>
+
             <!-- Analytics Card -->
             <div class="analytics-card"
                 style="background: white; padding: 20px; border-radius: 12px; margin-top: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
