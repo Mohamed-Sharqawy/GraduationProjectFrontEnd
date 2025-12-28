@@ -1,7 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, afterNextRender, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Property } from '../../Models/Property/property';
+import { Router } from '@angular/router';
+import { PropertyCardDto, CreatePropertyDto, PropertyDetailsDto } from '../../Models/Property/PropertyDtos';
+import { PropertyService } from '../../Services/Property-Service/property.service';
+import { AuthService } from '../../Services/Auth-Service/auth-service';
 
 @Component({
     selector: 'app-user-dashboard',
@@ -11,133 +14,221 @@ import { Property } from '../../Models/Property/property';
     styleUrl: './userdashboard.css'
 })
 export class UserDashboard {
-    // Dummy Data for demonstration
-    userProperties: Property[] = [
-        {
-            id: 1,
-            title: 'Modern Apartment in New Cairo',
-            price: 3500000,
-            rentPriceMonthly: 0,
-            currency: 'EGP',
-            location: 'New Cairo, Egypt',
-            propertyType: 'Apartment',
-            propertyTypeEn: 'Apartment',
-            status: 'Ready',
-            rooms: 3,
-            bathrooms: 2,
-            area: 145,
-            mainImageUrl: 'https://images.unsplash.com/photo-1545324418-cc1a3d272947?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80',
-            isFeatured: false,
-            city: 'Cairo',
-            cityEn: 'Cairo',
-            district: 'New Cairo',
-            districtEn: 'New Cairo',
-            projectName: 'The Address',
-            purpose: 'For Sale',
-            finishingType: 'Finished',
-            viewCount: 150,
-            createdAt: '2023-12-01',
-            agentId: '1',
-            agentName: 'John Doe',
-            agentProfileImage: ''
-        },
-        {
-            id: 2,
-            title: 'Cozy Villa in Sheikh Zayed',
-            price: 8200000,
-            rentPriceMonthly: 0,
-            currency: 'EGP',
-            location: 'Sheikh Zayed, Giza',
-            propertyType: 'Villa',
-            propertyTypeEn: 'Villa',
-            status: 'Off-Plan',
-            rooms: 4,
-            bathrooms: 3,
-            area: 320,
-            mainImageUrl: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80',
-            isFeatured: true,
-            city: 'Giza',
-            cityEn: 'Giza',
-            district: 'Sheikh Zayed',
-            districtEn: 'Sheikh Zayed',
-            projectName: 'Zayed Dunes',
-            purpose: 'For Sale',
-            finishingType: 'Semi-Finished',
-            viewCount: 320,
-            createdAt: '2023-12-10',
-            agentId: '1',
-            agentName: 'John Doe',
-            agentProfileImage: ''
-        }
-    ];
-
+    userProperties: PropertyCardDto[] = [];
     isFormVisible = false;
     isEditing = false;
+    isLoading = false;
+    errorMessage: string | null = null;
+    needsLogin = false; // New flag for login state
 
-    // Empty property for the form
+    // Form Data
     currentProperty: any = {};
+    selectedFiles: File[] = [];
+
+    // Filter
+    filter: any = {
+        PageNumber: 1,
+        PageSize: 100
+    };
+
+    // Static Lookups (LookupsService not available)
+    cities = [
+        { id: 1, name: 'Cairo' },
+        { id: 2, name: 'Giza' },
+        { id: 3, name: 'Alexandria' },
+        { id: 4, name: 'New Cairo' },
+        { id: 5, name: '6th of October' },
+        { id: 6, name: 'Sheikh Zayed' }
+    ];
+
+    propertyTypes = [
+        { id: 1, name: 'Apartment' },
+        { id: 2, name: 'Villa' },
+        { id: 3, name: 'Townhouse' },
+        { id: 4, name: 'Penthouse' },
+        { id: 5, name: 'Chalet' },
+        { id: 6, name: 'Office' },
+        { id: 7, name: 'Shop' }
+    ];
+
+    constructor(
+        private propertiesService: PropertyService,
+        private cdr: ChangeDetectorRef,
+        private router: Router,
+        private authService: AuthService
+    ) {
+        afterNextRender(() => {
+            console.log('🔄 UserDashboard: afterNextRender triggered');
+            setTimeout(() => {
+                this.loadProperties();
+            }, 0);
+        });
+    }
+
+    loadProperties() {
+        console.log('📡 UserDashboard: Loading properties...');
+
+        // Check authentication FIRST
+        const token = this.authService.token;
+        console.log('🔑 Token exists:', !!token);
+
+        if (!token) {
+            console.log('🚫 No token found, showing login prompt');
+            this.needsLogin = true;
+            this.isLoading = false;
+            this.cdr.detectChanges();
+            return;
+        }
+
+        this.isLoading = true;
+        this.errorMessage = null;
+        this.needsLogin = false;
+
+        this.propertiesService.getMyProperties(this.filter).subscribe({
+            next: (response) => {
+                console.log('✅ UserDashboard: Properties loaded', response);
+                this.userProperties = response.items;
+                this.isLoading = false;
+                this.cdr.detectChanges();
+            },
+            error: (err) => {
+                console.error('❌ UserDashboard: Error loading properties', err);
+                this.isLoading = false;
+
+                // Handle 401 specifically
+                if (err.status === 401) {
+                    this.needsLogin = true;
+                    this.errorMessage = 'Session expired. Please log in again.';
+                } else {
+                    this.errorMessage = 'Failed to load properties. ' + (err.error?.message || err.message || 'Unknown error');
+                }
+                this.cdr.detectChanges();
+            }
+        });
+    }
+
+    goToLogin() {
+        this.router.navigate(['/login']);
+    }
 
     addProperty() {
         this.isEditing = false;
+        this.selectedFiles = [];
         this.currentProperty = {
-            id: 0,
-            currency: 'EGP',
-            propertyType: 'Apartment',
-            status: 'Ready',
-            isFeatured: false,
-            mainImageUrl: ''
+            Title: '',
+            Description: '',
+            Price: null,
+            CityId: 1, // Default to Cairo or select
+            PropertyTypeId: 1, // Default
+            Purpose: 0, // Sale
+            Status: 1, // Active
+            Rooms: 0,
+            Bathrooms: 0,
+            Area: 0,
+            IsFeatured: false,
+            PrimaryImageIndex: 0,
+            IsAgricultural: false // Default
         };
         this.isFormVisible = true;
     }
 
     editProperty(id: number) {
         this.isEditing = true;
-        // Clone the object to avoid direct mutation before saving
-        const propToEdit = this.userProperties.find(p => p.id === id);
-        if (propToEdit) {
-            this.currentProperty = { ...propToEdit };
-            this.isFormVisible = true;
-        }
+        this.selectedFiles = []; // Reset files on edit
+
+        // Fetch full details
+        this.propertiesService.getProperty(id).subscribe({
+            next: (details: PropertyDetailsDto) => {
+                this.currentProperty = {
+                    id: details.id,
+                    Title: details.title,
+                    Description: details.description,
+                    Price: details.price,
+                    RentPriceMonthly: details.rentPriceMonthly,
+                    CityId: details.cityId,
+                    DistrictId: details.districtId,
+                    ProjectId: details.projectId,
+                    AddressDetails: details.addressDetails,
+                    PropertyTypeId: details.propertyTypeId,
+                    Purpose: details.purpose === 'For Sale' ? 0 : 1, // Simple mapping, refine if needed based on enum
+                    Status: 1, // details.status is string, need mapping if used in update
+                    Rooms: details.rooms,
+                    Bathrooms: details.bathrooms,
+                    Area: details.area,
+                    FloorNumber: details.floorNumber,
+                    IsFeatured: details.isFeatured,
+                    IsAgricultural: details.isAgricultural,
+                    PrimaryImageIndex: 0
+                };
+                // Note: handling existing images for update needs more UI logic (delete existing, add new). 
+                // For MVP, we might only allow adding new images or basic update.
+                this.isFormVisible = true;
+            },
+            error: (err) => console.error('Error fetching property details', err)
+        });
     }
 
     deleteProperty(id: number) {
         if (confirm('Are you sure you want to delete this property?')) {
-            this.userProperties = this.userProperties.filter(p => p.id !== id);
+            this.propertiesService.deleteProperty(id).subscribe({
+                next: () => {
+                    this.userProperties = this.userProperties.filter(p => p.id !== id);
+                    alert('Property deleted successfully');
+                },
+                error: (err) => {
+                    console.error('Error deleting property', err);
+                    alert('Failed to delete property');
+                }
+            });
+        }
+    }
+
+    onFileSelect(event: any) {
+        if (event.target.files && event.target.files.length > 0) {
+            this.selectedFiles = Array.from(event.target.files);
         }
     }
 
     saveProperty() {
-        // Basic assignment for fields not in the simplified form
-        if (!this.currentProperty.rooms) this.currentProperty.rooms = 0;
-        if (!this.currentProperty.bathrooms) this.currentProperty.bathrooms = 0;
-        if (!this.currentProperty.area) this.currentProperty.area = 0;
-        if (!this.currentProperty.rentPriceMonthly) this.currentProperty.rentPriceMonthly = 0;
-        if (!this.currentProperty.city) this.currentProperty.city = 'Cairo';
-        if (!this.currentProperty.cityEn) this.currentProperty.cityEn = 'Cairo';
-        if (!this.currentProperty.district) this.currentProperty.district = 'Maadi';
-        if (!this.currentProperty.districtEn) this.currentProperty.districtEn = 'Maadi';
-        if (!this.currentProperty.projectName) this.currentProperty.projectName = 'Project';
-        if (!this.currentProperty.purpose) this.currentProperty.purpose = 'For Sale';
-        if (!this.currentProperty.finishingType) this.currentProperty.finishingType = 'Finished';
-        if (!this.currentProperty.viewCount) this.currentProperty.viewCount = 0;
-        if (!this.currentProperty.createdAt) this.currentProperty.createdAt = new Date().toISOString();
-        if (!this.currentProperty.agentId) this.currentProperty.agentId = '1';
-        if (!this.currentProperty.agentName) this.currentProperty.agentName = 'User';
-        if (!this.currentProperty.agentProfileImage) this.currentProperty.agentProfileImage = '';
-        if (!this.currentProperty.propertyTypeEn) this.currentProperty.propertyTypeEn = this.currentProperty.propertyType;
+        const formData = new FormData();
+
+        // Append basic fields
+        for (const key in this.currentProperty) {
+            if (this.currentProperty[key] !== null && this.currentProperty[key] !== undefined && key !== 'id') {
+                formData.append(key, this.currentProperty[key].toString());
+            }
+        }
+
+        // Append Images
+        this.selectedFiles.forEach((file) => {
+            formData.append('Images', file, file.name);
+        });
 
         if (this.isEditing) {
-            // Update existing
-            const index = this.userProperties.findIndex(p => p.id === this.currentProperty.id);
-            if (index !== -1) {
-                this.userProperties[index] = { ...this.currentProperty } as Property;
-            }
+            this.propertiesService.updateProperty(this.currentProperty.id, formData).subscribe({
+                next: (res) => {
+                    alert('Property updated successfully');
+                    this.closeForm();
+                    this.loadProperties();
+                },
+                error: (err) => {
+                    console.error('Error updating property', err);
+                    alert('Failed to update property: ' + (err.error?.message || err.message));
+                }
+            });
         } else {
-            // Add new (generate a random ID for now)
-            this.currentProperty.id = Math.floor(Math.random() * 10000);
-            this.userProperties.push({ ...this.currentProperty } as Property);
+            this.propertiesService.createProperty(formData).subscribe({
+                next: (res) => {
+                    alert('Property created successfully');
+                    this.closeForm();
+                    this.loadProperties();
+                },
+                error: (err) => {
+                    console.error('Error creating property', err);
+                    alert('Failed to create property: ' + (err.error?.message || err.message));
+                }
+            });
         }
-        this.closeForm();
     }
 
     cancel() {
@@ -147,5 +238,6 @@ export class UserDashboard {
     private closeForm() {
         this.isFormVisible = false;
         this.currentProperty = {};
+        this.selectedFiles = [];
     }
 }

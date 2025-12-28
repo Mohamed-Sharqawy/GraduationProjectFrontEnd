@@ -9,7 +9,27 @@
         </button>
     </div>
 
-    @if (userProperties.length === 0) {
+    @if (needsLogin) {
+    <div style="text-align: center; padding: 50px; background: white; border-radius: 8px;">
+        <p style="font-size: 24px; margin-bottom: 10px;">🔒</p>
+        <p style="font-size: 18px; color: #666; margin-bottom: 5px;">Please log in to view your properties</p>
+        @if (errorMessage) {
+        <p style="font-size: 14px; color: #c62828;">{{ errorMessage }}</p>
+        }
+        <button class="add-btn" style="margin-top: 20px;" (click)="goToLogin()">Go to Login</button>
+    </div>
+    } @else if (errorMessage) {
+    <div
+        style="text-align: center; padding: 20px; margin: 20px; background: #ffebee; color: #c62828; border-radius: 8px; border: 1px solid #ef9a9a;">
+        <p style="margin: 0; font-weight: bold;">Error</p>
+        <p style="margin: 5px 0 0 0;">{{ errorMessage }}</p>
+        <button (click)="loadProperties()" style="margin-top: 10px; padding: 5px 15px; cursor: pointer;">Retry</button>
+    </div>
+    } @else if (isLoading) {
+    <div style="text-align: center; padding: 50px;">
+        <p style="font-size: 18px; color: #666;">Loading properties...</p>
+    </div>
+    } @else if (userProperties.length === 0) {
     <div style="text-align: center; padding: 50px; background: white; border-radius: 8px;">
         <p style="font-size: 18px; color: #666;">You haven't posted any properties yet.</p>
         <button class="add-btn" style="margin: 20px auto;" (click)="addProperty()">Create your first listing</button>
@@ -19,22 +39,23 @@
         @for (prop of userProperties; track prop.id) {
         <div class="property-card">
             <div class="card-image">
-                <img [src]="prop.mainImageUrl || 'https://placehold.co/600x400?text=No+Image'" [alt]="prop.title">
+                <img [src]="prop.primaryImageUrl || 'https://placehold.co/600x400?text=No+Image'" [alt]="prop.title">
                 <span
-                    style="position: absolute; top: 10px; left: 10px; background: rgba(0,0,0,0.6); color: white; padding: 4px 8px; border-radius: 4px; font-size: 12px;">{{prop.status}}</span>
+                    style="position: absolute; top: 10px; left: 10px; background: rgba(0,0,0,0.6); color: white; padding: 4px 8px; border-radius: 4px; font-size: 12px;">{{prop.status
+                    === 1 ? 'Active' : 'Pending'}}</span>
             </div>
             <div class="card-content">
                 <h3 class="card-title">{{prop.title}}</h3>
-                <div class="card-price">{{prop.price | currency : prop.currency : 'symbol' : '1.0-0'}}</div>
+                <div class="card-price">{{prop.price | currency : 'EGP' : 'symbol' : '1.0-0'}}</div>
 
                 <div class="card-details">
-                    <div class="detail-item">🛏 {{prop.rooms}} Beds</div>
-                    <div class="detail-item">🚿 {{prop.bathrooms}} Baths</div>
+                    <div class="detail-item">🛏 {{prop.rooms || 0}} Beds</div>
+                    <div class="detail-item">🚿 {{prop.bathrooms || 0}} Baths</div>
                     <div class="detail-item">📐 {{prop.area}} m²</div>
                 </div>
 
                 <div style="margin-top: auto; display: flex; align-items: center; color: #666; font-size: 13px;">
-                    📍 {{prop.location}}
+                    📍 {{prop.city}}
                 </div>
             </div>
             <div class="card-actions">
@@ -58,37 +79,62 @@
 
         <form (ngSubmit)="saveProperty()">
             <div class="form-group">
-                <label>Property Title</label>
-                <input type="text" class="form-control" [(ngModel)]="currentProperty.title" name="title"
-                    placeholder="e.g., Luxury Apartment in Cairo" required>
+                <label>Property Title (Arabic)</label>
+                <input type="text" class="form-control" [(ngModel)]="currentProperty.Title" name="Title"
+                    placeholder="e.g., شقة فاخرة في القاهرة" required>
+            </div>
+            <div class="form-group">
+                <label>Property Title (English)</label>
+                <input type="text" class="form-control" [(ngModel)]="currentProperty.TitleEn" name="TitleEn"
+                    placeholder="e.g., Luxury Apartment in Cairo">
             </div>
 
             <div class="form-row">
                 <div class="form-group">
                     <label>Price (EGP)</label>
-                    <input type="number" class="form-control" [(ngModel)]="currentProperty.price" name="price" required>
+                    <input type="number" class="form-control" [(ngModel)]="currentProperty.Price" name="Price" required
+                        min="1">
                 </div>
                 <div class="form-group">
-                    <label>Location</label>
-                    <input type="text" class="form-control" [(ngModel)]="currentProperty.location" name="location"
-                        placeholder="City, Area" required>
+                    <label>Area (m²)</label>
+                    <input type="number" class="form-control" [(ngModel)]="currentProperty.Area" name="Area" required
+                        min="1">
                 </div>
             </div>
 
             <div class="form-row">
                 <div class="form-group">
-                    <label>Type</label>
-                    <select class="form-control" [(ngModel)]="currentProperty.propertyType" name="propertyType">
-                        <option value="Apartment">Apartment</option>
-                        <option value="Villa">Villa</option>
-                        <option value="Duplex">Duplex</option>
+                    <label>City</label>
+                    <select class="form-control" [(ngModel)]="currentProperty.CityId" name="CityId" required>
+                        <option [ngValue]="null" disabled selected>Select City</option>
+                        @for (city of cities; track city.id) {
+                        <option [value]="city.id">{{city.name}}</option>
+                        }
                     </select>
                 </div>
                 <div class="form-group">
-                    <label>Status</label>
-                    <select class="form-control" [(ngModel)]="currentProperty.status" name="status">
-                        <option value="Ready">Ready</option>
-                        <option value="Off-Plan">Off-Plan</option>
+                    <label>Address Details</label>
+                    <input type="text" class="form-control" [(ngModel)]="currentProperty.AddressDetails"
+                        name="AddressDetails" placeholder="Detailed Address">
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Property Type</label>
+                    <select class="form-control" [(ngModel)]="currentProperty.PropertyTypeId" name="PropertyTypeId"
+                        required>
+                        <option [ngValue]="null" disabled selected>Select Type</option>
+                        @for (type of propertyTypes; track type.id) {
+                        <option [value]="type.id">{{type.name}}</option>
+                        }
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Purpose</label>
+                    <select class="form-control" [(ngModel)]="currentProperty.Purpose" name="Purpose">
+                        <option [value]="0">For Sale</option>
+                        <option [value]="1">For Rent</option>
                     </select>
                 </div>
             </div>
@@ -96,22 +142,19 @@
             <div class="form-row">
                 <div class="form-group">
                     <label>Bedrooms</label>
-                    <input type="number" class="form-control" [(ngModel)]="currentProperty.rooms" name="rooms">
+                    <input type="number" class="form-control" [(ngModel)]="currentProperty.Rooms" name="Rooms" min="1">
                 </div>
                 <div class="form-group">
                     <label>Bathrooms</label>
-                    <input type="number" class="form-control" [(ngModel)]="currentProperty.bathrooms" name="bathrooms">
-                </div>
-                <div class="form-group">
-                    <label>Area (m²)</label>
-                    <input type="number" class="form-control" [(ngModel)]="currentProperty.area" name="area">
+                    <input type="number" class="form-control" [(ngModel)]="currentProperty.Bathrooms" name="Bathrooms"
+                        min="1">
                 </div>
             </div>
 
             <div class="form-group">
-                <label>Image URL</label>
-                <input type="text" class="form-control" [(ngModel)]="currentProperty.mainImageUrl" name="mainImageUrl"
-                    placeholder="https://example.com/image.jpg">
+                <label>Images</label>
+                <input type="file" class="form-control" multiple (change)="onFileSelect($event)" accept="image/*">
+                <small style="color: #666">Max 6 images. First one is primary.</small>
             </div>
 
             <div class="modal-footer">

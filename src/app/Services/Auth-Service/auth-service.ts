@@ -17,10 +17,12 @@ export class AuthService {
   currentUser = signal<User | null>(null);
 
   constructor(private http: HttpClient) {
-    // Initialize user state from local storage on service creation
-    const storedUser = this.getStoredUser();
-    if (storedUser) {
-      this.currentUser.set(storedUser);
+    // Initialize user state from local storage on service creation - only in browser
+    if (typeof window !== 'undefined') {
+      const storedUser = this.getStoredUser();
+      if (storedUser) {
+        this.currentUser.set(storedUser);
+      }
     }
   }
 
@@ -109,7 +111,7 @@ export class AuthService {
    * Get stored user data from localStorage
    */
   getStoredUser(): User | null {
-    if (typeof localStorage === 'undefined') {
+    if (typeof window === 'undefined' || typeof localStorage === 'undefined') {
       return null;
     }
 
@@ -125,11 +127,12 @@ export class AuthService {
     return null;
   }
 
-  get token() {
-    if (typeof localStorage === 'undefined') {
-      return null;
+  get token(): string | null {
+    // Ensure we're in browser before accessing localStorage
+    if (typeof window !== 'undefined' && typeof localStorage !== 'undefined') {
+      return localStorage.getItem('token');
     }
-    return localStorage.getItem('token');
+    return null;
   }
 
   logout() {
