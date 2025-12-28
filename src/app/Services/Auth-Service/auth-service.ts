@@ -19,51 +19,25 @@ export class AuthService {
   currentUser = signal<User | null>(null);
 
   constructor(private http: HttpClient) {
-    // Initialize user state from local storage on service creation
-    const storedUser = this.getStoredUser();
-    if (storedUser) {
-      this.currentUser.set(storedUser);
+    // Initialize user state from local storage on service creation - only in browser
+    if (typeof window !== 'undefined') {
+      const storedUser = this.getStoredUser();
+      if (storedUser) {
+        this.currentUser.set(storedUser);
+      }
     }
   }
 
   login(data: Loginrequest) {
-    // Mock Login for UI testing
-    const mockUser: User = {
-      id: 'mock-id-123',
-      fullName: 'Test User',
-      email: data.email,
-      phoneNumber: '1234567890',
-      role: UserRole.Owner, // Default to Owner (Regular User)
-      isVerified: true,
-      token: 'mock-jwt-token'
-    };
-
-    this.storeAuthData(mockUser);
-    return of(mockUser);
-
-    // return this.http.post<User>(this.apiUrl + API_EndPoints.login, data).pipe(
-    //   tap(user => this.storeAuthData(user))
-    // );
+    return this.http.post<User>(this.apiUrl + API_EndPoints.login, data).pipe(
+      tap(user => this.storeAuthData(user))
+    );
   }
 
   register(data: Registerrequest) {
-    // Mock Register for UI testing
-    const mockUser: User = {
-      id: 'mock-id-new',
-      fullName: data.fullName,
-      email: data.email,
-      phoneNumber: data.phoneNumber,
-      role: UserRole.Owner,
-      isVerified: true,
-      token: 'mock-jwt-token'
-    };
-
-    this.storeAuthData(mockUser);
-    return of(mockUser);
-
-    // return this.http.post<User>(this.apiUrl + API_EndPoints.register, data).pipe(
-    //   tap(user => this.storeAuthData(user))
-    // );
+    return this.http.post<User>(this.apiUrl + API_EndPoints.register, data).pipe(
+      tap(user => this.storeAuthData(user))
+    );
   }
 
   getCurrentUser() {
@@ -90,7 +64,7 @@ export class AuthService {
    * Get stored user data from localStorage
    */
   getStoredUser(): User | null {
-    if (typeof localStorage === 'undefined') {
+    if (typeof window === 'undefined' || typeof localStorage === 'undefined') {
       return null;
     }
 
@@ -106,11 +80,12 @@ export class AuthService {
     return null;
   }
 
-  get token() {
-    if (typeof localStorage === 'undefined') {
-      return null;
+  get token(): string | null {
+    // Ensure we're in browser before accessing localStorage
+    if (typeof window !== 'undefined' && typeof localStorage !== 'undefined') {
+      return localStorage.getItem('token');
     }
-    return localStorage.getItem('token');
+    return null;
   }
 
   logout() {

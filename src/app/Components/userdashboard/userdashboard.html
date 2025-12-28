@@ -9,7 +9,27 @@
         </button>
     </div>
 
-    @if (userProperties.length === 0) {
+    @if (needsLogin) {
+    <div style="text-align: center; padding: 50px; background: white; border-radius: 8px;">
+        <p style="font-size: 24px; margin-bottom: 10px;">🔒</p>
+        <p style="font-size: 18px; color: #666; margin-bottom: 5px;">Please log in to view your properties</p>
+        @if (errorMessage) {
+        <p style="font-size: 14px; color: #c62828;">{{ errorMessage }}</p>
+        }
+        <button class="add-btn" style="margin-top: 20px;" (click)="goToLogin()">Go to Login</button>
+    </div>
+    } @else if (errorMessage) {
+    <div
+        style="text-align: center; padding: 20px; margin: 20px; background: #ffebee; color: #c62828; border-radius: 8px; border: 1px solid #ef9a9a;">
+        <p style="margin: 0; font-weight: bold;">Error</p>
+        <p style="margin: 5px 0 0 0;">{{ errorMessage }}</p>
+        <button (click)="loadProperties()" style="margin-top: 10px; padding: 5px 15px; cursor: pointer;">Retry</button>
+    </div>
+    } @else if (isLoading) {
+    <div style="text-align: center; padding: 50px;">
+        <p style="font-size: 18px; color: #666;">Loading properties...</p>
+    </div>
+    } @else if (userProperties.length === 0) {
     <div style="text-align: center; padding: 50px; background: white; border-radius: 8px;">
         <p style="font-size: 18px; color: #666;">You haven't posted any properties yet.</p>
         <button class="add-btn" style="margin: 20px auto;" (click)="addProperty()">Create your first listing</button>

@@ -80,7 +80,15 @@ export class PropertyService {
                 params = params.set(key, filter[key].toString());
             }
         }
-        return this.http.get<PaginatedResponse<PropertyCardDto>>(`${this.apiUrl}/my-properties`, { params });
+        return this.http.get<any>(`${this.apiUrl}/my-properties`, { params }).pipe(
+            map(response => {
+                const items = response.items || response.data || [];
+                return {
+                    ...response,
+                    items: items
+                } as PaginatedResponse<PropertyCardDto>;
+            })
+        );
     }
 
     /**

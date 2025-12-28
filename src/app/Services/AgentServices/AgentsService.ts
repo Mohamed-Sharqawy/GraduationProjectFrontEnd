@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { environment } from '../../../environments/Development/environment';
+import { environment } from '../../../environments/environments';
 import { Agent } from '../../Models/Agents/Agents';
 import { PaginatedResponse } from '../../Models/GenericPagination';
 import { AgentProfile } from '../../Models/Agents/Agents';
@@ -12,7 +12,7 @@ import { AgentFilterDto } from '../../Models/Agents/agent-filter.dto';
 })
 export class AgentsService {
 
-    private apiUrl = environment.baseUrl + '/Agents';
+    private apiUrl = environment.apiUrl + '/Agents';
 
     constructor(private http: HttpClient) { }
 
