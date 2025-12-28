@@ -92,20 +92,25 @@
             <div class="form-row">
                 <div class="form-group">
                     <label>Price (EGP)</label>
-                    <input type="number" class="form-control" [(ngModel)]="currentProperty.Price" name="Price" required>
+                    <input type="number" class="form-control" [(ngModel)]="currentProperty.Price" name="Price" required
+                        min="1">
                 </div>
                 <div class="form-group">
                     <label>Area (m²)</label>
-                    <input type="number" class="form-control" [(ngModel)]="currentProperty.Area" name="Area" required>
+                    <input type="number" class="form-control" [(ngModel)]="currentProperty.Area" name="Area" required
+                        min="1">
                 </div>
             </div>
 
             <div class="form-row">
                 <div class="form-group">
-                    <label>City ID</label>
-                    <!-- Ideally this should be a dropdown fetching cities -->
-                    <input type="number" class="form-control" [(ngModel)]="currentProperty.CityId" name="CityId"
-                        required>
+                    <label>City</label>
+                    <select class="form-control" [(ngModel)]="currentProperty.CityId" name="CityId" required>
+                        <option [ngValue]="null" disabled selected>Select City</option>
+                        @for (city of cities; track city.id) {
+                        <option [value]="city.id">{{city.name}}</option>
+                        }
+                    </select>
                 </div>
                 <div class="form-group">
                     <label>Address Details</label>
@@ -116,10 +121,14 @@
 
             <div class="form-row">
                 <div class="form-group">
-                    <label>Type ID</label>
-                    <!-- Ideally this should be a dropdown -->
-                    <input type="number" class="form-control" [(ngModel)]="currentProperty.PropertyTypeId"
-                        name="PropertyTypeId" required>
+                    <label>Property Type</label>
+                    <select class="form-control" [(ngModel)]="currentProperty.PropertyTypeId" name="PropertyTypeId"
+                        required>
+                        <option [ngValue]="null" disabled selected>Select Type</option>
+                        @for (type of propertyTypes; track type.id) {
+                        <option [value]="type.id">{{type.name}}</option>
+                        }
+                    </select>
                 </div>
                 <div class="form-group">
                     <label>Purpose</label>
@@ -133,11 +142,12 @@
             <div class="form-row">
                 <div class="form-group">
                     <label>Bedrooms</label>
-                    <input type="number" class="form-control" [(ngModel)]="currentProperty.Rooms" name="Rooms">
+                    <input type="number" class="form-control" [(ngModel)]="currentProperty.Rooms" name="Rooms" min="1">
                 </div>
                 <div class="form-group">
                     <label>Bathrooms</label>
-                    <input type="number" class="form-control" [(ngModel)]="currentProperty.Bathrooms" name="Bathrooms">
+                    <input type="number" class="form-control" [(ngModel)]="currentProperty.Bathrooms" name="Bathrooms"
+                        min="1">
                 </div>
             </div>
 

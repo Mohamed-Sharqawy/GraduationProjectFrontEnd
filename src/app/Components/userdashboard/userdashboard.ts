@@ -31,6 +31,26 @@ export class UserDashboard {
         PageSize: 100
     };
 
+    // Static Lookups (LookupsService not available)
+    cities = [
+        { id: 1, name: 'Cairo' },
+        { id: 2, name: 'Giza' },
+        { id: 3, name: 'Alexandria' },
+        { id: 4, name: 'New Cairo' },
+        { id: 5, name: '6th of October' },
+        { id: 6, name: 'Sheikh Zayed' }
+    ];
+
+    propertyTypes = [
+        { id: 1, name: 'Apartment' },
+        { id: 2, name: 'Villa' },
+        { id: 3, name: 'Townhouse' },
+        { id: 4, name: 'Penthouse' },
+        { id: 5, name: 'Chalet' },
+        { id: 6, name: 'Office' },
+        { id: 7, name: 'Shop' }
+    ];
+
     constructor(
         private propertiesService: PropertyService,
         private cdr: ChangeDetectorRef,
