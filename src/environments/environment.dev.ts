@@ -1,4 +1,4 @@
 export const environment = {
     production: false,
-    apiBaseUrl: 'http://localhost:5235/api'
+    apiBaseUrl: 'https://homyapi.runasp.net/api'
 };
