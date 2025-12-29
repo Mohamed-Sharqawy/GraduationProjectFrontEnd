@@ -9,6 +9,9 @@ import { SavedPropertyService } from '../../Services/SavedProperty-Service/saved
 import { PackageDto, SubscriptionStatusDto } from '../../Models/Subscription/subscription.models';
 import { SavedPropertyDto } from '../../Models/SavedProperty/saved-property.models';
 import { ToastrService } from 'ngx-toastr';
+import { AgentService } from '../../Services/Agent-Service/agent.service';
+import { VerificationFiles } from '../../Models/Verification/verification.models';
+import { environment } from '../../../environments/environments';
 
 @Component({
     selector: 'app-user-profile',
@@ -18,7 +21,10 @@ import { ToastrService } from 'ngx-toastr';
     styleUrl: './user-profile.css'
 })
 export class UserProfile implements OnInit {
-    activeTab: 'published' | 'subscription' | 'saved' | 'personal-info' = 'published';
+    activeTab: 'published' | 'subscription' | 'saved' | 'personal-info' | 'verification' = 'published';
+
+    // Backend base URL for images (remove /api from apiUrl)
+    private backendBaseUrl = environment.apiUrl.replace('/api', '');
 
 
 
@@ -49,29 +55,85 @@ export class UserProfile implements OnInit {
     public authService = inject(AuthService);
     private subscriptionService = inject(SubscriptionService);
     private savedPropertyService = inject(SavedPropertyService);
+    private agentService = inject(AgentService);
     private route = inject(ActivatedRoute);
     private router = inject(Router);
     private cdr = inject(ChangeDetectorRef);
     private toastr = inject(ToastrService);
+
+    // Verification state
+    verificationFiles: VerificationFiles = {
+        idCardFront: null,
+        idCardBack: null,
+        selfieWithId: null
+    };
+    verificationPreviews: { [key: string]: string | null } = {
+        idCardFront: null,
+        idCardBack: null,
+        selfieWithId: null
+    };
+    isSubmittingVerification = false;
 
     constructor() {
         // Initialize form data with current user using effect to stay in sync
         effect(() => {
             const user = this.authService.currentUser();
             if (user) {
+                console.log('📋 User data in effect:', JSON.stringify(user, null, 2));
                 this.formData = {
                     fullName: user.fullName || '',
                     email: user.email || '',
                     phone: user.phoneNumber || '',
-                    whatsapp: user.whatsappNumber || ''
+                    whatsapp: user.whatsAppNumber || ''
                 };
-
-
+                console.log('📋 Form data populated:', this.formData);
             }
         });
     }
 
+    /**
+     * Get the full profile image URL
+     * Handles both local file preview and backend image URLs
+     */
+    getProfileImageUrl(): string | null {
+        // If there's a local file preview, use that
+        if (this.filePreviewUrl) {
+            return this.filePreviewUrl;
+        }
+
+        // Get the profile image URL from user data
+        const imageUrl = this.authService.currentUser()?.profileImageUrl;
+        if (!imageUrl) {
+            return null;
+        }
+
+        // If it's already a full URL (starts with http), return as-is
+        if (imageUrl.startsWith('http://') || imageUrl.startsWith('https://')) {
+            return imageUrl;
+        }
+
+        // Otherwise, prepend the backend base URL
+        return this.backendBaseUrl + imageUrl;
+    }
+
     ngOnInit() {
+        // Refresh user data from backend to ensure we have the latest profile image URL
+        if (this.authService.isLoggedIn()) {
+            this.authService.getCurrentUser().subscribe({
+                next: (user) => {
+                    console.log('📥 Raw user data from API:', JSON.stringify(user, null, 2));
+                    // Preserve the token since getCurrentUser might not return it
+                    const existingToken = this.authService.currentUser()?.token;
+                    if (existingToken && !user.token) {
+                        user.token = existingToken;
+                    }
+                    this.authService.storeAuthData(user);
+                    this.cdr.detectChanges();
+                },
+                error: (err) => console.error('Failed to refresh user data:', err)
+            });
+        }
+
         // Check for tab query param
         this.route.queryParams.subscribe(params => {
             if (params['tab']) {
@@ -92,7 +154,7 @@ export class UserProfile implements OnInit {
         this.loadSubscriptionStatus();
     }
 
-    setActiveTab(tab: 'published' | 'subscription' | 'saved' | 'personal-info') {
+    setActiveTab(tab: 'published' | 'subscription' | 'saved' | 'personal-info' | 'verification') {
         this.activeTab = tab;
 
         // Load data when switching tabs
@@ -319,8 +381,9 @@ export class UserProfile implements OnInit {
         // The API likely expects key 'FullName' etc. matching the DTO properties.
         // Based on the user's screenshot: FullName, PhoneNumber, WhatsAppNumber, ProfileImage
         formData.append('FullName', this.formData.fullName);
+        if (this.formData.email) formData.append('Email', this.formData.email);
         if (this.formData.phone) formData.append('PhoneNumber', this.formData.phone);
-        if (this.formData.whatsapp) formData.append('WhatsAppNumber', this.formData.whatsapp); // Double check if it is WhatsAppNumber or WhatsappNumber. Screenshot says WhatsAppNumber.
+        if (this.formData.whatsapp) formData.append('WhatsAppNumber', this.formData.whatsapp);
 
         // Append file if selected
         if (this.selectedFile) {
@@ -330,9 +393,25 @@ export class UserProfile implements OnInit {
         this.authService.updateAgentProfile(formData).subscribe({
             next: () => {
                 this.toastr.success('Profile updated successfully!', 'Success');
-                // Reset selected file after success since it should be part of user profile now
+                // Reset selected file and preview after success
                 this.selectedFile = null;
                 this.filePreviewUrl = null;
+
+                // Force refresh of user data to get the updated profile image URL
+                // The authService.updateAgentProfile already calls getCurrentUser internally,
+                // but we need to wait for it to complete and update our local form data
+                setTimeout(() => {
+                    const updatedUser = this.authService.currentUser();
+                    if (updatedUser) {
+                        this.formData = {
+                            fullName: updatedUser.fullName || '',
+                            email: updatedUser.email || '',
+                            phone: updatedUser.phoneNumber || '',
+                            whatsapp: updatedUser.whatsAppNumber || ''
+                        };
+                        this.cdr.detectChanges();
+                    }
+                }, 500);
             },
             error: (error) => {
                 console.error('Failed to update profile:', error);
@@ -356,6 +435,82 @@ export class UserProfile implements OnInit {
         }
     }
 
+    /**
+     * Handle verification file selection
+     */
+    onVerificationFileSelected(event: any, fileType: 'idCardFront' | 'idCardBack' | 'selfieWithId') {
+        const file = event.target.files[0];
+        if (file) {
+            // Validate file type
+            if (!file.type.startsWith('image/')) {
+                this.toastr.error('Please select an image file', 'Invalid File');
+                return;
+            }
+
+            // Validate file size (max 5MB)
+            if (file.size > 5 * 1024 * 1024) {
+                this.toastr.error('File size must be less than 5MB', 'File Too Large');
+                return;
+            }
+
+            // Store the file
+            this.verificationFiles[fileType] = file;
+
+            // Create preview
+            const reader = new FileReader();
+            reader.onload = () => {
+                this.verificationPreviews[fileType] = reader.result as string;
+                this.cdr.detectChanges();
+            };
+            reader.readAsDataURL(file);
+        }
+    }
+
+    /**
+     * Check if all verification files are selected
+     */
+    get allVerificationFilesSelected(): boolean {
+        return !!(this.verificationFiles.idCardFront &&
+            this.verificationFiles.idCardBack &&
+            this.verificationFiles.selfieWithId);
+    }
+
+    /**
+     * Submit verification request
+     */
+    submitVerification() {
+        if (!this.allVerificationFilesSelected) {
+            this.toastr.warning('Please upload all three required photos', 'Missing Files');
+            return;
+        }
+
+        this.isSubmittingVerification = true;
+        this.agentService.submitVerification(this.verificationFiles).subscribe({
+            next: (response) => {
+                this.toastr.success('Your verification request has been submitted successfully. We will review your documents and notify you.', 'Verification Submitted');
+                // Reset form
+                this.verificationFiles = {
+                    idCardFront: null,
+                    idCardBack: null,
+                    selfieWithId: null
+                };
+                this.verificationPreviews = {
+                    idCardFront: null,
+                    idCardBack: null,
+                    selfieWithId: null
+                };
+                this.isSubmittingVerification = false;
+                this.cdr.detectChanges();
+            },
+            error: (error) => {
+                console.error('Failed to submit verification:', error);
+                const errorMessage = error.error?.message || 'Failed to submit verification request. Please try again.';
+                this.toastr.error(errorMessage, 'Verification Failed');
+                this.isSubmittingVerification = false;
+                this.cdr.detectChanges();
+            }
+        });
+    }
 
 }
 

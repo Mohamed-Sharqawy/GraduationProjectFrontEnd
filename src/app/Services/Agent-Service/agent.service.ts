@@ -7,6 +7,7 @@ import { AgentProfileDto } from '../../Models/Agent/agent-profile.dto';
 import { Agent } from '../../Models/Agents/Agents';
 import { PaginatedResponse } from '../../Models/GenericPagination';
 import { AgentFilterDto } from '../../Models/Agents/agent-filter.dto';
+import { VerificationFiles } from '../../Models/Verification/verification.models';
 
 @Injectable({
     providedIn: 'root'
@@ -39,5 +40,24 @@ export class AgentService {
         if (filter.sortDescending !== undefined) params = params.set('sortDescending', filter.sortDescending.toString());
 
         return this.http.get<PaginatedResponse<Agent>>(this.apiUrl, { params });
+    }
+
+    /**
+     * Submit identity verification request with ID photos
+     */
+    submitVerification(files: VerificationFiles): Observable<any> {
+        const formData = new FormData();
+
+        if (files.idCardFront) {
+            formData.append('IdCardFront', files.idCardFront);
+        }
+        if (files.idCardBack) {
+            formData.append('IdCardBack', files.idCardBack);
+        }
+        if (files.selfieWithId) {
+            formData.append('SelfieWithId', files.selfieWithId);
+        }
+
+        return this.http.post(`${this.apiUrl}/verify-identity`, formData);
     }
 }
