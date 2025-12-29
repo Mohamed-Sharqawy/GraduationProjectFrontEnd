@@ -14,7 +14,7 @@ export const routes: Routes = [
   { path: 'home', component: Home },
   { path: 'find-my-agent', component: FindMyAgentComponent },
   { path: 'listingproperties', component: Listingproperties },
-  { path: 'propertyview/:id', component: Propertyview },
+  { path: 'propertyview/:id', component: Propertyview, data: { ssr: false } },
   { path: 'agent-profile/:id', component: AgentProfile },
   { path: 'user-profile', loadComponent: () => import('./Components/user-profile/user-profile').then(m => m.UserProfile) },
   // Dashboard requires authentication AND active subscription
