@@ -71,35 +71,16 @@
 
                 <!-- Filter Bar -->
                 <div class="filter-bar">
-                    <div class="filter-group">
-                        <select class="filter-select">
-                            <option>All</option>
-                        </select>
-                    </div>
-                    <div class="filter-group location">
-                        <input type="text" placeholder="Enter location" class="filter-input">
+                    <div class="filter-group location" style="flex: 1;">
+                        <input type="text" placeholder="Enter location" class="filter-input"
+                            [(ngModel)]="locationSearch" (input)="filterProperties()">
                         <i class="fas fa-map-marker-alt location-icon"></i>
-                    </div>
-                    <div class="filter-group">
-                        <select class="filter-select">
-                            <option>Any Type</option>
-                        </select>
-                    </div>
-                    <div class="filter-group">
-                        <select class="filter-select">
-                            <option>Beds & Baths</option>
-                        </select>
-                    </div>
-                    <div class="filter-group">
-                        <select class="filter-select">
-                            <option>Price (EGP)</option>
-                        </select>
                     </div>
                 </div>
 
                 <!-- Sorting Info -->
                 <div class="sorting-row">
-                    <p class="results-count">Showing {{ agent.properties.length }} Properties</p>
+                    <p class="results-count">Showing {{ filteredProperties.length }} Properties</p>
                     <select class="sort-select">
                         <option>Popular</option>
                     </select>
@@ -108,7 +89,7 @@
 
             <!-- Properties List -->
             <div class="properties-list">
-                @for (prop of agent.properties; track prop.id) {
+                @for (prop of filteredProperties; track prop.id) {
                 <div class="property-card" [routerLink]="['/propertyview', prop.id]" style="cursor: pointer;">
                     <div class="property-image-container">
                         <img [src]="prop.imageUrl || 'https://placehold.co/600x400?text=No+Image'" [alt]="prop.title"

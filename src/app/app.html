@@ -43,7 +43,7 @@
         class="no-underline hover:text-[#28b16d] transition-colors relative flex items-center gap-1 cursor-pointer">
         My Dashboard
       </a>
-      <a routerLink="/listingproperties" class="no-underline hover:text-[#28b16d] transition-colors">New Projects</a>
+      <a routerLink="/listingproperties" class="no-underline hover:text-[#28b16d] transition-colors">Properties</a>
     </div>
   </div>
 </nav>
@@ -54,3 +54,18 @@
 
 <!-- Global Footer -->
 <app-footer></app-footer>
+
+<!-- Floating WhatsApp Button -->
+<div class="fixed bottom-6 right-6 z-50 flex flex-col items-end gap-2 group">
+  <!-- Tooltip -->
+  <div
+    class="bg-gray-800 text-white text-xs px-3 py-1.5 rounded shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none mb-1 whitespace-nowrap">
+    For any help
+  </div>
+
+  <!-- Button -->
+  <a href="https://wa.me/201099298412" target="_blank"
+    class="bg-[#25D366] hover:bg-[#128C7E] text-white w-14 h-14 rounded-full flex items-center justify-center shadow-lg transform transition-all duration-300 hover:scale-110 no-underline">
+    <i class="fab fa-whatsapp text-3xl"></i>
+  </a>
+</div>

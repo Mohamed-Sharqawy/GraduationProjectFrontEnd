@@ -1,13 +1,14 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { AgentService } from '../../Services/Agent-Service/agent.service';
 import { AgentProfileDto } from '../../Models/Agent/agent-profile.dto';
 
 @Component({
   selector: 'app-agent-profile',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, FormsModule],
   templateUrl: './agent-profile.html',
   styleUrl: './agent-profile.css',
 })
@@ -15,6 +16,8 @@ export class AgentProfile implements OnInit {
   agentId: string | null = null;
   agent: AgentProfileDto | null = null;
   isLoading: boolean = true;
+  filteredProperties: any[] = [];
+  locationSearch: string = '';
 
   constructor(
     private route: ActivatedRoute,
@@ -38,6 +41,7 @@ export class AgentProfile implements OnInit {
     this.agentsService.getAgentProfile(id).subscribe({
       next: (data) => {
         this.agent = data;
+        this.filteredProperties = data.properties || [];
         this.isLoading = false;
         console.log('Agent Data:', this.agent);
         this.cdr.detectChanges(); // Force change detection
@@ -48,6 +52,20 @@ export class AgentProfile implements OnInit {
         this.cdr.detectChanges(); // Force change detection
       }
     });
+  }
+
+  filterProperties() {
+    if (!this.agent || !this.agent.properties) return;
+
+    if (!this.locationSearch) {
+      this.filteredProperties = this.agent.properties;
+    } else {
+      const search = this.locationSearch.toLowerCase();
+      this.filteredProperties = this.agent.properties.filter(prop =>
+        (prop.location && prop.location.toLowerCase().includes(search)) ||
+        (prop.cityName && prop.cityName.toLowerCase().includes(search))
+      );
+    }
   }
 
   openEmail(email: string) {

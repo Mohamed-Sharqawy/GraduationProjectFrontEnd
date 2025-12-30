@@ -56,7 +56,7 @@ export class PropertyService {
         return this.http.get<PagedResultDto<PropertyListItemDto>>(this.apiUrl, { params }).pipe(
             map(response => ({
                 ...response,
-                items: response.items.map(item => this.mapToProperty(item))
+                items: (response.items || []).map(item => this.mapToProperty(item))
             }))
         );
     }

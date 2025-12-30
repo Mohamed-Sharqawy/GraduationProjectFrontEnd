@@ -30,6 +30,28 @@ export class UserProfile implements OnInit {
         whatsapp: ''
     };
 
+    // Edit Mode State
+    isEditingProfile = false;
+
+    startEditing() {
+        this.isEditingProfile = true;
+    }
+
+    cancelEditing() {
+        this.isEditingProfile = false;
+        // Re-reset form data to current user to discard changes
+        const user = this.authService.currentUser();
+        if (user) {
+            const u = user as any;
+            this.formData = {
+                fullName: user.fullName || u.FullName || '',
+                email: user.email || u.Email || '',
+                phone: user.phoneNumber || u.PhoneNumber || '',
+                whatsapp: user.whatsappNumber || u.WhatsappNumber || u.WhatsAppNumber || ''
+            };
+        }
+    }
+
     // Packages from API
     packages: PackageDto[] = [];
     isLoadingPackages = false;
@@ -58,20 +80,32 @@ export class UserProfile implements OnInit {
         // Initialize form data with current user using effect to stay in sync
         effect(() => {
             const user = this.authService.currentUser();
+            console.log('👤 UserProfile: Current user changed:', user);
             if (user) {
+                // Use 'any' cast to access potential PascalCase properties from backend
+                const u = user as any;
                 this.formData = {
-                    fullName: user.fullName || '',
-                    email: user.email || '',
-                    phone: user.phoneNumber || '',
-                    whatsapp: user.whatsappNumber || ''
+                    fullName: user.fullName || u.FullName || '',
+                    email: user.email || u.Email || '',
+                    phone: user.phoneNumber || u.PhoneNumber || '',
+                    whatsapp: user.whatsappNumber || u.WhatsappNumber || u.WhatsAppNumber || ''
                 };
-
-
             }
         });
     }
 
     ngOnInit() {
+        // Refresh user data from server to ensure we have the latest info (including potentially missing fields)
+        if (this.authService.isLoggedIn()) {
+            this.authService.getCurrentUser().subscribe({
+                next: (user) => {
+                    console.log('🔄 UserProfile: Refreshed user data from server:', user);
+                    this.authService.storeAuthData(user);
+                },
+                error: (err) => console.error('Failed to refresh user data:', err)
+            });
+        }
+
         // Check for tab query param
         this.route.queryParams.subscribe(params => {
             if (params['tab']) {
@@ -191,7 +225,17 @@ export class UserProfile implements OnInit {
             },
             error: (error) => {
                 console.error('Failed to create PayPal order:', error);
-                alert('FAILED to start PayPal payment.\n\nError details: ' + JSON.stringify(error, null, 2));
+
+                let errorMessage = 'Failed to start payment. Please try again.';
+                if (error.error && error.error.message) {
+                    errorMessage = error.error.message;
+                }
+
+                if (errorMessage.includes('توثيق') || errorMessage.includes('verify')) {
+                    this.toastr.warning(errorMessage, 'Verification Required');
+                } else {
+                    this.toastr.error(errorMessage, 'Payment Error');
+                }
 
                 this.isProcessingPayment = false;
                 this.selectedPackageId = null;
@@ -333,6 +377,7 @@ export class UserProfile implements OnInit {
                 // Reset selected file after success since it should be part of user profile now
                 this.selectedFile = null;
                 this.filePreviewUrl = null;
+                this.isEditingProfile = false; // Turn off edit mode
             },
             error: (error) => {
                 console.error('Failed to update profile:', error);
