@@ -1,9 +1,10 @@
 import { CanActivateFn, Router } from '@angular/router';
-import { inject } from '@angular/core';
+import { inject, PLATFORM_ID } from '@angular/core';
 import { map, catchError } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { SubscriptionService } from '../Services/Subscription-Service/subscription.service';
-import { AuthService } from '../Services/Auth-Service/auth-service';
+import { AuthService } from '../Services/Auth-Service/auth-service';    
+import { isPlatformBrowser } from '@angular/common';
 
 /**
  * Guard that checks if user has an active subscription
@@ -13,7 +14,11 @@ export const subscriptionGuard: CanActivateFn = (route, state) => {
     const subscriptionService = inject(SubscriptionService);
     const authService = inject(AuthService);
     const router = inject(Router);
+    const platformId = inject(PLATFORM_ID);
 
+    if (!isPlatformBrowser(platformId)) {
+        return true;
+    }
     // First check if user is logged in
     if (!authService.isLoggedIn()) {
         router.navigate(['/login']);
