@@ -81,11 +81,15 @@ export class AuthService {
     return this.http.put(agentsUrl, formData).pipe(
       tap(() => {
         // We need to fetch the updated user data or update the signal locally
-        // Since the response might not return the full user, we might want to reload "me"
-        // But for now let's hope it returns OK and we can update from the formData if needed
-        // Or better, fetch current user again to be safe
+        // Fetch current user again to get the updated profileImageUrl
+        const existingToken = this.currentUser()?.token;
         this.getCurrentUser().subscribe(user => {
+          // Preserve the token since getCurrentUser might not return it
+          if (existingToken && !user.token) {
+            user.token = existingToken;
+          }
           this.storeAuthData(user);
+          console.log('✅ Profile updated with image URL:', user.profileImageUrl);
         });
       })
     );

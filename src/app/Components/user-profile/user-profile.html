@@ -7,10 +7,9 @@
                 <div class="relative cursor-pointer group" (click)="fileInput.click()">
                     <div
                         class="w-12 h-12 rounded-full overflow-hidden bg-green-100 flex items-center justify-center text-green-600 font-bold text-xl border-2 border-transparent group-hover:border-green-400 transition-all">
-                        <img *ngIf="filePreviewUrl || authService.currentUser()?.profileImageUrl"
-                            [src]="filePreviewUrl || authService.currentUser()?.profileImageUrl"
+                        <img *ngIf="getProfileImageUrl()" [src]="getProfileImageUrl()"
                             class="w-full h-full object-cover" alt="Profile">
-                        <span *ngIf="!filePreviewUrl && !authService.currentUser()?.profileImageUrl">{{
+                        <span *ngIf="!getProfileImageUrl()">{{
                             authService.currentUser()?.fullName?.charAt(0) || 'U' }}</span>
                     </div>
                     <div
@@ -51,6 +50,11 @@
                 <i class="fa fa-user border-none"></i> Personal Info
             </button>
 
+            <button (click)="setActiveTab('verification')" [class.bg-green-50]="activeTab === 'verification'"
+                [class.text-green-600]="activeTab === 'verification'"
+                class="w-full text-left px-4 py-2.5 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-50 flex items-center gap-3 transition-colors border-none cursor-pointer bg-transparent">
+                <i class="fa fa-id-card border-none"></i> Identity Verification
+            </button>
 
         </nav>
     </aside>
@@ -267,8 +271,7 @@
                             </span>
                         </label>
                         <input type="email" [(ngModel)]="formData.email"
-                            class="w-full border border-gray-300 rounded-lg px-4 py-3 text-gray-700 focus:outline-none focus:border-green-500 transition-colors disabled:bg-gray-100 disabled:text-gray-500"
-                            [disabled]="true" title="Email cannot be changed">
+                            class="w-full border border-gray-300 rounded-lg px-4 py-3 text-gray-700 focus:outline-none focus:border-green-500 transition-colors">
                     </div>
 
                     <!-- Phone -->
@@ -307,7 +310,130 @@
             </div>
         </div>
 
-        <!-- Verification Tab -->
+        <!-- Identity Verification Tab -->
+        @if (activeTab === 'verification') {
+        <div>
+            <h2 class="text-2xl font-bold text-gray-800 mb-6">Identity Verification</h2>
+            <div class="bg-white p-8 rounded-xl shadow-sm border border-gray-100">
+                <div class="mb-6">
+                    <div class="bg-blue-50 border border-blue-200 p-4 rounded-lg mb-6">
+                        <div class="flex items-start gap-3">
+                            <i class="fa fa-info-circle text-blue-600 mt-1"></i>
+                            <div>
+                                <p class="text-blue-800 font-medium mb-1">Verification Required</p>
+                                <p class="text-sm text-blue-700">To ensure the safety of our community, please upload
+                                    the following documents for verification. Your information will be kept secure and
+                                    confidential.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                    <!-- National ID Front -->
+                    <div
+                        class="border-2 border-dashed border-gray-300 rounded-xl p-6 text-center hover:border-green-400 transition-colors">
+                        <input #idFrontInput type="file" class="hidden"
+                            (change)="onVerificationFileSelected($event, 'idCardFront')" accept="image/*">
+
+                        @if (verificationPreviews['idCardFront']) {
+                        <div class="relative">
+                            <img [src]="verificationPreviews['idCardFront']"
+                                class="w-full h-48 object-cover rounded-lg mb-3" alt="ID Front Preview">
+                            <button (click)="idFrontInput.click()"
+                                class="absolute top-2 right-2 bg-white/90 hover:bg-white text-gray-700 rounded-full w-8 h-8 flex items-center justify-center transition-all border-none cursor-pointer shadow-md">
+                                <i class="fa fa-edit"></i>
+                            </button>
+                        </div>
+                        } @else {
+                        <div (click)="idFrontInput.click()" class="cursor-pointer">
+                            <div class="text-gray-400 mb-3 text-4xl"><i class="fa fa-id-card"></i></div>
+                            <h3 class="text-sm font-bold text-gray-800 mb-1">National ID Front</h3>
+                            <p class="text-xs text-gray-500 mb-3">Upload the front side of your ID</p>
+                            <button type="button"
+                                class="bg-gray-100 text-gray-700 px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-200 transition-colors border-none cursor-pointer">
+                                Choose File
+                            </button>
+                        </div>
+                        }
+                    </div>
+
+                    <!-- National ID Back -->
+                    <div
+                        class="border-2 border-dashed border-gray-300 rounded-xl p-6 text-center hover:border-green-400 transition-colors">
+                        <input #idBackInput type="file" class="hidden"
+                            (change)="onVerificationFileSelected($event, 'idCardBack')" accept="image/*">
+
+                        @if (verificationPreviews['idCardBack']) {
+                        <div class="relative">
+                            <img [src]="verificationPreviews['idCardBack']"
+                                class="w-full h-48 object-cover rounded-lg mb-3" alt="ID Back Preview">
+                            <button (click)="idBackInput.click()"
+                                class="absolute top-2 right-2 bg-white/90 hover:bg-white text-gray-700 rounded-full w-8 h-8 flex items-center justify-center transition-all border-none cursor-pointer shadow-md">
+                                <i class="fa fa-edit"></i>
+                            </button>
+                        </div>
+                        } @else {
+                        <div (click)="idBackInput.click()" class="cursor-pointer">
+                            <div class="text-gray-400 mb-3 text-4xl"><i class="fa fa-id-card-o"></i></div>
+                            <h3 class="text-sm font-bold text-gray-800 mb-1">National ID Back</h3>
+                            <p class="text-xs text-gray-500 mb-3">Upload the back side of your ID</p>
+                            <button type="button"
+                                class="bg-gray-100 text-gray-700 px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-200 transition-colors border-none cursor-pointer">
+                                Choose File
+                            </button>
+                        </div>
+                        }
+                    </div>
+
+                    <!-- Selfie with ID -->
+                    <div
+                        class="border-2 border-dashed border-gray-300 rounded-xl p-6 text-center hover:border-green-400 transition-colors">
+                        <input #selfieInput type="file" class="hidden"
+                            (change)="onVerificationFileSelected($event, 'selfieWithId')" accept="image/*">
+
+                        @if (verificationPreviews['selfieWithId']) {
+                        <div class="relative">
+                            <img [src]="verificationPreviews['selfieWithId']"
+                                class="w-full h-48 object-cover rounded-lg mb-3" alt="Selfie Preview">
+                            <button (click)="selfieInput.click()"
+                                class="absolute top-2 right-2 bg-white/90 hover:bg-white text-gray-700 rounded-full w-8 h-8 flex items-center justify-center transition-all border-none cursor-pointer shadow-md">
+                                <i class="fa fa-edit"></i>
+                            </button>
+                        </div>
+                        } @else {
+                        <div (click)="selfieInput.click()" class="cursor-pointer">
+                            <div class="text-gray-400 mb-3 text-4xl"><i class="fa fa-camera"></i></div>
+                            <h3 class="text-sm font-bold text-gray-800 mb-1">Selfie with ID</h3>
+                            <p class="text-xs text-gray-500 mb-3">Take a selfie holding your ID</p>
+                            <button type="button"
+                                class="bg-gray-100 text-gray-700 px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-200 transition-colors border-none cursor-pointer">
+                                Choose File
+                            </button>
+                        </div>
+                        }
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="flex justify-end pt-6 border-t border-gray-100">
+                    <button (click)="submitVerification()"
+                        [disabled]="!allVerificationFilesSelected || isSubmittingVerification"
+                        [class.opacity-50]="!allVerificationFilesSelected || isSubmittingVerification"
+                        [class.cursor-not-allowed]="!allVerificationFilesSelected || isSubmittingVerification"
+                        class="bg-[#28b16d] text-white px-8 py-3 rounded-lg font-bold hover:bg-[#209e60] transition-colors border-none cursor-pointer shadow-sm hover:shadow-md flex items-center gap-2">
+                        @if (isSubmittingVerification) {
+                        <i class="fa fa-spinner fa-spin"></i>
+                        <span>Submitting...</span>
+                        } @else {
+                        <i class="fa fa-check-circle"></i>
+                        <span>Submit for Verification</span>
+                        }
+                    </button>
+                </div>
+            </div>
+        </div>
+        }
 
 
     </main>

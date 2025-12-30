@@ -16,9 +16,20 @@ export const routes: Routes = [
   { path: 'listingproperties', component: Listingproperties },
   { path: 'propertyview/:id', component: Propertyview, data: { ssr: false } },
   { path: 'agent-profile/:id', component: AgentProfile },
-  { path: 'user-profile', loadComponent: () => import('./Components/user-profile/user-profile').then(m => m.UserProfile) },
-  // Dashboard requires authentication AND active subscription
-  { path: 'user-dashboard', component: UserDashboard, canActivate: [authGuard, subscriptionGuard] },
+  // Profile requires authentication AND agent role
+  {
+    path: 'user-profile',
+    loadComponent: () => import('./Components/user-profile/user-profile').then(m => m.UserProfile),
+    canActivate: [authGuard, agentGuard]
+  },
+  // Dashboard requires authentication, agent role, AND active subscription
+  { path: 'user-dashboard', component: UserDashboard, canActivate: [authGuard, agentGuard, subscriptionGuard] },
+  // Saved Properties for owners (requires authentication only)
+  {
+    path: 'saved-properties',
+    loadComponent: () => import('./Components/saved-properties/saved-properties.component').then(m => m.SavedPropertiesComponent),
+    canActivate: [authGuard]
+  },
   {
     path: 'login', loadComponent: () =>
       import('./Components/login/login').then(m => m.Login)

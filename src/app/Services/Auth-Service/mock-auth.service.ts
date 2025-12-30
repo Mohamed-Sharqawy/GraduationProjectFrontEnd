@@ -21,7 +21,7 @@ export class MockAuthService {
             fullName: 'Test Owner',
             email: 'owner@homey.com',
             phoneNumber: '1234567890',
-            whatsappNumber: '1234567890',
+            whatsAppNumber: '1234567890',
             role: UserRole.Owner,
             isVerified: true,
             token: 'mock-token-owner-123'
@@ -31,7 +31,7 @@ export class MockAuthService {
             fullName: 'Test Agent',
             email: 'agent@homey.com',
             phoneNumber: '0987654321',
-            whatsappNumber: '0987654321',
+            whatsAppNumber: '0987654321',
             role: UserRole.Agent,
             isVerified: true,
             token: 'mock-token-agent-456'
@@ -41,7 +41,7 @@ export class MockAuthService {
             fullName: 'Test Admin',
             email: 'admin@homey.com',
             phoneNumber: '5555555555',
-            whatsappNumber: '5555555555',
+            whatsAppNumber: '5555555555',
             role: UserRole.Admin,
             isVerified: true,
             token: 'mock-token-admin-789'
@@ -160,7 +160,7 @@ export class MockAuthService {
                     fullName: data.fullName,
                     email: data.email,
                     phoneNumber: data.phoneNumber,
-                    whatsappNumber: data.whatsappNumber,
+                    whatsAppNumber: data.whatsappNumber,
                     role: data.role,
                     isVerified: false,
                     token: `mock-token-${Date.now()}`
