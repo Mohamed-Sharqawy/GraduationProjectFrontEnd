@@ -5,14 +5,15 @@
 
             <!-- Search Input for Agent Name only -->
             <div class="w-full lg:flex-1">
-                <input type="text" placeholder="Find Agent by Name" [(ngModel)]="filter.searchTerm"
+                <input type="text" placeholder="{{ 'FIND_AGENT.SEARCH_PLACEHOLDER' | translate }}"
+                    [(ngModel)]="filter.searchTerm"
                     class="w-full border border-gray-300 text-gray-700 placeholder-gray-400 py-3 px-4 rounded-[6px] focus:outline-none focus:ring-1 focus:ring-bayut-green focus:border-bayut-green transition-all"
                     (keyup.enter)="search()">
             </div>
 
             <button (click)="search()"
                 class="w-full lg:w-auto bg-[#00423a] hover:bg-[#005a4e] text-white font-bold py-3 px-8 rounded-[6px] transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#00423a]">
-                Find
+                {{ 'FIND_AGENT.FIND_BTN' | translate }}
             </button>
 
         </div>
@@ -23,8 +24,9 @@
         <div class="flex-1">
 
             <div class="mb-6">
-                <h1 class="text-2xl font-bold text-gray-900">Real Estate Agents in Egypt</h1>
-                <p class="text-gray-500 text-sm mt-1">Showing {{ agents.length }} results of {{ totalCount }} Agents</p>
+                <h1 class="text-2xl font-bold text-gray-900">{{ 'FIND_AGENT.PAGE_TITLE' | translate }}</h1>
+                <p class="text-gray-500 text-sm mt-1">{{ 'FIND_AGENT.SHOWING_RESULTS' | translate:{count: agents.length,
+                    total: totalCount} }}</p>
             </div>
 
             @for (agent of agents; track agent.id) {
@@ -42,16 +44,18 @@
                         <div class="flex flex-col gap-2">
                             <h2 class="text-[17px] font-bold text-gray-900 leading-tight">{{ agent.fullName }}</h2>
 
-                            <p class="text-sm text-gray-700">Real Estate Broker</p>
+                            <p class="text-sm text-gray-700">{{ 'FIND_AGENT.REAL_ESTATE_BROKER' | translate }}</p>
 
                             <div class="flex flex-col gap-1 mt-1 text-[13px] text-gray-800">
                                 <div class="flex items-center gap-2">
                                     <span class="text-gray-500 text-lg leading-none">🏠</span>
-                                    <span class="font-bold">{{ agent.activePropertiesCount }} Properties</span>
+                                    <span class="font-bold">{{ 'FIND_AGENT.PROPERTIES_COUNT' | translate:{count:
+                                        agent.activePropertiesCount} }}</span>
                                 </div>
                                 <div class="flex items-center gap-2">
                                     <span class="text-gray-500 text-lg leading-none">文</span>
-                                    <span>Speaks <span class="font-bold">Arabic, English</span></span>
+                                    <span>{{ 'FIND_AGENT.SPEAKS' | translate }} <span class="font-bold">{{
+                                            'AGENT_PROFILE.LANGUAGES_VALUE' | translate }}</span></span>
                                 </div>
                             </div>
 
@@ -69,7 +73,7 @@
                                     <path
                                         d="M22.5 6.908V6.75a3 3 0 00-3-3h-15a3 3 0 00-3 3v.158l9.714 5.978a1.5 1.5 0 001.572 0L22.5 6.908z" />
                                 </svg>
-                                <span>Email</span>
+                                <span>{{ 'AGENT_PROFILE.EMAIL' | translate }}</span>
                             </a>
 
                             <a [href]="'tel:' + agent.phone" (click)="$event.stopPropagation()"
@@ -80,7 +84,7 @@
                                         d="M1.5 4.5a3 3 0 013-3h1.372c.86 0 1.61.586 1.819 1.42l1.105 4.423a1.875 1.875 0 01-.694 1.955l-1.293.97c-.135.101-.164.249-.126.352a11.285 11.285 0 006.697 6.697c.103.038.25.009.352-.126l.97-1.293a1.875 1.875 0 011.955-.694l4.423 1.105c.834.209 1.42.959 1.42 1.82V19.5a3 3 0 01-3 3h-2.25C8.552 22.5 1.5 15.448 1.5 5.25V4.5z"
                                         clip-rule="evenodd" />
                                 </svg>
-                                <span>Call</span>
+                                <span>{{ 'AGENT_PROFILE.CALL' | translate }}</span>
                             </a>
 
                             <a [href]="'https://wa.me/' + agent.whatsAppNumber" target="_blank"
@@ -91,7 +95,7 @@
                                     <path
                                         d="M13.601 2.326A7.854 7.854 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.933 7.933 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.898 7.898 0 0 0 13.6 2.326zM7.994 14.521a6.573 6.573 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.557 6.557 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592zm3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.729.729 0 0 0-.529.247c-.182.198-.691.677-.691 1.654 0 .977.71 1.916.81 2.049.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232z" />
                                 </svg>
-                                <span>WhatsApp</span>
+                                <span>{{ 'AGENT_PROFILE.WHATSAPP' | translate }}</span>
                             </a>
                         </div>
 
@@ -125,19 +129,20 @@
                                 stroke-width="3" stroke-linecap="round" />
                         </svg>
                     </div>
-                    <h3 class="font-bold text-gray-900 text-[19px]">How Do Agents Earn Badges?</h3>
+                    <h3 class="font-bold text-gray-900 text-[19px]">{{ 'FIND_AGENT.SIDEBAR_TITLE' | translate }}</h3>
                     <p class="text-gray-800 text-[13px] mt-2 leading-tight">
-                        To highlight great performance, we reward agents with customised badges on Bayut.
+                        {{ 'FIND_AGENT.SIDEBAR_DESC' | translate }}
                     </p>
                 </div>
 
                 <div class="bg-[#e4f4f5] rounded-xl p-6 mb-4 text-center">
                     <span
                         class="inline-block bg-[#00423a] text-white text-[15px] font-bold px-8 py-2 rounded-[5px] mb-4 shadow-sm">
-                        TruBroker<sup class="font-normal text-[9px] ml-0.5">TM</sup>
+                        {{ 'FIND_AGENT.BADGE_TRUBROKER_TITLE' | translate }}<sup
+                            class="font-normal text-[9px] ml-0.5">TM</sup>
                     </span>
                     <p class="text-[#0f5c66] text-[13px] leading-relaxed font-medium">
-                        Exclusive badge awarded to agents who are highly responsive and advertise genuine properties.
+                        {{ 'FIND_AGENT.BADGE_TRUBROKER_DESC' | translate }}
                     </p>
                 </div>
 
@@ -149,11 +154,10 @@
                                 d="M12.0001 2.25208L21.4939 7.0001L12.0001 21.748L2.50635 7.0001L12.0001 2.25208ZM12.0001 4.74792L5.49365 7.0001L12.0001 17.0001L18.5066 7.0001L12.0001 4.74792Z" />
                             <path d="M12 2L2 7l10 15 10-15-10-5z" />
                         </svg>
-                        Quality Lister
+                        {{ 'FIND_AGENT.BADGE_QUALITY_TITLE' | translate }}
                     </div>
                     <p class="text-[#007ea8] text-[13px] leading-relaxed font-medium">
-                        Agents with the Quality Lister badge have showcased that they offer available and quality
-                        listings.
+                        {{ 'FIND_AGENT.BADGE_QUALITY_DESC' | translate }}
                     </p>
                 </div>
 
@@ -165,10 +169,10 @@
                                 d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z" />
                             <path d="M20 4l-2 3h4l-2-3zm-5 2l-1 2h2l-1-2z" />
                         </svg>
-                        Responsive Broker
+                        {{ 'FIND_AGENT.BADGE_RESPONSIVE_TITLE' | translate }}
                     </div>
                     <p class="text-[#8e3a98] text-[13px] leading-relaxed font-medium">
-                        Exclusive badge awarded to agents who are highly reachable and responsive.
+                        {{ 'FIND_AGENT.BADGE_RESPONSIVE_DESC' | translate }}
                     </p>
                 </div>
 

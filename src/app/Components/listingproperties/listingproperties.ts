@@ -7,10 +7,11 @@ import { PropertyService } from '../../Services/Property-Service/property.servic
 import { PropertyFilterDto } from '../../Models/Property/property-filter.dto';
 import { SavedPropertyService } from '../../Services/SavedProperty-Service/saved-property.service';
 import { AuthService } from '../../Services/Auth-Service/auth-service';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-listingproperties',
-  imports: [CommonModule, RouterModule, FormsModule],
+  imports: [CommonModule, RouterModule, FormsModule, TranslateModule],
   templateUrl: './listingproperties.html',
   styleUrls: ['./listingproperties.css'],
 })

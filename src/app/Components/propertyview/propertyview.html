@@ -1,12 +1,12 @@
 <div class="property-container">
     <nav class="breadcrumbs">
-        Home > {{ location }}
+        {{ 'PROPERTY_VIEW.HOME_LINK' | translate }} > {{ location }}
     </nav>
 
     <div class="gallery-grid">
         <div class="main-image">
             <img [src]="mainImageUrl" [alt]="title">
-            <span class="badge">Off-Plan</span>
+            <span class="badge">{{ 'PROPERTY_VIEW.OFF_PLAN' | translate }}</span>
         </div>
         <div class="side-images">
             <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQKIc_kss4gmWTk9urJ5yqttq3GnZ1y4ZUKDw&s"
@@ -21,22 +21,27 @@
             <div class="header-section">
                 <div class="price-row">
                     <h1>{{ price | currency: currency :'symbol':'1.0-0' }}</h1>
-                    <span class="installment-tag">{{ currency }} {{ installment }} monthly / {{ installmentPeriod
+                    <span class="installment-tag">{{ currency }} {{ installment }} {{ 'PROPERTY_VIEW.MONTHLY' |
+                        translate }} / {{ installmentPeriod
                         }}</span>
                 </div>
 
                 <div class="down-payment-row">
                     <span class="down-payment-badge">
-                        <i class="icon-cash">💵</i> Down payment: {{ currency }} {{ downPayment }}
+                        <i class="icon-cash">💵</i> {{ 'PROPERTY_VIEW.DOWN_PAYMENT' | translate }}: {{ currency }} {{
+                        downPayment }}
                     </span>
                 </div>
 
                 <h2 class="location-title">{{ location }}</h2>
 
                 <div class="specs-horizontal">
-                    <span class="spec-item"><i class="icon-bed">🛏</i> {{ specs.beds }} Bed</span>
-                    <span class="spec-item"><i class="icon-bath">🛁</i> {{ specs.baths }} Bath</span>
-                    <span class="spec-item"><i class="icon-area">📐</i> {{ specs.area }} Sq. M.</span>
+                    <span class="spec-item"><i class="icon-bed">🛏</i> {{ specs.beds }} {{ 'PROPERTY_VIEW.BED' |
+                        translate }}</span>
+                    <span class="spec-item"><i class="icon-bath">🛁</i> {{ specs.baths }} {{ 'PROPERTY_VIEW.BATH' |
+                        translate }}</span>
+                    <span class="spec-item"><i class="icon-area">📐</i> {{ specs.area }} {{ 'PROPERTY_VIEW.SQ_M' |
+                        translate }}</span>
                 </div>
 
                 <div class="description-section">
@@ -49,7 +54,7 @@
                 </div>
 
                 <section class="info-table">
-                    <h3>Property Information</h3>
+                    <h3>{{ 'PROPERTY_VIEW.PROPERTY_INFO_TITLE' | translate }}</h3>
                     <div class="grid-info">
                         @for (item of propertySpecs; track item.label) {
                         <div class="info-item">
@@ -73,10 +78,10 @@
 
                 <div class="actions">
                     <button class="btn-email" (click)="emailAgent()">
-                        <i class="icon-email">✉</i> Email
+                        <i class="icon-email">✉</i> {{ 'AGENT_PROFILE.EMAIL' | translate }}
                     </button>
                     <button class="btn-call" (click)="callAgent()">
-                        <i class="icon-phone">📞</i> Call
+                        <i class="icon-phone">📞</i> {{ 'AGENT_PROFILE.CALL' | translate }}
                     </button>
                     <button class="btn-whatsapp" (click)="whatsappAgent()">
                         <i class="icon-whatsapp">💬</i>
@@ -85,7 +90,7 @@
 
                 <div class="broker-footer">
                     <span class="agent-name">{{ agent.name }}</span>
-                    <a href="#" class="view-all-link">View all properties ></a>
+                    <a href="#" class="view-all-link">{{ 'PROPERTY_VIEW.VIEW_ALL' | translate }}</a>
                 </div>
             </div>
 
@@ -98,25 +103,27 @@
                     style="border: none; cursor: pointer;">
                     <i class="fa" [class.fa-heart]="isSaved" [class.fa-heart-o]="!isSaved"
                         [style.color]="isSaved ? '#dc2626' : '#6b7280'"></i>
-                    {{ isSaved ? 'Remove from Saved' : 'Save Property' }}
+                    {{ isSaved ? ('PROPERTY_VIEW.REMOVE_FROM_SAVED' | translate) : ('PROPERTY_VIEW.SAVE_PROPERTY' |
+                    translate) }}
                 </button>
             </div>
 
             <!-- Analytics Card -->
             <div class="analytics-card"
                 style="background: white; padding: 20px; border-radius: 12px; margin-top: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
-                <h3 style="margin-top: 0; color: #374151; font-size: 16px; margin-bottom: 15px;">Property Analytics</h3>
+                <h3 style="margin-top: 0; color: #374151; font-size: 16px; margin-bottom: 15px;">{{
+                    'PROPERTY_VIEW.PROPERTY_ANALYTICS' | translate }}</h3>
                 <div style="display: flex; flex-direction: column; gap: 12px;">
                     <div
                         style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 12px; border-bottom: 1px solid #f3f4f6;">
                         <span style="color: #6b7280; display: flex; align-items: center; gap: 8px;"><i
                                 class="fa fa-eye"></i>
-                            Total Views</span>
+                            {{ 'PROPERTY_VIEW.TOTAL_VIEWS' | translate }}</span>
                         <span style="font-weight: bold; color: #111827;">{{ viewCount }}</span>
                     </div>
                     <div style="display: flex; justify-content: space-between; align-items: center;">
                         <span style="color: #6b7280; display: flex; align-items: center; gap: 8px;"><i
-                                class="fa fa-whatsapp"></i> WhatsApp Leads</span>
+                                class="fa fa-whatsapp"></i> {{ 'PROPERTY_VIEW.WHATSAPP_LEADS' | translate }}</span>
                         <span style="font-weight: bold; color: #28b16d;">{{ whatsappClickCount }}</span>
                     </div>
                 </div>

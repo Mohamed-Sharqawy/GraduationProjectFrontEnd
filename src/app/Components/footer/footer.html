@@ -6,27 +6,30 @@
                 <span class="logo-icon">H</span>
                 <span class="logo-text">Homey</span>
             </div>
-            <p class="tagline">Your journey to the perfect home starts here.</p>
-            
+            <p class="tagline">{{ 'FOOTER.TAGLINE' | translate }}</p>
+
         </div>
 
         <!-- Quick Links -->
         <div class="footer-links">
-            <h3>Quick Links</h3>
+            <h3>{{ 'FOOTER.QUICK_LINKS' | translate }}</h3>
             <ul>
-                <li><a routerLink="/listingproperties">New Projects</a></li>
-                <li><a routerLink="/find-my-agent">Find Agents</a></li>
-                <li><a routerLink="/user-dashboard">List Property</a></li>
-                <li><a routerLink="/login">Login / Register</a></li>
+                <li><a routerLink="/listingproperties">{{ 'NAV.PROPERTIES' | translate }}</a></li>
+                <li><a routerLink="/find-my-agent">{{ 'NAV.FIND_AGENT' | translate }}</a></li>
+                <li><a routerLink="/user-dashboard">{{ 'NAV.LIST_PROPERTY' | translate }}</a></li>
+                <li><a routerLink="/login">{{ 'NAV.LOGIN' | translate }}</a></li>
             </ul>
         </div>
 
         <!-- Contact Info -->
         <div class="footer-contact">
-            <h3>Contact Us</h3>
+            <h3>{{ 'FOOTER.CONTACT_US' | translate }}</h3>
             <ul>
                 <li><i class="fa fa-map-marker"></i> 123 Real Estate Ave, Cairo, Egypt</li>
-                <li><i class="fa fa-phone"></i> +20 123 456 7890</li>
+                <li>
+                    <i class="fa fa-phone"></i>
+                    <span dir="ltr" style="display: inline-block;">+20 123 456 7890</span>
+                </li>
                 <li><i class="fa fa-envelope"></i> info@homey.com</li>
             </ul>
         </div>
@@ -34,7 +37,7 @@
 
     <div class="footer-bottom">
         <div class="max-w-[1140px] mx-auto px-4">
-            <p>&copy; 2025 Homey. All rights reserved.</p>
+            <p>{{ 'FOOTER.COPYRIGHT' | translate }}</p>
         </div>
     </div>
 </footer>

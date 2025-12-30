@@ -2,11 +2,12 @@ import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../Services/Auth-Service/auth-service';
+import { TranslateModule } from '@ngx-translate/core';
 
 
 @Component({
   selector: 'app-home',
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, TranslateModule],
   templateUrl: './home.html',
   styleUrl: './home.css',
 })
@@ -18,7 +19,7 @@ export class Home {
 
   heroImages: string[] = [
     'https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?q=80&w=1600',
-    'https://images.unsplash.com/photo-1600596542815-e32cbb65a780?q=80&w=1600',
+    
     'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?q=80&w=1600'
   ];
 

@@ -1,13 +1,13 @@
 <div class="auth-container">
     <div class="auth-card">
         <div class="auth-header">
-            <h1>Create Account</h1>
-            <p>Join Homey to find your perfect property</p>
+            <h1>{{ 'REGISTER.TITLE' | translate }}</h1>
+            <p>{{ 'REGISTER.SUBTITLE' | translate }}</p>
         </div>
 
         <form class="auth-form" (ngSubmit)="register()">
             <div class="form-group role-group">
-                <label>I want to join to...</label>
+                <label>{{ 'REGISTER.ROLE_LABEL' | translate }}</label>
                 <div class="role-options">
                     <!-- Owner Option -->
                     <label class="role-card">
@@ -22,8 +22,8 @@
                                     <path d="M8 21v-2a4 4 0 0 1 4-4v0a4 4 0 0 1 4 4v2" />
                                 </svg>
                             </div>
-                            <div class="role-title">Buy & Sell</div>
-                            <div class="role-description">Find your dream home or sell properties directly</div>
+                            <div class="role-title">{{ 'REGISTER.ROLE_BUY_SELL_TITLE' | translate }}</div>
+                            <div class="role-description">{{ 'REGISTER.ROLE_BUY_SELL_DESC' | translate }}</div>
                         </div>
                     </label>
 
@@ -40,15 +40,15 @@
                                     <line x1="23" y1="11" x2="17" y2="11"></line>
                                 </svg>
                             </div>
-                            <div class="role-title">Become an Agent</div>
-                            <div class="role-description">List multiple properties and grow your business</div>
+                            <div class="role-title">{{ 'REGISTER.ROLE_AGENT_TITLE' | translate }}</div>
+                            <div class="role-description">{{ 'REGISTER.ROLE_AGENT_DESC' | translate }}</div>
                         </div>
                     </label>
                 </div>
             </div>
 
             <div class="form-group">
-                <label for="fullName">Full Name</label>
+                <label for="fullName">{{ 'REGISTER.FULL_NAME_LABEL' | translate }}</label>
                 <div class="input-wrapper">
                     <svg class="input-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
                         stroke="currentColor" stroke-width="2">
@@ -56,26 +56,26 @@
                         <circle cx="12" cy="7" r="4"></circle>
                     </svg>
                     <input type="text" id="fullName" name="fullName" [(ngModel)]="fullName"
-                        placeholder="Enter your full name" required autocomplete="name" />
+                        placeholder="{{ 'REGISTER.FULL_NAME_PLACEHOLDER' | translate }}" required autocomplete="name" />
                 </div>
             </div>
 
             <div class="form-group">
-                <label for="email">Email Address</label>
+                <label for="email">{{ 'LOGIN.EMAIL_LABEL' | translate }}</label>
                 <div class="input-wrapper">
                     <svg class="input-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
                         stroke="currentColor" stroke-width="2">
                         <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
                         <polyline points="22,6 12,13 2,6"></polyline>
                     </svg>
-                    <input type="email" id="email" name="email" [(ngModel)]="email" placeholder="Enter your email"
-                        required autocomplete="email" />
+                    <input type="email" id="email" name="email" [(ngModel)]="email"
+                        placeholder="{{ 'LOGIN.EMAIL_PLACEHOLDER' | translate }}" required autocomplete="email" />
                 </div>
             </div>
 
             <div class="form-row">
                 <div class="form-group">
-                    <label for="phoneNumber">Phone Number</label>
+                    <label for="phoneNumber">{{ 'REGISTER.PHONE_LABEL' | translate }}</label>
                     <div class="input-wrapper">
                         <svg class="input-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
                             stroke="currentColor" stroke-width="2">
@@ -84,12 +84,12 @@
                             </path>
                         </svg>
                         <input type="tel" id="phoneNumber" name="phoneNumber" [(ngModel)]="phoneNumber"
-                            placeholder="Phone number" required autocomplete="tel" />
+                            placeholder="{{ 'REGISTER.PHONE_PLACEHOLDER' | translate }}" required autocomplete="tel" />
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label for="whatsAppNumber">WhatsApp (Optional)</label>
+                    <label for="whatsAppNumber">{{ 'REGISTER.WHATSAPP_LABEL' | translate }}</label>
                     <div class="input-wrapper">
                         <svg class="input-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
                             stroke="currentColor" stroke-width="2">
@@ -98,7 +98,7 @@
                             </path>
                         </svg>
                         <input type="tel" id="whatsAppNumber" name="whatsAppNumber" [(ngModel)]="whatsAppNumber"
-                            placeholder="WhatsApp number" autocomplete="tel" />
+                            placeholder="{{ 'REGISTER.WHATSAPP_PLACEHOLDER' | translate }}" autocomplete="tel" />
                     </div>
                 </div>
             </div>
@@ -107,7 +107,7 @@
 
             <div class="form-row">
                 <div class="form-group">
-                    <label for="password">Password</label>
+                    <label for="password">{{ 'LOGIN.PASSWORD_LABEL' | translate }}</label>
                     <div class="input-wrapper">
                         <svg class="input-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
                             stroke="currentColor" stroke-width="2">
@@ -115,12 +115,13 @@
                             <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
                         </svg>
                         <input type="password" id="password" name="password" [(ngModel)]="password"
-                            placeholder="Create password" required autocomplete="new-password" />
+                            placeholder="{{ 'REGISTER.PASSWORD_PLACEHOLDER_CREATE' | translate }}" required
+                            autocomplete="new-password" />
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label for="confirmPassword">Confirm Password</label>
+                    <label for="confirmPassword">{{ 'REGISTER.CONFIRM_PASSWORD_LABEL' | translate }}</label>
                     <div class="input-wrapper">
                         <svg class="input-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
                             stroke="currentColor" stroke-width="2">
@@ -128,23 +129,26 @@
                             <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
                         </svg>
                         <input type="password" id="confirmPassword" name="confirmPassword" [(ngModel)]="confirmPassword"
-                            placeholder="Confirm password" required autocomplete="new-password" />
+                            placeholder="{{ 'REGISTER.CONFIRM_PASSWORD_PLACEHOLDER' | translate }}" required
+                            autocomplete="new-password" />
                     </div>
                 </div>
             </div>
 
             <label class="checkbox-wrapper terms-checkbox">
                 <input type="checkbox" required />
-                <span>I agree to the <a href="#" class="link">Terms of Service</a> and <a href="#" class="link">Privacy
-                        Policy</a></span>
+                <span>{{ 'REGISTER.AGREE_TERMS' | translate }} <a href="#" class="link">{{ 'REGISTER.TERMS_LINK' |
+                        translate }}</a> {{ 'COMMON.AND' | translate }} <a href="#" class="link">{{
+                        'REGISTER.PRIVACY_LINK' | translate }}</a></span>
             </label>
 
             <button type="submit" class="btn-primary">
-                Create Account
+                {{ 'REGISTER.CREATE_ACCOUNT_BTN' | translate }}
             </button>
 
             <div class="auth-footer">
-                <p>Already have an account? <a routerLink="/login" class="link">Sign in</a></p>
+                <p>{{ 'REGISTER.HAVE_ACCOUNT' | translate }} <a routerLink="/login" class="link">{{
+                        'REGISTER.SIGN_IN_LINK' | translate }}</a></p>
             </div>
         </form>
     </div>

@@ -4,11 +4,12 @@ import { RouterModule } from '@angular/router';
 import { SavedPropertyService } from '../../Services/SavedProperty-Service/saved-property.service';
 import { SavedPropertyDto } from '../../Models/SavedProperty/saved-property.models';
 import { ToastrService } from 'ngx-toastr';
+import { TranslateService, TranslateModule } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-saved-properties',
     standalone: true,
-    imports: [CommonModule, RouterModule],
+    imports: [CommonModule, RouterModule, TranslateModule],
     templateUrl: './saved-properties.component.html',
     styleUrls: ['./saved-properties.component.css']
 })
@@ -18,6 +19,7 @@ export class SavedPropertiesComponent implements OnInit {
 
     private savedPropertyService = inject(SavedPropertyService);
     private toastr = inject(ToastrService);
+    private translate = inject(TranslateService);
     private cdr = inject(ChangeDetectorRef);
 
     ngOnInit() {
@@ -34,7 +36,7 @@ export class SavedPropertiesComponent implements OnInit {
             },
             error: (error) => {
                 console.error('Failed to load saved properties:', error);
-                this.toastr.error('Failed to load saved properties', 'Error');
+                this.toastr.error(this.translate.instant('SAVED_PROPERTIES.LOAD_ERROR'), this.translate.instant('SAVED_PROPERTIES.ERROR'));
                 this.isLoading = false;
                 this.cdr.detectChanges();
             }
@@ -45,12 +47,12 @@ export class SavedPropertiesComponent implements OnInit {
         this.savedPropertyService.unsaveProperty(propertyId).subscribe({
             next: () => {
                 this.savedProperties = this.savedProperties.filter(sp => sp.property.id !== propertyId);
-                this.toastr.success('Property removed from saved list', 'Success');
+                this.toastr.success(this.translate.instant('SAVED_PROPERTIES.UNSAVE_SUCCESS'), this.translate.instant('SAVED_PROPERTIES.SUCCESS'));
                 this.cdr.detectChanges();
             },
             error: (error) => {
                 console.error('Failed to unsave property:', error);
-                this.toastr.error('Failed to remove property', 'Error');
+                this.toastr.error(this.translate.instant('SAVED_PROPERTIES.UNSAVE_ERROR'), this.translate.instant('SAVED_PROPERTIES.ERROR'));
             }
         });
     }

@@ -1,8 +1,9 @@
 <!-- Top Bar -->
 <div class="bg-[#fcfcfc] border-b border-gray-200 text-xs py-2 text-gray-500 font-sans">
   <div class="max-w-[1140px] mx-auto px-4 flex justify-between items-center">
-    <div class="flex gap-4 items-center cursor-pointer hover:text-gray-700">
-      <span><i class="fa fa-globe"></i> EN</span>
+    <div class="flex gap-4 items-center cursor-pointer hover:text-gray-700"
+      (click)="translationService.toggleLanguage()">
+      <span><i class="fa fa-globe"></i> {{ 'COMMON.LANGUAGE_BTN' | translate }}</span>
     </div>
     <div class="flex gap-4 items-center cursor-pointer hover:text-gray-700">
       @if (authService.currentUser()) {
@@ -27,8 +28,9 @@
         <i class="fa fa-sign-out"></i> Logout
       </button>
       } @else {
-      <a routerLink="/login" class="no-underline text-gray-500 hover:text-gray-700"><i class="fa fa-user"></i> Log
-        in</a>
+      <a routerLink="/login" class="no-underline text-gray-500 hover:text-gray-700"><i class="fa fa-user"></i> {{
+        'NAV.LOGIN' | translate }}
+      </a>
       }
     </div>
   </div>
@@ -48,7 +50,7 @@
     <div class="flex items-center gap-6 font-semibold text-gray-800">
       <a routerLink="/find-my-agent"
         class="no-underline hover:text-[#28b16d] transition-colors relative flex items-center gap-1">
-        Find my Agent
+        {{ 'NAV.FIND_AGENT' | translate }}
         <!-- <span class="bg-red-500 text-white text-[9px] px-1.5 rounded-[3px] align-top">NEW</span> -->
       </a>
       <!-- Show Dashboard only for Agents -->
@@ -57,9 +59,10 @@
         class="no-underline hover:text-[#28b16d] transition-colors relative flex items-center gap-1 cursor-pointer">
         My Dashboard
       </a>
-      
+
       }
-      <a routerLink="/listingproperties" class="no-underline hover:text-[#28b16d] transition-colors">Properties</a>
+      <a routerLink="/listingproperties" class="no-underline hover:text-[#28b16d] transition-colors">{{ 'NAV.PROPERTIES'
+        | translate }}</a>
     </div>
   </div>
 </nav>

@@ -5,11 +5,12 @@ import { Router } from '@angular/router';
 import { PropertyCardDto, CreatePropertyDto, PropertyDetailsDto } from '../../Models/Property/PropertyDtos';
 import { PropertyService } from '../../Services/Property-Service/property.service';
 import { AuthService } from '../../Services/Auth-Service/auth-service';
+import { TranslateService, TranslateModule } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-user-dashboard',
     standalone: true,
-    imports: [CommonModule, FormsModule],
+    imports: [CommonModule, FormsModule, TranslateModule],
     templateUrl: './userdashboard.html',
     styleUrl: './userdashboard.css'
 })
@@ -55,7 +56,8 @@ export class UserDashboard {
         private propertiesService: PropertyService,
         private cdr: ChangeDetectorRef,
         private router: Router,
-        private authService: AuthService
+        private authService: AuthService,
+        private translate: TranslateService
     ) {
         afterNextRender(() => {
             console.log('🔄 UserDashboard: afterNextRender triggered');
@@ -98,7 +100,7 @@ export class UserDashboard {
                 // Handle 401 specifically
                 if (err.status === 401) {
                     this.needsLogin = true;
-                    this.errorMessage = 'Session expired. Please log in again.';
+                    this.errorMessage = this.translate.instant('USER_DASHBOARD.SESSION_EXPIRED');
                 } else {
                     this.errorMessage = 'Failed to load properties. ' + (err.error?.message || err.message || 'Unknown error');
                 }
@@ -169,15 +171,15 @@ export class UserDashboard {
     }
 
     deleteProperty(id: number) {
-        if (confirm('Are you sure you want to delete this property?')) {
+        if (confirm(this.translate.instant('USER_DASHBOARD.CONFIRM_DELETE'))) {
             this.propertiesService.deleteProperty(id).subscribe({
                 next: () => {
                     this.userProperties = this.userProperties.filter(p => p.id !== id);
-                    alert('Property deleted successfully');
+                    alert(this.translate.instant('USER_DASHBOARD.DELETE_SUCCESS'));
                 },
                 error: (err) => {
                     console.error('Error deleting property', err);
-                    alert('Failed to delete property');
+                    alert(this.translate.instant('USER_DASHBOARD.DELETE_FAIL'));
                 }
             });
         }
@@ -207,25 +209,25 @@ export class UserDashboard {
         if (this.isEditing) {
             this.propertiesService.updateProperty(this.currentProperty.id, formData).subscribe({
                 next: (res) => {
-                    alert('Property updated successfully');
+                    alert(this.translate.instant('USER_DASHBOARD.UPDATE_SUCCESS'));
                     this.closeForm();
                     this.loadProperties();
                 },
                 error: (err) => {
                     console.error('Error updating property', err);
-                    alert('Failed to update property: ' + (err.error?.message || err.message));
+                    alert(this.translate.instant('USER_DASHBOARD.UPDATE_FAIL') + ': ' + (err.error?.message || err.message));
                 }
             });
         } else {
             this.propertiesService.createProperty(formData).subscribe({
                 next: (res) => {
-                    alert('Property created successfully');
+                    alert(this.translate.instant('USER_DASHBOARD.CREATE_SUCCESS'));
                     this.closeForm();
                     this.loadProperties();
                 },
                 error: (err) => {
                     console.error('Error creating property', err);
-                    alert('Failed to create property: ' + (err.error?.message || err.message));
+                    alert(this.translate.instant('USER_DASHBOARD.CREATE_FAIL') + ': ' + (err.error?.message || err.message));
                 }
             });
         }

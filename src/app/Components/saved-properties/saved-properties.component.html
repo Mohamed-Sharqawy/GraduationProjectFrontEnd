@@ -2,8 +2,8 @@
     <div class="max-w-7xl mx-auto">
         <!-- Page Header -->
         <div class="mb-8">
-            <h1 class="text-3xl font-bold text-gray-800 mb-2">My Saved Properties</h1>
-            <p class="text-gray-600">Properties you've saved for later viewing</p>
+            <h1 class="text-3xl font-bold text-gray-800 mb-2">{{ 'SAVED_PROPERTIES.PAGE_TITLE' | translate }}</h1>
+            <p class="text-gray-600">{{ 'SAVED_PROPERTIES.PAGE_SUBTITLE' | translate }}</p>
         </div>
 
         <!-- Loading State -->
@@ -12,7 +12,7 @@
             <div
                 class="inline-block w-12 h-12 border-4 border-gray-200 border-t-[#28b16d] rounded-full animate-spin mb-4">
             </div>
-            <p class="text-gray-500">Loading your saved properties...</p>
+            <p class="text-gray-500">{{ 'SAVED_PROPERTIES.LOADING' | translate }}</p>
         </div>
         }
 
@@ -20,11 +20,11 @@
         @if (!isLoading && savedProperties.length === 0) {
         <div class="bg-white p-12 rounded-xl shadow-sm border border-gray-100 text-center">
             <div class="text-gray-400 mb-4 text-6xl"><i class="fa fa-heart-o"></i></div>
-            <h3 class="text-xl font-bold text-gray-800 mb-2">No saved properties yet</h3>
-            <p class="text-gray-600 mb-6">Start exploring and save properties you're interested in!</p>
+            <h3 class="text-xl font-bold text-gray-800 mb-2">{{ 'SAVED_PROPERTIES.NO_SAVED' | translate }}</h3>
+            <p class="text-gray-600 mb-6">{{ 'SAVED_PROPERTIES.NO_SAVED_DESC' | translate }}</p>
             <a routerLink="/listingproperties"
                 class="inline-block bg-[#28b16d] text-white px-8 py-3 rounded-lg font-bold hover:bg-[#209e60] transition-colors no-underline">
-                Browse Properties
+                {{ 'SAVED_PROPERTIES.BROWSE_PROPERTIES' | translate }}
             </a>
         </div>
         }
@@ -41,12 +41,12 @@
                         [alt]="saved.property.title" class="w-full h-full object-cover">
                     <button (click)="unsaveProperty(saved.property.id)"
                         class="absolute top-3 right-3 bg-white/95 hover:bg-red-50 text-red-500 rounded-full w-10 h-10 flex items-center justify-center transition-all border-none cursor-pointer shadow-md hover:shadow-lg"
-                        title="Remove from saved">
+                        [title]="'SAVED_PROPERTIES.REMOVE_TOOLTIP' | translate">
                         <i class="fa fa-heart"></i>
                     </button>
                     @if (saved.property.isFeatured) {
                     <div class="absolute top-3 left-3 bg-[#28b16d] text-white px-3 py-1 rounded-full text-xs font-bold">
-                        Featured
+                        {{ 'SAVED_PROPERTIES.FEATURED' | translate }}
                     </div>
                     }
                 </div>
@@ -91,7 +91,7 @@
                     <!-- View Details Button -->
                     <a [routerLink]="['/propertyview', saved.property.id]"
                         class="block w-full text-center bg-gray-100 hover:bg-[#28b16d] hover:text-white text-gray-800 py-2.5 rounded-lg font-semibold transition-colors no-underline">
-                        View Details <i class="fa fa-arrow-right ml-1"></i>
+                        {{ 'SAVED_PROPERTIES.VIEW_DETAILS' | translate }} <i class="fa fa-arrow-right ml-1"></i>
                     </a>
                 </div>
             </div>

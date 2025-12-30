@@ -6,7 +6,7 @@
     }
 
     <div class="slider-overlay">
-        <h1>Explore Our Hidden Gems for Sale and Rent</h1>
+        <h1>{{ 'HOME.HERO_TITLE' | translate }}</h1>
     </div>
 
     <div class="slider-dots">
@@ -20,18 +20,18 @@
 <!-- Services Section -->
 <section class="features-section container">
     <div class="section-header">
-        <h2>Our Services</h2>
-        <p>Everything you need for your property journey</p>
+        <h2>{{ 'HOME.SERVICES_TITLE' | translate }}</h2>
+        <p>{{ 'HOME.SERVICES_SUBTITLE' | translate }}</p>
     </div>
 
     <div class="feature-grid">
         <!-- Feature 1: Finding a Property -->
         <div class="feature-card cursor-pointer" routerLink="/listingproperties">
             <div class="card-content">
-                <h3>Find a Property</h3>
-                <p>Explore our wide range of properties for sale and rent.</p>
-                <a routerLink="/listingproperties" class="text-[#28b16d] font-bold no-underline hover:underline">Browse
-                    Properties →</a>
+                <h3>{{ 'HOME.FIND_PROPERTY_TITLE' | translate }}</h3>
+                <p>{{ 'HOME.FIND_PROPERTY_DESC' | translate }}</p>
+                <a routerLink="/listingproperties" class="text-[#28b16d] font-bold no-underline hover:underline">
+                    {{ 'HOME.BROWSE_PROPERTIES' | translate }}</a>
             </div>
             <div class="card-icon">🏠</div>
         </div>
@@ -39,10 +39,10 @@
         <!-- Feature 2: Finding an Agent -->
         <div class="feature-card blue-card cursor-pointer" routerLink="/find-my-agent">
             <div class="card-content">
-                <h3>Find an Agent</h3>
-                <p>Connect with top real estate agents to help you.</p>
-                <a routerLink="/find-my-agent" class="text-[#28b16d] font-bold no-underline hover:underline">Find Agents
-                    →</a>
+                <h3>{{ 'HOME.FIND_AGENT_TITLE' | translate }}</h3>
+                <p>{{ 'HOME.FIND_AGENT_DESC' | translate }}</p>
+                <a routerLink="/find-my-agent" class="text-[#28b16d] font-bold no-underline hover:underline">
+                    {{ 'HOME.FIND_AGENTS' | translate }}</a>
             </div>
             <div class="card-icon">🤵</div>
         </div>
@@ -50,10 +50,11 @@
         <!-- Feature 3: Sell Your Property -->
         <div class="feature-card cursor-pointer" (click)="handleSellProperty()">
             <div class="card-content">
-                <h3>Sell Your Property</h3>
-                <p>List your property with us and reach thousands of buyers.</p>
+                <h3>{{ 'HOME.SELL_PROPERTY_TITLE' | translate }}</h3>
+                <p>{{ 'HOME.SELL_PROPERTY_DESC' | translate }}</p>
                 <a (click)="$event.stopPropagation(); handleSellProperty()"
-                    class="text-[#28b16d] font-bold no-underline hover:underline cursor-pointer">List Property →</a>
+                    class="text-[#28b16d] font-bold no-underline hover:underline cursor-pointer">
+                    {{ 'HOME.LIST_PROPERTY' | translate }}</a>
             </div>
             <div class="card-icon">🔑</div>
         </div>
@@ -64,14 +65,12 @@
 <section class="about-section container" style="margin-top: 4rem; margin-bottom: 4rem;">
     <div class="section-content" style="display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center;">
         <div class="about-text">
-            <h2 style="font-size: 2rem; color: #333; margin-bottom: 1.5rem;">About Homey</h2>
+            <h2 style="font-size: 2rem; color: #333; margin-bottom: 1.5rem;">{{ 'HOME.ABOUT_TITLE' | translate }}</h2>
             <p style="color: #666; line-height: 1.6; margin-bottom: 1rem;">
-                Homey is your premier destination for finding the perfect property. We bridge the gap between dream
-                homes and eager buyers, providing a seamless platform for real estate transactions.
+                {{ 'HOME.ABOUT_DESC_1' | translate }}
             </p>
             <p style="color: #666; line-height: 1.6;">
-                Whether you're looking to buy your first home, rent a luxury apartment, or sell your property to the
-                right buyer, Homey makes the process simple, transparent, and efficient.
+                {{ 'HOME.ABOUT_DESC_2' | translate }}
             </p>
         </div>
         <div class="about-image"
@@ -85,8 +84,8 @@
 <section class="vision-section" style="background-color: #f9f9f9; padding: 4rem 0;">
     <div class="container">
         <div class="section-header">
-            <h2>Why Choose Us</h2>
-            <p>We're redefining the real estate experience</p>
+            <h2>{{ 'HOME.VISION_SECTION_TITLE' | translate }}</h2>
+            <p>{{ 'HOME.VISION_SECTION_SUBTITLE' | translate }}</p>
         </div>
 
         <div class="vision-grid"
@@ -95,10 +94,10 @@
             <div class="vision-card"
                 style="background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
                 <div class="icon" style="font-size: 2.5rem; margin-bottom: 1rem;">🎯</div>
-                <h3 style="font-size: 1.25rem; margin-bottom: 1rem; color: #333;">Our Vision</h3>
+                <h3 style="font-size: 1.25rem; margin-bottom: 1rem; color: #333;">{{ 'HOME.VISION_TITLE' | translate }}
+                </h3>
                 <p style="color: #666; line-height: 1.6;">
-                    To create a world where every person can find their perfect home with ease and confidence, powered
-                    by technology and trust.
+                    {{ 'HOME.VISION_DESC' | translate }}
                 </p>
             </div>
 
@@ -106,10 +105,10 @@
             <div class="vision-card"
                 style="background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
                 <div class="icon" style="font-size: 2.5rem; margin-bottom: 1rem;">🤝</div>
-                <h3 style="font-size: 1.25rem; margin-bottom: 1rem; color: #333;">Trusted Network</h3>
+                <h3 style="font-size: 1.25rem; margin-bottom: 1rem; color: #333;">{{ 'HOME.TRUST_TITLE' | translate }}
+                </h3>
                 <p style="color: #666; line-height: 1.6;">
-                    We work with only the best certified agents and verified listings to ensure your safety and
-                    satisfaction.
+                    {{ 'HOME.TRUST_DESC' | translate }}
                 </p>
             </div>
 
@@ -117,10 +116,10 @@
             <div class="vision-card"
                 style="background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
                 <div class="icon" style="font-size: 2.5rem; margin-bottom: 1rem;">🚀</div>
-                <h3 style="font-size: 1.25rem; margin-bottom: 1rem; color: #333;">Innovation</h3>
+                <h3 style="font-size: 1.25rem; margin-bottom: 1rem; color: #333;">{{ 'HOME.INNOVATION_TITLE' | translate
+                    }}</h3>
                 <p style="color: #666; line-height: 1.6;">
-                    leveraging cutting-edge technology to provide market insights, virtual tours, and seamless
-                    communication.
+                    {{ 'HOME.INNOVATION_DESC' | translate }}
                 </p>
             </div>
         </div>

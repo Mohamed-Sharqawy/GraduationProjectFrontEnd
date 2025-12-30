@@ -1,38 +1,42 @@
 <div class="dashboard-container">
     <div class="dashboard-header">
         <div>
-            <h1>My Properties</h1>
-            <p style="color: #666; margin-top: 5px;">Manage your listings for sale or rent</p>
+            <h1>{{ 'USER_DASHBOARD.DASHBOARD_TITLE' | translate }}</h1>
+            <p style="color: #666; margin-top: 5px;">{{ 'USER_DASHBOARD.DASHBOARD_SUBTITLE' | translate }}</p>
         </div>
         <button class="add-btn" (click)="addProperty()">
-            <span style="font-size: 20px;">+</span> Add New Property
+            <span style="font-size: 20px;">+</span> {{ 'USER_DASHBOARD.ADD_NEW_PROPERTY' | translate }}
         </button>
     </div>
 
     @if (needsLogin) {
     <div style="text-align: center; padding: 50px; background: white; border-radius: 8px;">
         <p style="font-size: 24px; margin-bottom: 10px;">🔒</p>
-        <p style="font-size: 18px; color: #666; margin-bottom: 5px;">Please log in to view your properties</p>
+        <p style="font-size: 18px; color: #666; margin-bottom: 5px;">{{ 'USER_DASHBOARD.LOGIN_REQUIRED_TITLE' |
+            translate }}</p>
         @if (errorMessage) {
         <p style="font-size: 14px; color: #c62828;">{{ errorMessage }}</p>
         }
-        <button class="add-btn" style="margin-top: 20px;" (click)="goToLogin()">Go to Login</button>
+        <button class="add-btn" style="margin-top: 20px;" (click)="goToLogin()">{{ 'USER_DASHBOARD.GO_TO_LOGIN' |
+            translate }}</button>
     </div>
     } @else if (errorMessage) {
     <div
         style="text-align: center; padding: 20px; margin: 20px; background: #ffebee; color: #c62828; border-radius: 8px; border: 1px solid #ef9a9a;">
-        <p style="margin: 0; font-weight: bold;">Error</p>
+        <p style="margin: 0; font-weight: bold;">{{ 'USER_DASHBOARD.ERROR_TITLE' | translate }}</p>
         <p style="margin: 5px 0 0 0;">{{ errorMessage }}</p>
-        <button (click)="loadProperties()" style="margin-top: 10px; padding: 5px 15px; cursor: pointer;">Retry</button>
+        <button (click)="loadProperties()" style="margin-top: 10px; padding: 5px 15px; cursor: pointer;">{{
+            'USER_DASHBOARD.RETRY' | translate }}</button>
     </div>
     } @else if (isLoading) {
     <div style="text-align: center; padding: 50px;">
-        <p style="font-size: 18px; color: #666;">Loading properties...</p>
+        <p style="font-size: 18px; color: #666;">{{ 'COMMON.LOADING' | translate }}</p>
     </div>
     } @else if (userProperties.length === 0) {
     <div style="text-align: center; padding: 50px; background: white; border-radius: 8px;">
-        <p style="font-size: 18px; color: #666;">You haven't posted any properties yet.</p>
-        <button class="add-btn" style="margin: 20px auto;" (click)="addProperty()">Create your first listing</button>
+        <p style="font-size: 18px; color: #666;">{{ 'USER_DASHBOARD.NO_PROPERTIES' | translate }}</p>
+        <button class="add-btn" style="margin: 20px auto;" (click)="addProperty()">{{
+            'USER_DASHBOARD.CREATE_FIRST_LISTING' | translate }}</button>
     </div>
     } @else {
     <div class="properties-grid">
@@ -41,16 +45,16 @@
             <div class="card-image">
                 <img [src]="prop.primaryImageUrl || 'https://placehold.co/600x400?text=No+Image'" [alt]="prop.title">
                 <span
-                    style="position: absolute; top: 10px; left: 10px; background: rgba(0,0,0,0.6); color: white; padding: 4px 8px; border-radius: 4px; font-size: 12px;">{{prop.status
-                    === 1 ? 'Active' : 'Pending'}}</span>
+                    style="position: absolute; top: 10px; left: 10px; background: rgba(0,0,0,0.6); color: white; padding: 4px 8px; border-radius: 4px; font-size: 12px;">{{(prop.status
+                    === 1 ? 'USER_DASHBOARD.ACTIVE' : 'USER_DASHBOARD.PENDING') | translate}}</span>
             </div>
             <div class="card-content">
                 <h3 class="card-title">{{prop.title}}</h3>
                 <div class="card-price">{{prop.price | currency : 'EGP' : 'symbol' : '1.0-0'}}</div>
 
                 <div class="card-details">
-                    <div class="detail-item">🛏 {{prop.rooms || 0}} Beds</div>
-                    <div class="detail-item">🚿 {{prop.bathrooms || 0}} Baths</div>
+                    <div class="detail-item">🛏 {{prop.rooms || 0}} {{ 'USER_DASHBOARD.BEDS' | translate }}</div>
+                    <div class="detail-item">🚿 {{prop.bathrooms || 0}} {{ 'USER_DASHBOARD.BATHS' | translate }}</div>
                     <div class="detail-item">📐 {{prop.area}} m²</div>
                 </div>
 
@@ -59,8 +63,10 @@
                 </div>
             </div>
             <div class="card-actions">
-                <button class="action-btn edit-btn" (click)="editProperty(prop.id)">✎ Edit</button>
-                <button class="action-btn delete-btn" (click)="deleteProperty(prop.id)">🗑 Delete</button>
+                <button class="action-btn edit-btn" (click)="editProperty(prop.id)">✎ {{ 'USER_DASHBOARD.EDIT' |
+                    translate }}</button>
+                <button class="action-btn delete-btn" (click)="deleteProperty(prop.id)">🗑 {{ 'USER_DASHBOARD.DELETE' |
+                    translate }}</button>
             </div>
         </div>
         }
@@ -73,30 +79,31 @@
 <div class="modal-overlay" (click)="cancel()">
     <div class="modal-content" (click)="$event.stopPropagation()">
         <div class="modal-header">
-            <h2>{{ isEditing ? 'Edit Property' : 'Add New Property' }}</h2>
+            <h2>{{ (isEditing ? 'USER_DASHBOARD.EDIT_PROPERTY' : 'USER_DASHBOARD.ADD_PROPERTY_TITLE') | translate }}
+            </h2>
             <button class="close-btn" (click)="cancel()">×</button>
         </div>
 
         <form (ngSubmit)="saveProperty()">
             <div class="form-group">
-                <label>Property Title (Arabic)</label>
+                <label>{{ 'USER_DASHBOARD.PROPERTY_TITLE_AR' | translate }}</label>
                 <input type="text" class="form-control" [(ngModel)]="currentProperty.Title" name="Title"
                     placeholder="e.g., شقة فاخرة في القاهرة" required>
             </div>
             <div class="form-group">
-                <label>Property Title (English)</label>
+                <label>{{ 'USER_DASHBOARD.PROPERTY_TITLE_EN' | translate }}</label>
                 <input type="text" class="form-control" [(ngModel)]="currentProperty.TitleEn" name="TitleEn"
                     placeholder="e.g., Luxury Apartment in Cairo">
             </div>
 
             <div class="form-row">
                 <div class="form-group">
-                    <label>Price (EGP)</label>
+                    <label>{{ 'USER_DASHBOARD.PRICE' | translate }}</label>
                     <input type="number" class="form-control" [(ngModel)]="currentProperty.Price" name="Price" required
                         min="1">
                 </div>
                 <div class="form-group">
-                    <label>Area (m²)</label>
+                    <label>{{ 'USER_DASHBOARD.AREA' | translate }}</label>
                     <input type="number" class="form-control" [(ngModel)]="currentProperty.Area" name="Area" required
                         min="1">
                 </div>
@@ -104,16 +111,17 @@
 
             <div class="form-row">
                 <div class="form-group">
-                    <label>City</label>
+                    <label>{{ 'USER_DASHBOARD.CITY' | translate }}</label>
                     <select class="form-control" [(ngModel)]="currentProperty.CityId" name="CityId" required>
-                        <option [ngValue]="null" disabled selected>Select City</option>
+                        <option [ngValue]="null" disabled selected>{{ 'USER_DASHBOARD.SELECT_CITY' | translate }}
+                        </option>
                         @for (city of cities; track city.id) {
                         <option [value]="city.id">{{city.name}}</option>
                         }
                     </select>
                 </div>
                 <div class="form-group">
-                    <label>Address Details</label>
+                    <label>{{ 'USER_DASHBOARD.ADDRESS_DETAILS' | translate }}</label>
                     <input type="text" class="form-control" [(ngModel)]="currentProperty.AddressDetails"
                         name="AddressDetails" placeholder="Detailed Address">
                 </div>
@@ -121,45 +129,47 @@
 
             <div class="form-row">
                 <div class="form-group">
-                    <label>Property Type</label>
+                    <label>{{ 'USER_DASHBOARD.PROPERTY_TYPE' | translate }}</label>
                     <select class="form-control" [(ngModel)]="currentProperty.PropertyTypeId" name="PropertyTypeId"
                         required>
-                        <option [ngValue]="null" disabled selected>Select Type</option>
+                        <option [ngValue]="null" disabled selected>{{ 'USER_DASHBOARD.SELECT_TYPE' | translate }}
+                        </option>
                         @for (type of propertyTypes; track type.id) {
                         <option [value]="type.id">{{type.name}}</option>
                         }
                     </select>
                 </div>
                 <div class="form-group">
-                    <label>Purpose</label>
+                    <label>{{ 'USER_DASHBOARD.PURPOSE' | translate }}</label>
                     <select class="form-control" [(ngModel)]="currentProperty.Purpose" name="Purpose">
-                        <option [value]="0">For Sale</option>
-                        <option [value]="1">For Rent</option>
+                        <option [value]="0">{{ 'USER_DASHBOARD.FOR_SALE' | translate }}</option>
+                        <option [value]="1">{{ 'USER_DASHBOARD.FOR_RENT' | translate }}</option>
                     </select>
                 </div>
             </div>
 
             <div class="form-row">
                 <div class="form-group">
-                    <label>Bedrooms</label>
+                    <label>{{ 'USER_DASHBOARD.BEDROOMS' | translate }}</label>
                     <input type="number" class="form-control" [(ngModel)]="currentProperty.Rooms" name="Rooms" min="1">
                 </div>
                 <div class="form-group">
-                    <label>Bathrooms</label>
+                    <label>{{ 'USER_DASHBOARD.BATHROOMS' | translate }}</label>
                     <input type="number" class="form-control" [(ngModel)]="currentProperty.Bathrooms" name="Bathrooms"
                         min="1">
                 </div>
             </div>
 
             <div class="form-group">
-                <label>Images</label>
+                <label>{{ 'USER_DASHBOARD.IMAGES' | translate }}</label>
                 <input type="file" class="form-control" multiple (change)="onFileSelect($event)" accept="image/*">
-                <small style="color: #666">Max 6 images. First one is primary.</small>
+                <small style="color: #666">{{ 'USER_DASHBOARD.IMAGES_NOTE' | translate }}</small>
             </div>
 
             <div class="modal-footer">
-                <button type="button" class="btn-cancel" (click)="cancel()">Cancel</button>
-                <button type="submit" class="btn-save">Save Property</button>
+                <button type="button" class="btn-cancel" (click)="cancel()">{{ 'USER_DASHBOARD.CANCEL' | translate
+                    }}</button>
+                <button type="submit" class="btn-save">{{ 'USER_DASHBOARD.SAVE_PROPERTY' | translate }}</button>
             </div>
         </form>
     </div>

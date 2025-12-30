@@ -5,11 +5,12 @@ import { FormsModule } from '@angular/forms';
 import { AgentService } from '../../Services/Agent-Service/agent.service';
 import { Agent } from '../../Models/Agents/Agents';
 import { AgentFilterDto } from '../../Models/Agents/agent-filter.dto';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-find-my-agent',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule],
+  imports: [CommonModule, RouterModule, FormsModule, TranslateModule],
   templateUrl: './find-my-agent.html',
   styleUrl: './find-my-agent.css'
 })

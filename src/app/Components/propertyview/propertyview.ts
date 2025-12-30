@@ -6,10 +6,11 @@ import { AgentService } from '../../Services/Agent-Service/agent.service';
 import { PropertyDetailsDto } from '../../Models/Property/property-details.dto';
 import { SavedPropertyService } from '../../Services/SavedProperty-Service/saved-property.service';
 import { AuthService } from '../../Services/Auth-Service/auth-service';
+import { TranslateService, TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-propertyview',
-  imports: [CommonModule],
+  imports: [CommonModule, TranslateModule],
   templateUrl: './propertyview.html',
   styleUrl: './propertyview.css',
 })
@@ -67,7 +68,8 @@ export class Propertyview implements OnInit {
     private agentService: AgentService,
     private savedPropertyService: SavedPropertyService,
     public authService: AuthService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private translate: TranslateService
   ) { }
 
   ngOnInit() {
@@ -77,7 +79,7 @@ export class Propertyview implements OnInit {
       this.loadProperty(this.propertyId);
       this.checkIfSaved(this.propertyId);
     } else {
-      this.errorMessage = 'Invalid property ID.';
+      this.errorMessage = this.translate.instant('PROPERTY_VIEW.INVALID_ID');
       this.isLoading = false;
     }
   }
@@ -92,7 +94,7 @@ export class Propertyview implements OnInit {
       },
       error: (err) => {
         console.error('Error loading property', err);
-        this.errorMessage = 'Failed to load property details.';
+        this.errorMessage = this.translate.instant('PROPERTY_VIEW.LOAD_ERROR');
         this.isLoading = false;
         this.cdr.detectChanges();
       }
@@ -122,16 +124,16 @@ export class Propertyview implements OnInit {
     };
 
     // Split description by newlines or use as single item
-    this.description = data.description ? data.description.split('\n') : ['No description available.'];
+    this.description = data.description ? data.description.split('\n') : [this.translate.instant('PROPERTY_VIEW.DESCRIPTION_FALLBACK')];
 
     this.propertySpecs = [
-      { label: 'Type', value: data.propertyType },
-      { label: 'Purpose', value: this.mapPurpose(data.purpose) },
-      { label: 'Reference no.', value: `REF-${data.id}` }, // Mock ref
-      { label: 'Completion', value: data.status },
-      { label: 'Furnishing', value: this.mapFinishing(data.finishingType) },
-      { label: 'Published at', value: new Date(data.createdAt).toLocaleDateString() },
-      { label: 'Ownership', value: 'Freehold' } // defaulting
+      { label: this.translate.instant('PROPERTY_VIEW.TYPE_LABEL'), value: data.propertyType },
+      { label: this.translate.instant('PROPERTY_VIEW.PURPOSE_LABEL'), value: this.mapPurpose(data.purpose) },
+      { label: this.translate.instant('PROPERTY_VIEW.REFERENCE_LABEL'), value: `REF-${data.id}` }, // Mock ref
+      { label: this.translate.instant('PROPERTY_VIEW.COMPLETION_LABEL'), value: data.status },
+      { label: this.translate.instant('PROPERTY_VIEW.FURNISHING_LABEL'), value: this.mapFinishing(data.finishingType) },
+      { label: this.translate.instant('PROPERTY_VIEW.PUBLISHED_LABEL'), value: new Date(data.createdAt).toLocaleDateString() },
+      { label: this.translate.instant('PROPERTY_VIEW.OWNERSHIP_LABEL'), value: this.translate.instant('PROPERTY_VIEW.FREEHOLD') } // defaulting
     ];
 
     // Agent Logic
@@ -172,15 +174,15 @@ export class Propertyview implements OnInit {
   }
 
   private mapPurpose(val: string): string {
-    if (val === '0' || val === '1') return 'Buy';
-    if (val === '2') return 'Rent';
+    if (val === '0' || val === '1') return this.translate.instant('PROPERTY_VIEW.BUY');
+    if (val === '2') return this.translate.instant('PROPERTY_VIEW.RENT');
     return val;
   }
 
   private mapFinishing(val?: string): string {
-    if (!val) return 'Unfurnished';
-    if (val === '1' || val === '3') return 'Ultra Lux';
-    if (val === '2') return 'Super Lux';
+    if (!val) return this.translate.instant('PROPERTY_VIEW.UNFURNISHED');
+    if (val === '1' || val === '3') return this.translate.instant('PROPERTY_VIEW.ULTRA_LUX');
+    if (val === '2') return this.translate.instant('PROPERTY_VIEW.SUPER_LUX');
     return val;
   }
 

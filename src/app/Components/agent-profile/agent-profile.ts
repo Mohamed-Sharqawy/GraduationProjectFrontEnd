@@ -4,11 +4,12 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AgentService } from '../../Services/Agent-Service/agent.service';
 import { AgentProfileDto } from '../../Models/Agent/agent-profile.dto';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-agent-profile',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule],
+  imports: [CommonModule, RouterModule, FormsModule, TranslateModule],
   templateUrl: './agent-profile.html',
   styleUrl: './agent-profile.css',
 })
