@@ -2,14 +2,9 @@
   "version": 2,
   "public": true,
   "rewrites": [
-    { "source": "/assets/(.*)", "destination": "/assets/$1" },
-    { "source": "/(.*).js", "destination": "/$1.js" },
-    { "source": "/(.*).css", "destination": "/$1.css" },
-    { "source": "/(.*).json", "destination": "/$1.json" },
-    { "source": "/(.*).png", "destination": "/$1.png" },
-    { "source": "/(.*).jpg", "destination": "/$1.jpg" },
-    { "source": "/(.*).svg", "destination": "/$1.svg" },
-    { "source": "/(.*).ico", "destination": "/$1.ico" },
-    { "source": "/(.*)", "destination": "/index.html" }
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
   ]
 }
