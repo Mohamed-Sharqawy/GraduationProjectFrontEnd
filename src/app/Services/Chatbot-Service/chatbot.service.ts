@@ -15,8 +15,8 @@ export class ChatbotService {
   /**
    * Get similar properties for a given property ID
    */
-  getSimilarProperties(propertyId: number): Observable<{ success: boolean; data: PropertyListItemDto[] }> {
-    return this.http.post<{ success: boolean; data: PropertyListItemDto[] }>(
+  getSimilarProperties(propertyId: number): Observable<{ success: boolean; similarProperties: PropertyListItemDto[] }> {
+    return this.http.post<{ success: boolean; similarProperties: PropertyListItemDto[] }>(
       `${this.apiUrl}/similar/${propertyId}`,
       {}
     );

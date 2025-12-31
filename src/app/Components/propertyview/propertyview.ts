@@ -143,8 +143,8 @@ export class Propertyview implements OnInit {
     this.isLoadingSimilar = true;
     this.chatbotService.getSimilarProperties(id).subscribe({
       next: (response) => {
-        if (response.success && response.data) {
-          this.similarProperties = response.data.slice(0, 6); // Take up to 6 properties
+        if (response.success && response.similarProperties) {
+          this.similarProperties = response.similarProperties.slice(0, 6); // Take up to 6 properties
         }
         this.isLoadingSimilar = false;
         this.cdr.detectChanges();
