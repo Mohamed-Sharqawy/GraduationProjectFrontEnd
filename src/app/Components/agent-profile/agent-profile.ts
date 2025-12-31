@@ -42,9 +42,12 @@ export class AgentProfile implements OnInit {
     this.agentsService.getAgentProfile(id).subscribe({
       next: (data) => {
         this.agent = data;
-        this.filteredProperties = data.properties || [];
+        // Filter to show ONLY active properties
+        const allProperties = data.properties || [];
+        this.filteredProperties = allProperties.filter(prop => prop.status === 'Active');
         this.isLoading = false;
         console.log('Agent Data:', this.agent);
+        console.log('Active Properties:', this.filteredProperties);
         this.cdr.detectChanges(); // Force change detection
       },
       error: (err) => {
@@ -58,11 +61,14 @@ export class AgentProfile implements OnInit {
   filterProperties() {
     if (!this.agent || !this.agent.properties) return;
 
+    // Start with ACTIVE properties only
+    let activeProperties = this.agent.properties.filter(prop => prop.status === 'Active');
+
     if (!this.locationSearch) {
-      this.filteredProperties = this.agent.properties;
+      this.filteredProperties = activeProperties;
     } else {
       const search = this.locationSearch.toLowerCase();
-      this.filteredProperties = this.agent.properties.filter(prop =>
+      this.filteredProperties = activeProperties.filter(prop =>
         (prop.location && prop.location.toLowerCase().includes(search)) ||
         (prop.city && prop.city.toLowerCase().includes(search))
       );

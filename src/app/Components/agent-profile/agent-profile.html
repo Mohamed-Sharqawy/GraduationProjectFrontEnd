@@ -93,7 +93,7 @@
                 @for (prop of filteredProperties; track prop.id) {
                 <div class="property-card" [routerLink]="['/propertyview', prop.id]" style="cursor: pointer;">
                     <div class="property-image-container">
-                        <img [src]="prop.imageUrl || 'https://placehold.co/600x400?text=No+Image'" [alt]="prop.title"
+                        <img [src]="prop.mainImageUrl || 'https://placehold.co/600x400?text=No+Image'" [alt]="prop.title"
                             class="property-image">
                         @if (prop.isFeatured) {
                         <span class="hot-badge">{{ 'AGENT_PROFILE.HOT' | translate }}</span>
@@ -105,7 +105,7 @@
                         </h3>
                         <p class="property-specs">
                             <span class="type">{{ prop.propertyType }}</span>
-                            <span class="specs"><i class="fas fa-bed"></i> {{ prop.bedrooms }}</span>
+                            <span class="specs"><i class="fas fa-bed"></i> {{ prop.rooms }}</span>
                             <span class="specs"><i class="fas fa-bath"></i> {{ prop.bathrooms }}</span>
                             <span class="area">{{ 'AGENT_PROFILE.AREA' | translate:{value: prop.area} }}</span>
                         </p>
