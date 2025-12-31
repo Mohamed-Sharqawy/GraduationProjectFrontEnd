@@ -6,6 +6,8 @@ import { PropertyCardDto, CreatePropertyDto, PropertyDetailsDto } from '../../Mo
 import { PropertyService } from '../../Services/Property-Service/property.service';
 import { AuthService } from '../../Services/Auth-Service/auth-service';
 import { TranslateService, TranslateModule } from '@ngx-translate/core';
+import { LookupService } from '../../Services/Lookup-Service/lookup.service';
+import { CityDto, DistrictDto, ProjectDto, PropertyTypeDto } from '../../Models/Lookups/lookup.models';
 
 @Component({
     selector: 'app-user-dashboard',
@@ -20,7 +22,7 @@ export class UserDashboard {
     isEditing = false;
     isLoading = false;
     errorMessage: string | null = null;
-    needsLogin = false; // New flag for login state
+    needsLogin = false;
 
     // Form Data
     currentProperty: any = {};
@@ -32,28 +34,32 @@ export class UserDashboard {
         PageSize: 100
     };
 
-    // Static Lookups (LookupsService not available)
-    cities = [
-        { id: 1, name: 'Cairo' },
-        { id: 2, name: 'Giza' },
-        { id: 3, name: 'Alexandria' },
-        { id: 4, name: 'New Cairo' },
-        { id: 5, name: '6th of October' },
-        { id: 6, name: 'Sheikh Zayed' }
-    ];
+    // Lookups from API
+    cities: CityDto[] = [];
+    filteredCities: CityDto[] = [];
+    citySearchTerm: string = '';
 
-    propertyTypes = [
-        { id: 1, name: 'Apartment' },
-        { id: 2, name: 'Villa' },
-        { id: 3, name: 'Townhouse' },
-        { id: 4, name: 'Penthouse' },
-        { id: 5, name: 'Chalet' },
-        { id: 6, name: 'Office' },
-        { id: 7, name: 'Shop' }
-    ];
+    districts: DistrictDto[] = [];
+    filteredDistricts: DistrictDto[] = [];
+    districtSearchTerm: string = '';
+
+    projects: ProjectDto[] = [];
+    filteredProjects: ProjectDto[] = [];
+    projectSearchTerm: string = '';
+
+    propertyTypes: PropertyTypeDto[] = [];
+    filteredPropertyTypes: PropertyTypeDto[] = [];
+    propertyTypeSearchTerm: string = '';
+
+    // Loading states for lookups
+    isLoadingCities = false;
+    isLoadingDistricts = false;
+    isLoadingProjects = false;
+    isLoadingPropertyTypes = false;
 
     constructor(
         private propertiesService: PropertyService,
+        private lookupService: LookupService,
         private cdr: ChangeDetectorRef,
         private router: Router,
         private authService: AuthService,
@@ -63,14 +69,162 @@ export class UserDashboard {
             console.log('🔄 UserDashboard: afterNextRender triggered');
             setTimeout(() => {
                 this.loadProperties();
+                this.loadLookups();
             }, 0);
         });
     }
 
+    // ==================== Load Lookups ====================
+
+    loadLookups() {
+        this.loadCities();
+        this.loadPropertyTypes();
+        this.loadAllProjects();
+    }
+
+    loadCities() {
+        this.isLoadingCities = true;
+        this.lookupService.getAllCities().subscribe({
+            next: (cities) => {
+                this.cities = cities;
+                this.filteredCities = cities;
+                this.isLoadingCities = false;
+                this.cdr.detectChanges();
+            },
+            error: (err) => {
+                console.error('Error loading cities:', err);
+                this.isLoadingCities = false;
+            }
+        });
+    }
+
+    loadPropertyTypes() {
+        this.isLoadingPropertyTypes = true;
+        this.lookupService.getAllPropertyTypes().subscribe({
+            next: (types) => {
+                this.propertyTypes = types;
+                this.filteredPropertyTypes = types;
+                this.isLoadingPropertyTypes = false;
+                this.cdr.detectChanges();
+            },
+            error: (err) => {
+                console.error('Error loading property types:', err);
+                this.isLoadingPropertyTypes = false;
+            }
+        });
+    }
+
+    loadAllProjects() {
+        this.isLoadingProjects = true;
+        this.lookupService.getAllProjects().subscribe({
+            next: (projects) => {
+                this.projects = projects;
+                this.filteredProjects = projects;
+                this.isLoadingProjects = false;
+                this.cdr.detectChanges();
+            },
+            error: (err) => {
+                console.error('Error loading projects:', err);
+                this.isLoadingProjects = false;
+            }
+        });
+    }
+
+    // ==================== City Change Handler ====================
+
+    onCityChange(cityId: number) {
+        console.log('🏙️ City changed to:', cityId);
+        
+        // Reset district and project
+        this.currentProperty.DistrictId = null;
+        this.currentProperty.ProjectId = null;
+        this.districts = [];
+        this.filteredDistricts = [];
+        this.districtSearchTerm = '';
+
+        if (cityId) {
+            // Load districts for selected city
+            this.isLoadingDistricts = true;
+            this.lookupService.getDistrictsByCityId(cityId).subscribe({
+                next: (districts) => {
+                    this.districts = districts;
+                    this.filteredDistricts = districts;
+                    this.isLoadingDistricts = false;
+                    this.cdr.detectChanges();
+                },
+                error: (err) => {
+                    console.error('Error loading districts:', err);
+                    this.isLoadingDistricts = false;
+                }
+            });
+
+            // Filter projects by city
+            this.filteredProjects = this.projects.filter(p => p.cityId === cityId);
+        } else {
+            this.filteredProjects = this.projects;
+        }
+        this.cdr.detectChanges();
+    }
+
+    // ==================== Search Filters ====================
+
+    filterCities() {
+        const term = this.citySearchTerm.toLowerCase().trim();
+        if (!term) {
+            this.filteredCities = this.cities;
+        } else {
+            this.filteredCities = this.cities.filter(c => 
+                c.name.toLowerCase().includes(term) || 
+                (c.nameEn && c.nameEn.toLowerCase().includes(term))
+            );
+        }
+    }
+
+    filterDistricts() {
+        const term = this.districtSearchTerm.toLowerCase().trim();
+        if (!term) {
+            this.filteredDistricts = this.districts;
+        } else {
+            this.filteredDistricts = this.districts.filter(d => 
+                d.name.toLowerCase().includes(term) || 
+                (d.nameEn && d.nameEn.toLowerCase().includes(term))
+            );
+        }
+    }
+
+    filterProjects() {
+        const term = this.projectSearchTerm.toLowerCase().trim();
+        const cityId = this.currentProperty.CityId;
+        
+        let baseProjects = cityId ? this.projects.filter(p => p.cityId === cityId) : this.projects;
+        
+        if (!term) {
+            this.filteredProjects = baseProjects;
+        } else {
+            this.filteredProjects = baseProjects.filter(p => 
+                p.name.toLowerCase().includes(term) || 
+                (p.nameEn && p.nameEn.toLowerCase().includes(term))
+            );
+        }
+    }
+
+    filterPropertyTypes() {
+        const term = this.propertyTypeSearchTerm.toLowerCase().trim();
+        if (!term) {
+            this.filteredPropertyTypes = this.propertyTypes;
+        } else {
+            this.filteredPropertyTypes = this.propertyTypes.filter(t => 
+                t.name.toLowerCase().includes(term) || 
+                (t.nameEn && t.nameEn.toLowerCase().includes(term))
+            );
+        }
+    }
+
+    // ==================== Properties CRUD ====================
+
     loadProperties() {
         console.log('📡 UserDashboard: Loading properties...');
 
-        // Check authentication FIRST
         const token = this.authService.token;
         console.log('🔑 Token exists:', !!token);
 
@@ -97,7 +251,6 @@ export class UserDashboard {
                 console.error('❌ UserDashboard: Error loading properties', err);
                 this.isLoading = false;
 
-                // Handle 401 specifically
                 if (err.status === 401) {
                     this.needsLogin = true;
                     this.errorMessage = this.translate.instant('USER_DASHBOARD.SESSION_EXPIRED');
@@ -116,54 +269,74 @@ export class UserDashboard {
     addProperty() {
         this.isEditing = false;
         this.selectedFiles = [];
+        this.districtSearchTerm = '';
+        this.projectSearchTerm = '';
+        this.districts = [];
+        this.filteredDistricts = [];
+        this.filteredProjects = this.projects;
+        
         this.currentProperty = {
             Title: '',
+            TitleEn: '',
             Description: '',
+            DescriptionEn: '',
             Price: null,
-            CityId: 1, // Default to Cairo or select
-            PropertyTypeId: 1, // Default
-            Purpose: 0, // Sale
-            Status: 1, // Active
+            RentPriceMonthly: null,
+            CityId: null,
+            DistrictId: null,
+            ProjectId: null,
+            AddressDetails: '',
+            AddressDetailsEn: '',
+            PropertyTypeId: null,
+            Purpose: 1, // Sale
             Rooms: 0,
             Bathrooms: 0,
             Area: 0,
+            FloorNumber: null,
+            FinishingType: 0,
             IsFeatured: false,
-            PrimaryImageIndex: 0,
-            IsAgricultural: false // Default
+            IsAgricultural: false,
+            PrimaryImageIndex: 0
         };
         this.isFormVisible = true;
     }
 
     editProperty(id: number) {
         this.isEditing = true;
-        this.selectedFiles = []; // Reset files on edit
+        this.selectedFiles = [];
 
-        // Fetch full details
         this.propertiesService.getProperty(id).subscribe({
             next: (details: PropertyDetailsDto) => {
                 this.currentProperty = {
                     id: details.id,
                     Title: details.title,
+                    TitleEn: '',
                     Description: details.description,
+                    DescriptionEn: '',
                     Price: details.price,
                     RentPriceMonthly: details.rentPriceMonthly,
                     CityId: details.cityId,
                     DistrictId: details.districtId,
                     ProjectId: details.projectId,
                     AddressDetails: details.addressDetails,
+                    AddressDetailsEn: '',
                     PropertyTypeId: details.propertyTypeId,
-                    Purpose: details.purpose === 'For Sale' ? 0 : 1, // Simple mapping, refine if needed based on enum
-                    Status: 1, // details.status is string, need mapping if used in update
+                    Purpose: details.purpose === 'For Sale' ? 1 : 2,
                     Rooms: details.rooms,
                     Bathrooms: details.bathrooms,
                     Area: details.area,
                     FloorNumber: details.floorNumber,
+                    FinishingType: 0,
                     IsFeatured: details.isFeatured,
                     IsAgricultural: details.isAgricultural,
                     PrimaryImageIndex: 0
                 };
-                // Note: handling existing images for update needs more UI logic (delete existing, add new). 
-                // For MVP, we might only allow adding new images or basic update.
+                
+                // Load districts for the city
+                if (details.cityId) {
+                    this.onCityChange(details.cityId);
+                }
+                
                 this.isFormVisible = true;
             },
             error: (err) => console.error('Error fetching property details', err)
@@ -241,5 +414,8 @@ export class UserDashboard {
         this.isFormVisible = false;
         this.currentProperty = {};
         this.selectedFiles = [];
+        this.districtSearchTerm = '';
+        this.projectSearchTerm = '';
     }
 }
+

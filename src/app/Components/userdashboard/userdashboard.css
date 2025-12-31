@@ -251,6 +251,36 @@
     flex: 1;
 }
 
+/* Search Input Styles */
+.search-input {
+    margin-bottom: 8px;
+    padding: 10px 12px !important;
+    font-size: 14px !important;
+    background-color: #fafafa;
+    border: 1px dashed var(--border-color) !important;
+}
+
+.search-input:focus {
+    background-color: white;
+    border-style: solid !important;
+}
+
+.search-input::placeholder {
+    color: #999;
+    font-style: italic;
+}
+
+.search-input:disabled {
+    background-color: #f0f0f0;
+    cursor: not-allowed;
+}
+
+/* Select with loading state */
+select.form-control:disabled {
+    background-color: #f5f5f5;
+    cursor: wait;
+}
+
 .modal-footer {
     display: flex;
     justify-content: flex-end;
