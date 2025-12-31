@@ -52,7 +52,7 @@ export const routes: Routes = [
     path: 'dashboard',
     component: Home, // Using Home component as placeholder for testing
     canActivate: [authGuard, subscriptionGuard]
-  },
-  { path: '**', redirectTo: 'home' } // Wildcard route for a 404 page or redirect
+  }
+  // { path: '**', redirectTo: 'home' } // Wildcard route disabled for debugging
 ];
 

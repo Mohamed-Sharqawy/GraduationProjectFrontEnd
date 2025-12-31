@@ -20,8 +20,7 @@ export const appConfig: ApplicationConfig = {
     provideBrowserGlobalErrorListeners(),
     provideZonelessChangeDetection(),
     provideRouter(routes, 
-      withInMemoryScrolling({ scrollPositionRestoration: 'enabled' }),
-      withEnabledBlockingInitialNavigation()
+      withInMemoryScrolling({ scrollPositionRestoration: 'enabled' })
     ),
 
     provideAnimations(),
