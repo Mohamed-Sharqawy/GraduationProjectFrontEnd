@@ -64,7 +64,7 @@ export class AgentProfile implements OnInit {
       const search = this.locationSearch.toLowerCase();
       this.filteredProperties = this.agent.properties.filter(prop =>
         (prop.location && prop.location.toLowerCase().includes(search)) ||
-        (prop.cityName && prop.cityName.toLowerCase().includes(search))
+        (prop.city && prop.city.toLowerCase().includes(search))
       );
     }
   }
