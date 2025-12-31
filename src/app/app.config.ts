@@ -1,5 +1,5 @@
 import { ApplicationConfig, provideBrowserGlobalErrorListeners, provideZonelessChangeDetection, importProvidersFrom } from '@angular/core';
-import { provideRouter, withInMemoryScrolling, withEnabledBlockingInitialNavigation, withHashLocation } from '@angular/router';
+import { provideRouter, withInMemoryScrolling, withEnabledBlockingInitialNavigation } from '@angular/router';
 import { provideHttpClient, withInterceptors, HttpClient, withFetch } from '@angular/common/http';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideToastr } from 'ngx-toastr';
@@ -21,8 +21,7 @@ export const appConfig: ApplicationConfig = {
     provideZonelessChangeDetection(),
     provideRouter(routes, 
       withInMemoryScrolling({ scrollPositionRestoration: 'enabled' }),
-      withEnabledBlockingInitialNavigation(),
-      withHashLocation() // <--- This fixes the refresh issue 100%
+      withEnabledBlockingInitialNavigation()
     ),
 
     provideAnimations(),
