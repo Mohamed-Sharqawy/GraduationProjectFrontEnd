@@ -1,31 +1,34 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterModule } from '@angular/router';
 import { PropertyService } from '../../Services/Property-Service/property.service';
 import { AgentService } from '../../Services/Agent-Service/agent.service';
+import { ChatbotService } from '../../Services/Chatbot-Service/chatbot.service';
 import { PropertyDetailsDto } from '../../Models/Property/property-details.dto';
+import { PropertyListItemDto } from '../../Models/Property/property-list-item.dto';
 import { SavedPropertyService } from '../../Services/SavedProperty-Service/saved-property.service';
 import { AuthService } from '../../Services/Auth-Service/auth-service';
 import { TranslateService, TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-propertyview',
-  imports: [CommonModule, TranslateModule],
+  imports: [CommonModule, TranslateModule, RouterModule],
   templateUrl: './propertyview.html',
   styleUrl: './propertyview.css',
 })
 export class Propertyview implements OnInit {
-  // Static Fallback Data
+  // Property Data
+  property: PropertyDetailsDto | null = null;
   price = 0;
   currency = 'EGP';
+  rentPriceMonthly = 0;
   installment = '0';
   installmentPeriod = '0 years';
   downPayment = '0';
-
   location = '';
   title = '';
   mainImageUrl = '';
-
+  
   specs = {
     beds: 0,
     baths: 0,
@@ -41,31 +44,37 @@ export class Propertyview implements OnInit {
   propertyId: number | null = null;
 
   description: string[] = [];
-
   propertySpecs: { label: string; value: string }[] = [];
 
-  // Default Broker ID for fallback - Replace with a valid ID from your DB
-  private readonly DEFAULT_AGENT_ID = '3fa85f64-5717-4562-b3fc-2c963f66afa6';
-
+  // Agent data
   agent = {
-    name: 'Ahmed Mohamed',
-    company: 'Deal Real Estate',
-    imageUrl: 'https://randomuser.me/api/portraits/men/32.jpg',
-    role: 'Senior Property Consultant',
-    experience: '5 Years',
-    activeListings: 101,
+    id: '',
+    name: '',
+    company: '',
+    imageUrl: '',
+    role: '',
+    experience: '',
+    activeListings: 0,
     email: '',
     phone: '',
     whatsapp: ''
   };
 
+  // Similar Properties
+  similarProperties: PropertyListItemDto[] = [];
+  isLoadingSimilar = false;
+
   isLoading = true;
   errorMessage = '';
+
+  // Current language
+  currentLang: string = 'ar';
 
   constructor(
     private route: ActivatedRoute,
     private propertyService: PropertyService,
     private agentService: AgentService,
+    private chatbotService: ChatbotService,
     private savedPropertyService: SavedPropertyService,
     public authService: AuthService,
     private cdr: ChangeDetectorRef,
@@ -73,21 +82,41 @@ export class Propertyview implements OnInit {
   ) { }
 
   ngOnInit() {
+    // Get current language
+    this.currentLang = this.translate.currentLang || this.translate.defaultLang || 'ar';
+    
+    // Subscribe to language changes
+    this.translate.onLangChange.subscribe(event => {
+      this.currentLang = event.lang;
+      this.updatePropertyDisplay();
+      this.cdr.detectChanges();
+    });
+
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
       this.propertyId = Number(id);
       this.loadProperty(this.propertyId);
       this.checkIfSaved(this.propertyId);
+      this.incrementViewCount(this.propertyId);
+      this.loadSimilarProperties(this.propertyId);
     } else {
       this.errorMessage = this.translate.instant('PROPERTY_VIEW.INVALID_ID');
       this.isLoading = false;
     }
   }
 
+  incrementViewCount(id: number) {
+    this.propertyService.incrementViewCount(id).subscribe({
+      next: () => console.log('View count incremented'),
+      error: (err) => console.error('Failed to increment view count:', err)
+    });
+  }
+
   loadProperty(id: number) {
     this.isLoading = true;
     this.propertyService.getProperty(id).subscribe({
       next: (data) => {
+        this.property = data;
         this.mapData(data);
         this.isLoading = false;
         this.cdr.detectChanges();
@@ -101,21 +130,39 @@ export class Propertyview implements OnInit {
     });
   }
 
+  loadSimilarProperties(id: number) {
+    this.isLoadingSimilar = true;
+    this.chatbotService.getSimilarProperties(id).subscribe({
+      next: (response) => {
+        if (response.success && response.data) {
+          this.similarProperties = response.data.slice(0, 3); // Take only 3
+        }
+        this.isLoadingSimilar = false;
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        console.error('Error loading similar properties:', err);
+        this.isLoadingSimilar = false;
+        this.cdr.detectChanges();
+      }
+    });
+  }
+
   private mapData(data: PropertyDetailsDto) {
     this.price = data.price;
     this.currency = data.currency;
+    this.rentPriceMonthly = data.rentPriceMonthly || 0;
 
-    // Calculate financial estimates if not provided
-    this.downPayment = (data.price * 0.10).toLocaleString(); // 10%
-    this.installment = ((data.price * 0.9) / 72).toLocaleString(undefined, { maximumFractionDigits: 0 }); // 6 years monthly
+    // Calculate financial estimates
+    this.downPayment = (data.price * 0.10).toLocaleString();
+    this.installment = ((data.price * 0.9) / 72).toLocaleString(undefined, { maximumFractionDigits: 0 });
     this.installmentPeriod = '6 years';
 
-    this.location = [data.projectName, data.district, data.city].filter(Boolean).join(', ');
-    this.title = data.title;
+    this.updatePropertyDisplay();
 
     // Image mapping
     const mainImg = data.images.find(i => i.isMain) || data.images[0];
-    this.mainImageUrl = mainImg ? mainImg.imageUrl : 'https://images.unsplash.com/photo-1564013799919-ab600027ffc6?q=80&w=400';
+    this.mainImageUrl = mainImg ? mainImg.imageUrl : '';
 
     this.specs = {
       beds: data.rooms || 0,
@@ -123,90 +170,128 @@ export class Propertyview implements OnInit {
       area: data.area || 0
     };
 
-    // Split description by newlines or use as single item
-    this.description = data.description ? data.description.split('\n') : [this.translate.instant('PROPERTY_VIEW.DESCRIPTION_FALLBACK')];
+    this.viewCount = data.viewCount || 0;
+    this.whatsappClickCount = data.whatsAppClicks || 0;
+
+    // Split description by newlines
+    const desc = this.getDescription();
+    this.description = desc ? desc.split('\n').filter(Boolean) : [];
+
+    this.updatePropertySpecs();
+
+    // Agent data
+    if (data.agent && data.agent.id && data.agent.id !== '00000000-0000-0000-0000-000000000000') {
+      this.agent = {
+        id: data.agent.id,
+        name: data.agent.fullName,
+        email: data.agent.email || '',
+        phone: data.agent.phone || '',
+        whatsapp: data.agent.whatsAppNumber || '',
+        activeListings: data.agent.activePropertiesCount || 0,
+        imageUrl: data.agent.profileImageUrl || '',
+        company: '',
+        role: '',
+        experience: ''
+      };
+    }
+  }
+
+  private updatePropertyDisplay() {
+    if (!this.property) return;
+
+    const data = this.property;
+    
+    // Update title and location based on language
+    if (this.currentLang === 'en') {
+      this.title = data.titleEn || data.title;
+      this.location = [data.projectNameEn, data.districtEn, data.cityEn].filter(Boolean).join(', ');
+    } else {
+      this.title = data.title;
+      this.location = [data.projectName, data.district, data.city].filter(Boolean).join(', ');
+    }
+  }
+
+  private updatePropertySpecs() {
+    if (!this.property) return;
+
+    const data = this.property;
+    const propertyType = this.currentLang === 'en' ? (data.propertyTypeEn || data.propertyType) : data.propertyType;
 
     this.propertySpecs = [
-      { label: this.translate.instant('PROPERTY_VIEW.TYPE_LABEL'), value: data.propertyType },
+      { label: this.translate.instant('PROPERTY_VIEW.TYPE_LABEL'), value: propertyType },
       { label: this.translate.instant('PROPERTY_VIEW.PURPOSE_LABEL'), value: this.mapPurpose(data.purpose) },
-      { label: this.translate.instant('PROPERTY_VIEW.REFERENCE_LABEL'), value: `REF-${data.id}` }, // Mock ref
-      { label: this.translate.instant('PROPERTY_VIEW.COMPLETION_LABEL'), value: data.status },
+      { label: this.translate.instant('PROPERTY_VIEW.REFERENCE_LABEL'), value: `REF-${data.id}` },
+      { label: this.translate.instant('PROPERTY_VIEW.STATUS_LABEL'), value: data.status },
       { label: this.translate.instant('PROPERTY_VIEW.FURNISHING_LABEL'), value: this.mapFinishing(data.finishingType) },
-      { label: this.translate.instant('PROPERTY_VIEW.PUBLISHED_LABEL'), value: new Date(data.createdAt).toLocaleDateString() },
-      { label: this.translate.instant('PROPERTY_VIEW.OWNERSHIP_LABEL'), value: this.translate.instant('PROPERTY_VIEW.FREEHOLD') } // defaulting
+      { label: this.translate.instant('PROPERTY_VIEW.PUBLISHED_LABEL'), value: new Date(data.createdAt).toLocaleDateString() }
     ];
+  }
 
-    // Agent Logic
-    if (data.agent && data.agent.id && data.agent.id !== '00000000-0000-0000-0000-000000000000') {
-      this.updateAgentDisplay({
-        fullName: data.agent.fullName,
-        email: data.agent.email,
-        phone: data.agent.phone,
-        whatsAppNumber: data.agent.whatsAppNumber,
-        profileImageUrl: data.agent.profileImageUrl,
-        activePropertiesCount: data.agent.activePropertiesCount
-      });
-    } else {
-      this.loadDefaultAgent();
+  private getDescription(): string {
+    if (!this.property) return '';
+    if (this.currentLang === 'en') {
+      return this.property.descriptionEn || this.property.description;
     }
+    return this.property.description;
   }
 
-  private loadDefaultAgent() {
-    this.agentService.getAgentProfile(this.DEFAULT_AGENT_ID).subscribe({
-      next: (profile) => {
-        this.updateAgentDisplay(profile);
-        this.cdr.detectChanges();
-      },
-      error: (err) => console.error('Failed to load default agent', err)
-    });
-  }
-
-  private updateAgentDisplay(info: any) {
-    this.agent.name = info.fullName || this.agent.name;
-    this.agent.email = info.email;
-    this.agent.phone = info.phone;
-    this.agent.whatsapp = info.whatsAppNumber;
-    this.agent.activeListings = info.activePropertiesCount ?? this.agent.activeListings;
-
-    if (info.profileImageUrl) {
-      this.agent.imageUrl = info.profileImageUrl;
-    }
-  }
-
-  private mapPurpose(val: string): string {
-    if (val === '0' || val === '1') return this.translate.instant('PROPERTY_VIEW.BUY');
-    if (val === '2') return this.translate.instant('PROPERTY_VIEW.RENT');
-    return val;
+  private mapPurpose(val: string | undefined): string {
+    if (val === 'ForSale') return this.translate.instant('PROPERTY_VIEW.FOR_SALE');
+    if (val === 'ForRent') return this.translate.instant('PROPERTY_VIEW.FOR_RENT');
+    if (val === 'Both') return this.translate.instant('PROPERTY_VIEW.FOR_BOTH');
+    return val || '';
   }
 
   private mapFinishing(val?: string): string {
-    if (!val) return this.translate.instant('PROPERTY_VIEW.UNFURNISHED');
-    if (val === '1' || val === '3') return this.translate.instant('PROPERTY_VIEW.ULTRA_LUX');
-    if (val === '2') return this.translate.instant('PROPERTY_VIEW.SUPER_LUX');
+    if (!val || val === 'None') return this.translate.instant('PROPERTY_VIEW.NO_FINISHING');
+    if (val === 'Semi') return this.translate.instant('PROPERTY_VIEW.SEMI_FINISHING');
+    if (val === 'Full') return this.translate.instant('PROPERTY_VIEW.FULL_FINISHING');
+    if (val === 'SuperLux') return this.translate.instant('PROPERTY_VIEW.SUPER_LUX');
     return val;
   }
 
-  // Contact Methods
+  // Contact Methods with tracking
   callAgent() {
-    if (this.agent.phone) window.open(`tel:${this.agent.phone}`, '_self');
+    if (this.agent.phone && this.propertyId) {
+      this.propertyService.trackPhoneClick(this.propertyId).subscribe({
+        next: () => console.log('Phone click tracked'),
+        error: (err) => console.error('Failed to track phone click:', err)
+      });
+      window.open(`tel:${this.agent.phone}`, '_self');
+    }
   }
 
   emailAgent() {
-    if (this.agent.email) window.open(`mailto:${this.agent.email}`, '_self');
+    if (this.agent.email) {
+      window.open(`mailto:${this.agent.email}`, '_self');
+    }
   }
 
   whatsappAgent() {
-    if (this.agent.whatsapp) {
-      // Mock tracking click
-      this.whatsappClickCount++;
+    if (this.agent.whatsapp && this.propertyId) {
+      // Track WhatsApp click
+      this.propertyService.trackWhatsAppClick(this.propertyId).subscribe({
+        next: () => {
+          console.log('WhatsApp click tracked');
+          this.whatsappClickCount++;
+        },
+        error: (err) => console.error('Failed to track WhatsApp click:', err)
+      });
 
       const url = `https://wa.me/${this.agent.whatsapp}`;
       window.open(url, '_blank');
     }
   }
 
+  // Navigate to agent profile
+  viewAgentProfile() {
+    if (this.agent.id) {
+      window.location.href = `/agent-profile/${this.agent.id}`;
+    }
+  }
+
   /**
-   * Check if this property is saved by the current user
+   * Check if this property is saved
    */
   checkIfSaved(propertyId: number) {
     if (!this.authService.isLoggedIn()) {
@@ -244,5 +329,27 @@ export class Propertyview implements OnInit {
         console.error('Failed to toggle save:', error);
       }
     });
+  }
+
+  // Helper methods for similar properties
+  getSimilarPropertyTitle(prop: PropertyListItemDto): string {
+    if (this.currentLang === 'en') {
+      return prop.titleEn || prop.title;
+    }
+    return prop.title;
+  }
+
+  getSimilarPropertyLocation(prop: PropertyListItemDto): string {
+    if (this.currentLang === 'en') {
+      return prop.location || prop.cityEn || prop.city || '';
+    }
+    return prop.location || prop.city || '';
+  }
+
+  getSimilarPropertyType(prop: PropertyListItemDto): string {
+    if (this.currentLang === 'en') {
+      return prop.propertyTypeEn || prop.propertyType || '';
+    }
+    return prop.propertyType || '';
   }
 }

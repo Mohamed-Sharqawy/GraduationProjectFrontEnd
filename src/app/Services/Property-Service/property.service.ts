@@ -112,6 +112,28 @@ export class PropertyService {
         return this.http.delete(`${this.apiUrl}/${id}`);
     }
 
+    /**
+     * Increment view count for a property
+     */
+    incrementViewCount(id: number): Observable<any> {
+        return this.http.post(`${this.apiUrl}/${id}/view`, {});
+    }
+
+    /**
+     * Track WhatsApp click for a property
+     */
+    trackWhatsAppClick(id: number): Observable<any> {
+        return this.http.post(`${this.apiUrl}/${id}/whatsapp-click`, {});
+    }
+
+    /**
+     * Track phone click for a property
+     */
+    trackPhoneClick(id: number): Observable<any> {
+        return this.http.post(`${this.apiUrl}/${id}/phone-click`, {});
+    }
+
+
 
     /**
      * Map backend DTO to frontend Property model
