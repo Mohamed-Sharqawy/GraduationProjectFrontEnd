@@ -347,15 +347,25 @@ export class UserDashboard {
 
         this.propertiesService.getProperty(id).subscribe({
             next: (details: PropertyDetailsDto) => {
-                // Determine Purpose ID from string or enum
-                let purposeId = 1; // Default Sale
-                if (details.purpose === 'For Rent' || details.purpose === 'Rent') purposeId = 2;
-                else if (details.purpose === 'For Both' || details.purpose === 'Both') purposeId = 3;
+                // Map Purpose from string to ID
+                let purposeId = 1; // Default ForSale
+                const purposeStr = details.purpose?.toLowerCase();
+                if (purposeStr === 'forrent' || purposeStr === 'for rent' || purposeStr === 'rent') {
+                    purposeId = 2;
+                } else if (purposeStr === 'both' || purposeStr === 'for both' || purposeStr === 'forsale,forrent') {
+                    purposeId = 3;
+                }
 
-                // Match Finishing Type (Basic mapping, adjust based on backend strings)
-                let finishingId = 0;
-                // If backend sends text, we might need a mapping here. 
-                // For now assuming 0 if not matched or if it comes as int.
+                // Map FinishingType from string to ID
+                let finishingId = 0; // Default None
+                const finishingStr = details.finishingType?.toLowerCase();
+                if (finishingStr === 'semi') {
+                    finishingId = 1;
+                } else if (finishingStr === 'full') {
+                    finishingId = 2;
+                } else if (finishingStr === 'superlux' || finishingStr === 'super lux') {
+                    finishingId = 3;
+                }
 
                 this.currentProperty = {
                     id: details.id,
@@ -376,7 +386,7 @@ export class UserDashboard {
                     Bathrooms: details.bathrooms,
                     Area: details.area,
                     FloorNumber: details.floorNumber,
-                    FinishingType: 0, // Needs mapping from details.finishingType if string
+                    FinishingType: finishingId, // Use mapped finishing type
                     IsFeatured: details.isFeatured,
                     IsAgricultural: details.isAgricultural,
                     PrimaryImageIndex: 0
