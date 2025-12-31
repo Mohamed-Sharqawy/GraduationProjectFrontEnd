@@ -401,7 +401,26 @@ export class UserDashboard {
         });
     }
 
-    // ... (deleteProperty remains same) ...
+    deleteProperty(id: number) {
+        if (confirm(this.translate.instant('USER_DASHBOARD.CONFIRM_DELETE'))) {
+            this.propertiesService.deleteProperty(id).subscribe({
+                next: () => {
+                    this.userProperties = this.userProperties.filter(p => p.id !== id);
+                    alert(this.translate.instant('USER_DASHBOARD.DELETE_SUCCESS'));
+                },
+                error: (err) => {
+                    console.error('Error deleting property', err);
+                    alert(this.translate.instant('USER_DASHBOARD.DELETE_FAIL'));
+                }
+            });
+        }
+    }
+
+    onFileSelect(event: any) {
+        if (event.target.files && event.target.files.length > 0) {
+            this.selectedFiles = Array.from(event.target.files);
+        }
+    }
 
     saveProperty() {
         const formData = new FormData();
