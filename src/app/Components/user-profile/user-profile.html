@@ -133,8 +133,8 @@
                             </a>
                         </div>
                         <div class="flex gap-4 mt-3 text-xs text-gray-500">
-                            <span *ngIf="saved.property.bedrooms"><i class="fa fa-bed mr-1"></i>{{
-                                saved.property.bedrooms }} {{ 'USER_PROFILE.SAVED.BEDS' | translate }}</span>
+                            <span *ngIf="saved.property.bedrooms || saved.property.rooms"><i class="fa fa-bed mr-1"></i>{{
+                                saved.property.bedrooms || saved.property.rooms }} {{ 'USER_PROFILE.SAVED.BEDS' | translate }}</span>
                             <span *ngIf="saved.property.bathrooms"><i class="fa fa-bath mr-1"></i>{{
                                 saved.property.bathrooms }} {{ 'USER_PROFILE.SAVED.BATHS' | translate }}</span>
                             <span *ngIf="saved.property.area"><i class="fa fa-expand mr-1"></i>{{ saved.property.area }}

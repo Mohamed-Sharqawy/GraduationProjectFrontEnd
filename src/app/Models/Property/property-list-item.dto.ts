@@ -24,6 +24,7 @@ export interface PropertyListItemDto {
     // Specs
     area?: number;
     rooms?: number;
+    bedrooms?: number; // Alias for rooms (backward compatibility)
     bathrooms?: number;
     
     // Images
