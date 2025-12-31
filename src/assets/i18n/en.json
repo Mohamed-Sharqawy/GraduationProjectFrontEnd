@@ -387,6 +387,20 @@
         "UNSAVE_PROPERTY": "Remove from Saved",
         "SIMILAR_PROPERTIES": "Similar Properties",
         "NO_SIMILAR": "No similar properties found",
-        "LOADING": "Loading..."
+        "LOADING": "Loading...",
+        "BED": "Bed",
+        "BEDS": "Beds",
+        "BATH": "Bath",
+        "BATHS": "Baths",
+        "SQ_M": "m²",
+        "DOWN_PAYMENT": "Down Payment",
+        "MONTHLY_INSTALLMENT": "Monthly Installment",
+        "INSTALLMENT_PERIOD": "Installment Period",
+        "PRICE": "Price",
+        "MONTHLY_RENT": "Monthly Rent",
+        "PROPERTY_INFO_TITLE": "Property Information",
+        "DESCRIPTION_TITLE": "Description",
+        "AMENITIES_TITLE": "Amenities",
+        "LOCATION_TITLE": "Location"
     }
 }

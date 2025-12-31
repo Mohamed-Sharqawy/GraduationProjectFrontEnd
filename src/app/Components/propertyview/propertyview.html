@@ -1,133 +1,164 @@
-<div class="property-container">
-    <nav class="breadcrumbs">
-        {{ 'PROPERTY_VIEW.HOME_LINK' | translate }} > {{ location }}
-    </nav>
-
-    <div class="gallery-grid">
-        <div class="main-image">
-            <img [src]="mainImageUrl" [alt]="title">
-            <span class="badge">{{ 'PROPERTY_VIEW.OFF_PLAN' | translate }}</span>
-        </div>
-        <div class="side-images">
-            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQKIc_kss4gmWTk9urJ5yqttq3GnZ1y4ZUKDw&s"
-                alt="Interior Design">
-            <img src="https://tjh.com/wp-content/uploads/2024/11/TJH_HERO_kitchen-design-trends-to-watch-for@2x.webp"
-                alt="Modern Kitchen">
+<div class="property-container" *ngIf="!isLoading && !errorMessage">
+    <!-- Image Gallery -->
+    <div class="gallery-section" *ngIf="property && property.images && property.images.length > 0">
+        <div class="gallery-grid">
+            <div class="main-image">
+                <img [src]="mainImageUrl" [alt]="title">
+            </div>
+            <div class="side-images">
+                <img *ngFor="let img of property.images.slice(1, 3); let i = index" 
+                     [src]="img.imageUrl" 
+                     [alt]="title + ' - ' + (i + 2)">
+            </div>
         </div>
     </div>
 
     <div class="content-layout">
         <main class="property-details">
+            <!-- Header Section -->
             <div class="header-section">
+                <!-- Price -->
                 <div class="price-row">
                     <h1>{{ price | currency: currency :'symbol':'1.0-0' }}</h1>
-                    <span class="installment-tag">{{ currency }} {{ installment }} {{ 'PROPERTY_VIEW.MONTHLY' |
-                        translate }} / {{ installmentPeriod
-                        }}</span>
-                </div>
-
-                <div class="down-payment-row">
-                    <span class="down-payment-badge">
-                        <i class="icon-cash">💵</i> {{ 'PROPERTY_VIEW.DOWN_PAYMENT' | translate }}: {{ currency }} {{
-                        downPayment }}
+                    <span class="installment-tag" *ngIf="rentPriceMonthly > 0">
+                        {{ rentPriceMonthly | currency: currency :'symbol':'1.0-0' }} {{ 'PROPERTY_VIEW.MONTHLY_RENT' | translate }}
+                    </span>
+                    <span class="installment-tag" *ngIf="rentPriceMonthly === 0">
+                        {{ currency }} {{ installment }} / {{ installmentPeriod }}
                     </span>
                 </div>
 
-                <h2 class="location-title">{{ location }}</h2>
-
-                <div class="specs-horizontal">
-                    <span class="spec-item"><i class="icon-bed">🛏</i> {{ specs.beds }} {{ 'PROPERTY_VIEW.BED' |
-                        translate }}</span>
-                    <span class="spec-item"><i class="icon-bath">🛁</i> {{ specs.baths }} {{ 'PROPERTY_VIEW.BATH' |
-                        translate }}</span>
-                    <span class="spec-item"><i class="icon-area">📐</i> {{ specs.area }} {{ 'PROPERTY_VIEW.SQ_M' |
-                        translate }}</span>
+                <!-- Down Payment -->
+                <div class="down-payment-row" *ngIf="rentPriceMonthly === 0">
+                    <span class="down-payment-badge">
+                        💵 {{ 'PROPERTY_VIEW.DOWN_PAYMENT' | translate }}: {{ currency }} {{ downPayment }}
+                    </span>
                 </div>
 
+                <!-- Location -->
+                <h2 class="location-title">{{ location }}</h2>
+
+                <!-- Specs -->
+                <div class="specs-horizontal">
+                    <span class="spec-item" *ngIf="specs.beds > 0">
+                        🛏 {{ specs.beds }} {{ specs.beds > 1 ? ('PROPERTY_VIEW.BEDS' | translate) : ('PROPERTY_VIEW.BED' | translate) }}
+                    </span>
+                    <span class="spec-item" *ngIf="specs.baths > 0">
+                        🛁 {{ specs.baths }} {{ specs.baths > 1 ? ('PROPERTY_VIEW.BATHS' | translate) : ('PROPERTY_VIEW.BATH' | translate) }}
+                    </span>
+                    <span class="spec-item" *ngIf="specs.area > 0">
+                        📐 {{ specs.area }} {{ 'PROPERTY_VIEW.SQ_M' | translate }}
+                    </span>
+                </div>
+
+                <!-- Title & Description -->
                 <div class="description-section">
                     <h3>{{ title }}</h3>
-                    <ul class="desc-list">
-                        @for (line of description; track line) {
-                        <li>{{ line }}</li>
-                        }
+                    <ul class="desc-list" *ngIf="description.length > 0">
+                        <li *ngFor="let line of description">{{ line }}</li>
                     </ul>
                 </div>
 
+                <!-- Property Info Table -->
                 <section class="info-table">
                     <h3>{{ 'PROPERTY_VIEW.PROPERTY_INFO_TITLE' | translate }}</h3>
                     <div class="grid-info">
-                        @for (item of propertySpecs; track item.label) {
-                        <div class="info-item">
+                        <div class="info-item" *ngFor="let item of propertySpecs">
                             <span class="label">{{ item.label }}</span>
                             <span class="value">{{ item.value }}</span>
                         </div>
-                        }
+                    </div>
+                </section>
+
+                <!-- Amenities -->
+                <section class="amenities-section" *ngIf="property && property.amenities && property.amenities.length > 0">
+                    <h3>{{ 'PROPERTY_VIEW.AMENITIES_TITLE' | translate }}</h3>
+                    <div class="amenities-grid">
+                        <div class="amenity-item" *ngFor="let amenity of property.amenities">
+                            <i class="fa fa-check-circle" style="color: #28b16d;"></i>
+                            {{ currentLang === 'en' ? (amenity.nameEn || amenity.name) : amenity.name }}
+                        </div>
                     </div>
                 </section>
             </div>
         </main>
 
+        <!-- Sidebar -->
         <aside class="sidebar">
+            <!-- Agent Card -->
             <div class="broker-card">
                 <div class="broker-header">
-                    <img [src]="agent.imageUrl" [alt]="agent.name" class="profile-pic">
+                    <img [src]="agent.imageUrl || 'https://via.placeholder.com/80'" 
+                         [alt]="agent.name" 
+                         class="profile-pic">
                     <div class="broker-info">
-                        <p class="company-name">{{ agent.company }}</p>
+                        <h3 class="agent-name" 
+                            (click)="viewAgentProfile()" 
+                            style="cursor: pointer; color: #28b16d; margin: 0;">
+                            {{ agent.name }}
+                        </h3>
+                        <p class="agent-stats">{{ agent.activeListings }} {{ 'PROPERTY_VIEW.ACTIVE_LISTINGS' | translate }}</p>
                     </div>
                 </div>
 
                 <div class="actions">
-                    <button class="btn-email" (click)="emailAgent()">
-                        <i class="icon-email">✉</i> {{ 'AGENT_PROFILE.EMAIL' | translate }}
+                    <button class="btn-call" (click)="callAgent()" *ngIf="agent.phone">
+                        📞 {{ 'PROPERTY_VIEW.CALL' | translate }}
                     </button>
-                    <button class="btn-call" (click)="callAgent()">
-                        <i class="icon-phone">📞</i> {{ 'AGENT_PROFILE.CALL' | translate }}
+                    <button class="btn-email" (click)="emailAgent()" *ngIf="agent.email">
+                        ✉ {{ 'PROPERTY_VIEW.EMAIL' | translate }}
                     </button>
-                    <button class="btn-whatsapp" (click)="whatsappAgent()">
-                        <i class="icon-whatsapp">💬</i>
+                    <button class="btn-whatsapp" (click)="whatsappAgent()" *ngIf="agent.whatsapp">
+                        💬 {{ 'PROPERTY_VIEW.WHATSAPP' | translate }}
                     </button>
-                </div>
-
-                <div class="broker-footer">
-                    <span class="agent-name">{{ agent.name }}</span>
-                    <a href="#" class="view-all-link">{{ 'PROPERTY_VIEW.VIEW_ALL' | translate }}</a>
                 </div>
             </div>
 
             <!-- Save Property Button -->
-            <div class="save-property-card"
-                style="background: white; padding: 16px; border-radius: 12px; margin-top: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
-                <button (click)="toggleSave()"
-                    class="w-full py-3 px-4 rounded-lg font-medium flex items-center justify-center gap-2 transition-all"
-                    [style.background]="isSaved ? '#fee2e2' : '#f3f4f6'" [style.color]="isSaved ? '#dc2626' : '#374151'"
-                    style="border: none; cursor: pointer;">
-                    <i class="fa" [class.fa-heart]="isSaved" [class.fa-heart-o]="!isSaved"
-                        [style.color]="isSaved ? '#dc2626' : '#6b7280'"></i>
-                    {{ isSaved ? ('PROPERTY_VIEW.REMOVE_FROM_SAVED' | translate) : ('PROPERTY_VIEW.SAVE_PROPERTY' |
-                    translate) }}
+            <div class="save-property-card">
+                <button (click)="toggleSave()" class="save-btn" [class.saved]="isSaved">
+                    <i class="fa" [class.fa-heart]="isSaved" [class.fa-heart-o]="!isSaved"></i>
+                    {{ isSaved ? ('PROPERTY_VIEW.UNSAVE_PROPERTY' | translate) : ('PROPERTY_VIEW.SAVE_PROPERTY' | translate) }}
                 </button>
-            </div>
-
-            <!-- Analytics Card -->
-            <div class="analytics-card"
-                style="background: white; padding: 20px; border-radius: 12px; margin-top: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
-                <h3 style="margin-top: 0; color: #374151; font-size: 16px; margin-bottom: 15px;">{{
-                    'PROPERTY_VIEW.PROPERTY_ANALYTICS' | translate }}</h3>
-                <div style="display: flex; flex-direction: column; gap: 12px;">
-                    <div
-                        style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 12px; border-bottom: 1px solid #f3f4f6;">
-                        <span style="color: #6b7280; display: flex; align-items: center; gap: 8px;"><i
-                                class="fa fa-eye"></i>
-                            {{ 'PROPERTY_VIEW.TOTAL_VIEWS' | translate }}</span>
-                        <span style="font-weight: bold; color: #111827;">{{ viewCount }}</span>
-                    </div>
-                    <div style="display: flex; justify-content: space-between; align-items: center;">
-                        <span style="color: #6b7280; display: flex; align-items: center; gap: 8px;"><i
-                                class="fa fa-whatsapp"></i> {{ 'PROPERTY_VIEW.WHATSAPP_LEADS' | translate }}</span>
-                        <span style="font-weight: bold; color: #28b16d;">{{ whatsappClickCount }}</span>
-                    </div>
-                </div>
             </div>
         </aside>
     </div>
+
+    <!-- Similar Properties Section -->
+    <section class="similar-properties-section" *ngIf="similarProperties.length > 0">
+        <h2>{{ 'PROPERTY_VIEW.SIMILAR_PROPERTIES' | translate }}</h2>
+        <div class="properties-grid">
+            <div class="property-card" *ngFor="let prop of similarProperties" [routerLink]="['/propertyview', prop.id]">
+                <div class="card-image">
+                    <img [src]="prop.mainImageUrl || 'https://via.placeholder.com/300x200'" 
+                         [alt]="getSimilarPropertyTitle(prop)">
+                    <span class="badge" *ngIf="prop.isFeatured">⭐ {{ 'LISTING_PROPERTIES.FEATURED' | translate }}</span>
+                </div>
+                <div class="card-content">
+                    <h3>{{ getSimilarPropertyTitle(prop) }}</h3>
+                    <p class="location">📍 {{ getSimilarPropertyLocation(prop) }}</p>
+                    <div class="specs">
+                        <span *ngIf="prop.rooms">🛏 {{ prop.rooms }}</span>
+                        <span *ngIf="prop.bathrooms">🛁 {{ prop.bathrooms }}</span>
+                        <span *ngIf="prop.area">📐 {{ prop.area }} {{ 'PROPERTY_VIEW.SQ_M' | translate }}</span>
+                    </div>
+                    <div class="price-row">
+                        <span class="price">{{ prop.price | currency:(prop.currency || 'EGP'):'symbol':'1.0-0' }}</span>
+                        <span class="type">{{ getSimilarPropertyType(prop) }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<!-- Loading State -->
+<div class="loading-state" *ngIf="isLoading">
+    <div class="spinner"></div>
+    <p>{{ 'PROPERTY_VIEW.LOADING' | translate }}</p>
+</div>
+
+<!-- Error State -->
+<div class="error-state" *ngIf="errorMessage && !isLoading">
+    <p>{{ errorMessage }}</p>
 </div>

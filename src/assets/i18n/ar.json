@@ -387,6 +387,20 @@
         "UNSAVE_PROPERTY": "إزالة من المحفوظات",
         "SIMILAR_PROPERTIES": "عقارات مشابهة",
         "NO_SIMILAR": "لا توجد عقارات مشابهة",
-        "LOADING": "جاري التحميل..."
+        "LOADING": "جاري التحميل...",
+        "BED": "غرفة",
+        "BEDS": "غرف",
+        "BATH": "حمام",
+        "BATHS": "حمامات",
+        "SQ_M": "م²",
+        "DOWN_PAYMENT": "دفعة مقدمة",
+        "MONTHLY_INSTALLMENT": "قسط شهري",
+        "INSTALLMENT_PERIOD": "فترة التقسيط",
+        "PRICE": "السعر",
+        "MONTHLY_RENT": "الإيجار الشهري",
+        "PROPERTY_INFO_TITLE": "معلومات العقار",
+        "DESCRIPTION_TITLE": "الوصف",
+        "AMENITIES_TITLE": "المرافق",
+        "LOCATION_TITLE": "الموقع"
     }
 }
