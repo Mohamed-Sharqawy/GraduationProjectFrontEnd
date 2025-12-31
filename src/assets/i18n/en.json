@@ -360,5 +360,33 @@
             "SUBMITTING": "Submitting...",
             "SUBMIT": "Submit for Verification"
         }
+    },
+    "PROPERTY_VIEW": {
+        "INVALID_ID": "Invalid property ID",
+        "LOAD_ERROR": "Error loading property data",
+        "TYPE_LABEL": "Type",
+        "PURPOSE_LABEL": "Purpose",
+        "REFERENCE_LABEL": "Reference",
+        "STATUS_LABEL": "Status",
+        "FURNISHING_LABEL": "Finishing",
+        "PUBLISHED_LABEL": "Published",
+        "FOR_SALE": "For Sale",
+        "FOR_RENT": "For Rent",
+        "FOR_BOTH": "For Sale & Rent",
+        "NO_FINISHING": "No Finishing",
+        "SEMI_FINISHING": "Semi Finishing",
+        "FULL_FINISHING": "Full Finishing",
+        "SUPER_LUX": "Super Lux",
+        "AGENT_SECTION_TITLE": "Agent Information",
+        "ACTIVE_LISTINGS": "Active Listings",
+        "CALL": "Call",
+        "EMAIL": "Email",
+        "WHATSAPP": "WhatsApp",
+        "VIEW_PROFILE": "View Profile",
+        "SAVE_PROPERTY": "Save Property",
+        "UNSAVE_PROPERTY": "Remove from Saved",
+        "SIMILAR_PROPERTIES": "Similar Properties",
+        "NO_SIMILAR": "No similar properties found",
+        "LOADING": "Loading..."
     }
 }

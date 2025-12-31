@@ -360,5 +360,33 @@
             "SUBMITTING": "جاري الإرسال...",
             "SUBMIT": "إرسال للتحقق"
         }
+    },
+    "PROPERTY_VIEW": {
+        "INVALID_ID": "معرف العقار غير صالح",
+        "LOAD_ERROR": "حدث خطأ أثناء تحميل بيانات العقار",
+        "TYPE_LABEL": "النوع",
+        "PURPOSE_LABEL": "الغرض",
+        "REFERENCE_LABEL": "المرجع",
+        "STATUS_LABEL": "الحالة",
+        "FURNISHING_LABEL": "التشطيب",
+        "PUBLISHED_LABEL": "تاريخ النشر",
+        "FOR_SALE": "للبيع",
+        "FOR_RENT": "للإيجار",
+        "FOR_BOTH": "للبيع والإيجار",
+        "NO_FINISHING": "بدون تشطيب",
+        "SEMI_FINISHING": "نصف تشطيب",
+        "FULL_FINISHING": "تشطيب كامل",
+        "SUPER_LUX": "سوبر لوكس",
+        "AGENT_SECTION_TITLE": "معلومات الوسيط",
+        "ACTIVE_LISTINGS": "عقار نشط",
+        "CALL": "اتصال",
+        "EMAIL": "بريد إلكتروني",
+        "WHATSAPP": "واتساب",
+        "VIEW_PROFILE": "عرض الملف الشخصي",
+        "SAVE_PROPERTY": "حفظ العقار",
+        "UNSAVE_PROPERTY": "إزالة من المحفوظات",
+        "SIMILAR_PROPERTIES": "عقارات مشابهة",
+        "NO_SIMILAR": "لا توجد عقارات مشابهة",
+        "LOADING": "جاري التحميل..."
     }
 }

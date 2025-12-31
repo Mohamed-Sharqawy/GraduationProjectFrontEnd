@@ -230,9 +230,9 @@ export class Propertyview implements OnInit {
   private getDescription(): string {
     if (!this.property) return '';
     if (this.currentLang === 'en') {
-      return this.property.descriptionEn || this.property.description;
+      return this.property.descriptionEn || this.property.description || '';
     }
-    return this.property.description;
+    return this.property.description || '';
   }
 
   private mapPurpose(val: string | undefined): string {
