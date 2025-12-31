@@ -404,6 +404,7 @@
         "LOCATION_TITLE": "Location",
         "ANALYTICS_TITLE": "Property Analytics",
         "VIEWS": "Views",
-        "WHATSAPP_CLICKS": "WhatsApp Clicks"
+        "WHATSAPP_CLICKS": "WhatsApp Clicks",
+        "RECOMMENDED": "Recommended Properties"
     }
 }

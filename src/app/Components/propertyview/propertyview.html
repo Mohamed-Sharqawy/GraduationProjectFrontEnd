@@ -139,25 +139,45 @@
 
     <!-- Similar Properties Section -->
     <section class="similar-properties-section" *ngIf="similarProperties.length > 0">
-        <h2>{{ 'PROPERTY_VIEW.SIMILAR_PROPERTIES' | translate }}</h2>
+        <h2 class="section-title">{{ 'PROPERTY_VIEW.RECOMMENDED' | translate }}</h2>
         <div class="properties-grid">
-            <div class="property-card" *ngFor="let prop of similarProperties" [routerLink]="['/propertyview', prop.id]">
+            <div class="property-card" *ngFor="let prop of similarProperties" 
+                 [routerLink]="['/propertyview', prop.id]"
+                 (click)="incrementViewCount(prop.id)"> <!-- Track view when clicked -->
                 <div class="card-image">
                     <img [src]="prop.mainImageUrl || 'https://via.placeholder.com/300x200'" 
                          [alt]="getSimilarPropertyTitle(prop)">
                     <span class="badge" *ngIf="prop.isFeatured">⭐ {{ 'LISTING_PROPERTIES.FEATURED' | translate }}</span>
+                    <span class="purpose-badge" [class.rent]="prop.purpose === 'ForRent'">
+                        {{ (prop.purpose === 'ForRent' ? 'PROPERTY_VIEW.FOR_RENT' : 'PROPERTY_VIEW.FOR_SALE') | translate }}
+                    </span>
                 </div>
                 <div class="card-content">
-                    <h3>{{ getSimilarPropertyTitle(prop) }}</h3>
-                    <p class="location">📍 {{ getSimilarPropertyLocation(prop) }}</p>
-                    <div class="specs">
-                        <span *ngIf="prop.rooms">🛏 {{ prop.rooms }}</span>
-                        <span *ngIf="prop.bathrooms">🛁 {{ prop.bathrooms }}</span>
-                        <span *ngIf="prop.area">📐 {{ prop.area }} {{ 'PROPERTY_VIEW.SQ_M' | translate }}</span>
+                    <h3 class="card-title">{{ getSimilarPropertyTitle(prop) }}</h3>
+                    <p class="location"><i class="fa fa-map-marker-alt"></i> {{ getSimilarPropertyLocation(prop) }}</p>
+                    
+                    <div class="card-specs">
+                        <div class="spec" *ngIf="prop.rooms">
+                            <i class="fa fa-bed"></i> 
+                            <span>{{ prop.rooms }}</span>
+                        </div>
+                        <div class="spec" *ngIf="prop.bathrooms">
+                            <i class="fa fa-bath"></i> 
+                            <span>{{ prop.bathrooms }}</span>
+                        </div>
+                        <div class="spec" *ngIf="prop.area">
+                            <i class="fa fa-ruler-combined"></i> 
+                            <span>{{ prop.area }} {{ 'PROPERTY_VIEW.SQ_M' | translate }}</span>
+                        </div>
                     </div>
-                    <div class="price-row">
-                        <span class="price">{{ prop.price | currency:(prop.currency || 'EGP'):'symbol':'1.0-0' }}</span>
-                        <span class="type">{{ getSimilarPropertyType(prop) }}</span>
+                    
+                    <div class="card-footer">
+                        <div class="price">
+                            {{ prop.price | currency:(prop.currency || 'EGP'):'symbol':'1.0-0' }}
+                        </div>
+                        <div class="view-btn">
+                            {{ 'PROPERTY_VIEW.VIEW_PROFILE' | translate }} <i class="fa fa-arrow-right"></i>
+                        </div>
                     </div>
                 </div>
             </div>

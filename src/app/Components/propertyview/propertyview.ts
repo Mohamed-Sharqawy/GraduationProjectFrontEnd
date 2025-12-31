@@ -93,17 +93,25 @@ export class Propertyview implements OnInit {
       this.cdr.detectChanges();
     });
 
-    const id = this.route.snapshot.paramMap.get('id');
-    if (id) {
-      this.propertyId = Number(id);
-      this.loadProperty(this.propertyId);
-      this.checkIfSaved(this.propertyId);
-      this.incrementViewCount(this.propertyId);
-      this.loadSimilarProperties(this.propertyId);
-    } else {
-      this.errorMessage = this.translate.instant('PROPERTY_VIEW.INVALID_ID');
-      this.isLoading = false;
-    }
+    // Subscribe to route parameters changes
+    this.route.paramMap.subscribe(params => {
+      const id = params.get('id');
+      if (id) {
+        this.propertyId = Number(id);
+        this.loadProperty(this.propertyId);
+        this.checkIfSaved(this.propertyId);
+        this.incrementViewCount(this.propertyId);
+        this.loadSimilarProperties(this.propertyId);
+        
+        // Scroll to top when property changes
+        if (typeof window !== 'undefined') {
+          window.scrollTo(0, 0);
+        }
+      } else {
+        this.errorMessage = this.translate.instant('PROPERTY_VIEW.INVALID_ID');
+        this.isLoading = false;
+      }
+    });
   }
 
   incrementViewCount(id: number) {
@@ -136,7 +144,7 @@ export class Propertyview implements OnInit {
     this.chatbotService.getSimilarProperties(id).subscribe({
       next: (response) => {
         if (response.success && response.data) {
-          this.similarProperties = response.data.slice(0, 3); // Take only 3
+          this.similarProperties = response.data.slice(0, 6); // Take up to 6 properties
         }
         this.isLoadingSimilar = false;
         this.cdr.detectChanges();
