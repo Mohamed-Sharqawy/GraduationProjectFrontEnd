@@ -38,6 +38,12 @@ export const routes: Routes = [
     path: 'register', loadComponent: () =>
       import('./Components/register/register').then(m => m.Register)
   },
+  // Payment callback route for PayPal redirect
+  {
+    path: 'payment-callback',
+    loadComponent: () => import('./Components/payment-callback/payment-callback').then(m => m.PaymentCallbackComponent),
+    data: { ssr: false } // Disable SSR for this route as it depends on query params
+  },
   // Protected dashboard route
   {
     path: 'dashboard',
