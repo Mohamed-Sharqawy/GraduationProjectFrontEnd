@@ -454,12 +454,37 @@ export class UserDashboard {
         this.isSaving = true;
         const formData = new FormData();
 
-        // 1. Append all basic fields
+        // Convert numeric values to enum names for backend
+        const purposeMap: { [key: number]: string } = {
+            1: 'ForSale',
+            2: 'ForRent',
+            3: 'Both'
+        };
+        const finishingMap: { [key: number]: string } = {
+            0: 'None',
+            1: 'Semi',
+            2: 'Full',
+            3: 'SuperLux'
+        };
+
+        // 1. Append all basic fields with special handling for Purpose and FinishingType
         for (const key in this.currentProperty) {
-            // Check for valid values (allow false/0 but skip null/undefined)
             const value = this.currentProperty[key];
             if (value !== null && value !== undefined && key !== 'id') {
-                formData.append(key, value.toString());
+                // Convert Purpose number to enum name
+                if (key === 'Purpose') {
+                    const purposeValue = purposeMap[Number(value)] || 'ForSale';
+                    formData.append(key, purposeValue);
+                }
+                // Convert FinishingType number to enum name
+                else if (key === 'FinishingType') {
+                    const finishingValue = finishingMap[Number(value)] || 'None';
+                    formData.append(key, finishingValue);
+                }
+                // Append other values as-is
+                else {
+                    formData.append(key, value.toString());
+                }
             }
         }
 
