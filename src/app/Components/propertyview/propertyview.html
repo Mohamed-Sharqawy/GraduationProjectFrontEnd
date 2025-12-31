@@ -19,13 +19,13 @@
                     <span class="installment-tag" *ngIf="rentPriceMonthly > 0">
                         {{ rentPriceMonthly | currency: currency :'symbol':'1.0-0' }} {{ 'PROPERTY_VIEW.MONTHLY_RENT' | translate }}
                     </span>
-                    <span class="installment-tag" *ngIf="rentPriceMonthly === 0">
+                    <span class="installment-tag" *ngIf="rentPriceMonthly === 0 && property?.purpose !== 'ForSale'">
                         {{ currency }} {{ installment }} / {{ installmentPeriod }}
                     </span>
                 </div>
 
                 <!-- Down Payment -->
-                <div class="down-payment-row" *ngIf="rentPriceMonthly === 0">
+                <div class="down-payment-row" *ngIf="rentPriceMonthly === 0 && property?.purpose !== 'ForSale'">
                     <span class="down-payment-badge">
                         💵 {{ 'PROPERTY_VIEW.DOWN_PAYMENT' | translate }}: {{ currency }} {{ downPayment }}
                     </span>

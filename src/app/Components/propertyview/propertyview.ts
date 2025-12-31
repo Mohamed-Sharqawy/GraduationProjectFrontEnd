@@ -218,6 +218,13 @@ export class Propertyview implements OnInit {
       this.title = data.title;
       this.location = [data.projectName, data.district, data.city].filter(Boolean).join(', ');
     }
+
+    // Update description based on language
+    const desc = this.getDescription();
+    this.description = desc ? desc.split('\n').filter(Boolean) : [];
+
+    // Update property specs with current language
+    this.updatePropertySpecs();
   }
 
   private updatePropertySpecs() {
