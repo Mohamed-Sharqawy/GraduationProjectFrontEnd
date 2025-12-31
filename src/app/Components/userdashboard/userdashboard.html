@@ -55,7 +55,7 @@
                 <div class="card-details">
                     <div class="detail-item">🛏 {{prop.rooms || 0}} {{ 'USER_DASHBOARD.BEDS' | translate }}</div>
                     <div class="detail-item">🚿 {{prop.bathrooms || 0}} {{ 'USER_DASHBOARD.BATHS' | translate }}</div>
-                    <div class="detail-item">📐 {{prop.area}} m²</div>
+                    <div class="detail-item">📐 {{prop.area}} {{ 'USER_DASHBOARD.SQM' | translate }}</div>
                 </div>
 
                 <div style="margin-top: auto; display: flex; align-items: center; color: #666; font-size: 13px;">
@@ -88,12 +88,12 @@
             <div class="form-group">
                 <label>{{ 'USER_DASHBOARD.PROPERTY_TITLE_AR' | translate }}</label>
                 <input type="text" class="form-control" [(ngModel)]="currentProperty.Title" name="Title"
-                    placeholder="e.g., شقة فاخرة في القاهرة" required>
+                    [placeholder]="'USER_DASHBOARD.PROPERTY_TITLE_AR_PLACEHOLDER' | translate" required>
             </div>
             <div class="form-group">
                 <label>{{ 'USER_DASHBOARD.PROPERTY_TITLE_EN' | translate }}</label>
                 <input type="text" class="form-control" [(ngModel)]="currentProperty.TitleEn" name="TitleEn"
-                    placeholder="e.g., Luxury Apartment in Cairo">
+                    [placeholder]="'USER_DASHBOARD.PROPERTY_TITLE_EN_PLACEHOLDER' | translate">
             </div>
 
             <div class="form-row">
@@ -112,39 +112,36 @@
             <div class="form-row">
                 <div class="form-group">
                     <label>{{ 'USER_DASHBOARD.CITY' | translate }} *</label>
-                    <input type="text" class="form-control search-input" 
-                           [(ngModel)]="citySearchTerm" 
-                           (input)="filterCities()"
-                           placeholder="{{ 'USER_DASHBOARD.SEARCH_CITY' | translate }}"
-                           name="citySearch">
-                    <select class="form-control" [(ngModel)]="currentProperty.CityId" name="CityId" 
-                            (change)="onCityChange(currentProperty.CityId)" required>
-                        <option [ngValue]="null" disabled selected>{{ 'USER_DASHBOARD.SELECT_CITY' | translate }}</option>
+                    <input type="text" class="form-control search-input" [(ngModel)]="citySearchTerm"
+                        (input)="filterCities()" placeholder="{{ 'USER_DASHBOARD.SEARCH_CITY' | translate }}"
+                        name="citySearch">
+                    <select class="form-control" [(ngModel)]="currentProperty.CityId" name="CityId"
+                        (change)="onCityChange(currentProperty.CityId)" required>
+                        <option [ngValue]="null" disabled selected>{{ 'USER_DASHBOARD.SELECT_CITY' | translate }}
+                        </option>
                         @if (isLoadingCities) {
-                            <option disabled>{{ 'COMMON.LOADING' | translate }}...</option>
+                        <option disabled>{{ 'COMMON.LOADING' | translate }}...</option>
                         }
                         @for (city of filteredCities; track city.id) {
-                            <option [value]="city.id">{{city.name}} {{city.nameEn ? '(' + city.nameEn + ')' : ''}}</option>
+                        <option [value]="city.id">{{city.name}} {{city.nameEn ? '(' + city.nameEn + ')' : ''}}</option>
                         }
                     </select>
                 </div>
                 <div class="form-group">
                     <label>{{ 'USER_DASHBOARD.DISTRICT' | translate }}</label>
-                    <input type="text" class="form-control search-input" 
-                           [(ngModel)]="districtSearchTerm" 
-                           (input)="filterDistricts()"
-                           placeholder="{{ 'USER_DASHBOARD.SEARCH_DISTRICT' | translate }}"
-                           [disabled]="!currentProperty.CityId"
-                           name="districtSearch">
+                    <input type="text" class="form-control search-input" [(ngModel)]="districtSearchTerm"
+                        (input)="filterDistricts()" placeholder="{{ 'USER_DASHBOARD.SEARCH_DISTRICT' | translate }}"
+                        [disabled]="!currentProperty.CityId" name="districtSearch">
                     <select class="form-control" [(ngModel)]="currentProperty.DistrictId" name="DistrictId"
-                            [disabled]="!currentProperty.CityId || isLoadingDistricts"
-                            (change)="onDistrictChange(currentProperty.DistrictId)">
+                        [disabled]="!currentProperty.CityId || isLoadingDistricts"
+                        (change)="onDistrictChange(currentProperty.DistrictId)">
                         <option [ngValue]="null">{{ 'USER_DASHBOARD.SELECT_DISTRICT' | translate }}</option>
                         @if (isLoadingDistricts) {
-                            <option disabled>{{ 'COMMON.LOADING' | translate }}...</option>
+                        <option disabled>{{ 'COMMON.LOADING' | translate }}...</option>
                         }
                         @for (district of filteredDistricts; track district.id) {
-                            <option [value]="district.id">{{district.name}} {{district.nameEn ? '(' + district.nameEn + ')' : ''}}</option>
+                        <option [value]="district.id">{{district.name}} {{district.nameEn ? '(' + district.nameEn + ')'
+                            : ''}}</option>
                         }
                     </select>
                 </div>
@@ -153,43 +150,42 @@
             <div class="form-row">
                 <div class="form-group">
                     <label>{{ 'USER_DASHBOARD.PROJECT' | translate }}</label>
-                    <input type="text" class="form-control search-input" 
-                           [(ngModel)]="projectSearchTerm" 
-                           (input)="filterProjects()"
-                           placeholder="{{ 'USER_DASHBOARD.SEARCH_PROJECT' | translate }}"
-                           name="projectSearch">
+                    <input type="text" class="form-control search-input" [(ngModel)]="projectSearchTerm"
+                        (input)="filterProjects()" placeholder="{{ 'USER_DASHBOARD.SEARCH_PROJECT' | translate }}"
+                        name="projectSearch">
                     <select class="form-control" [(ngModel)]="currentProperty.ProjectId" name="ProjectId">
                         <option [ngValue]="null">{{ 'USER_DASHBOARD.SELECT_PROJECT' | translate }}</option>
                         @if (isLoadingProjects) {
-                            <option disabled>{{ 'COMMON.LOADING' | translate }}...</option>
+                        <option disabled>{{ 'COMMON.LOADING' | translate }}...</option>
                         }
                         @for (project of filteredProjects; track project.id) {
-                            <option [value]="project.id">{{project.name}} - {{project.cityName}}</option>
+                        <option [value]="project.id">{{project.name}} - {{project.cityName}}</option>
                         }
                     </select>
                 </div>
                 <div class="form-group">
                     <label>{{ 'USER_DASHBOARD.ADDRESS_DETAILS' | translate }}</label>
                     <input type="text" class="form-control" [(ngModel)]="currentProperty.AddressDetails"
-                        name="AddressDetails" placeholder="{{ 'USER_DASHBOARD.ADDRESS_DETAILS_PLACEHOLDER' | translate }}">
+                        name="AddressDetails"
+                        placeholder="{{ 'USER_DASHBOARD.ADDRESS_DETAILS_PLACEHOLDER' | translate }}">
                 </div>
             </div>
 
             <div class="form-row">
                 <div class="form-group">
                     <label>{{ 'USER_DASHBOARD.PROPERTY_TYPE' | translate }} *</label>
-                    <input type="text" class="form-control search-input" 
-                           [(ngModel)]="propertyTypeSearchTerm" 
-                           (input)="filterPropertyTypes()"
-                           placeholder="{{ 'USER_DASHBOARD.SEARCH_PROPERTY_TYPE' | translate }}"
-                           name="propertyTypeSearch">
-                    <select class="form-control" [(ngModel)]="currentProperty.PropertyTypeId" name="PropertyTypeId" required>
-                        <option [ngValue]="null" disabled selected>{{ 'USER_DASHBOARD.SELECT_TYPE' | translate }}</option>
+                    <input type="text" class="form-control search-input" [(ngModel)]="propertyTypeSearchTerm"
+                        (input)="filterPropertyTypes()"
+                        placeholder="{{ 'USER_DASHBOARD.SEARCH_PROPERTY_TYPE' | translate }}" name="propertyTypeSearch">
+                    <select class="form-control" [(ngModel)]="currentProperty.PropertyTypeId" name="PropertyTypeId"
+                        required>
+                        <option [ngValue]="null" disabled selected>{{ 'USER_DASHBOARD.SELECT_TYPE' | translate }}
+                        </option>
                         @if (isLoadingPropertyTypes) {
-                            <option disabled>{{ 'COMMON.LOADING' | translate }}...</option>
+                        <option disabled>{{ 'COMMON.LOADING' | translate }}...</option>
                         }
                         @for (type of filteredPropertyTypes; track type.id) {
-                            <option [value]="type.id">{{type.name}} {{type.nameEn ? '(' + type.nameEn + ')' : ''}}</option>
+                        <option [value]="type.id">{{type.name}} {{type.nameEn ? '(' + type.nameEn + ')' : ''}}</option>
                         }
                     </select>
                 </div>
@@ -210,14 +206,16 @@
                 </div>
                 <div class="form-group">
                     <label>{{ 'USER_DASHBOARD.BATHROOMS' | translate }}</label>
-                    <input type="number" class="form-control" [(ngModel)]="currentProperty.Bathrooms" name="Bathrooms" min="0">
+                    <input type="number" class="form-control" [(ngModel)]="currentProperty.Bathrooms" name="Bathrooms"
+                        min="0">
                 </div>
             </div>
 
             <div class="form-row">
                 <div class="form-group">
                     <label>{{ 'USER_DASHBOARD.FLOOR_NUMBER' | translate }}</label>
-                    <input type="number" class="form-control" [(ngModel)]="currentProperty.FloorNumber" name="FloorNumber" min="0">
+                    <input type="number" class="form-control" [(ngModel)]="currentProperty.FloorNumber"
+                        name="FloorNumber" min="0">
                 </div>
                 <div class="form-group">
                     <label>{{ 'USER_DASHBOARD.FINISHING_TYPE' | translate }}</label>
@@ -232,20 +230,24 @@
 
             <!-- Show Rent Price only if Purpose is Rent or Both -->
             @if (currentProperty.Purpose === 2 || currentProperty.Purpose === 3) {
-                <div class="form-group">
-                    <label>{{ 'USER_DASHBOARD.RENT_PRICE_MONTHLY' | translate }}</label>
-                    <input type="number" class="form-control" [(ngModel)]="currentProperty.RentPriceMonthly" name="RentPriceMonthly" min="0" placeholder="{{ 'USER_DASHBOARD.RENT_PRICE_PLACEHOLDER' | translate }}">
-                </div>
+            <div class="form-group">
+                <label>{{ 'USER_DASHBOARD.RENT_PRICE_MONTHLY' | translate }}</label>
+                <input type="number" class="form-control" [(ngModel)]="currentProperty.RentPriceMonthly"
+                    name="RentPriceMonthly" min="0"
+                    placeholder="{{ 'USER_DASHBOARD.RENT_PRICE_PLACEHOLDER' | translate }}">
+            </div>
             }
 
             <div class="form-group">
                 <label>{{ 'USER_DASHBOARD.DESCRIPTION_AR' | translate }}</label>
-                <textarea class="form-control" [(ngModel)]="currentProperty.Description" name="Description" rows="3" placeholder="{{ 'USER_DASHBOARD.DESCRIPTION_PLACEHOLDER' | translate }}"></textarea>
+                <textarea class="form-control" [(ngModel)]="currentProperty.Description" name="Description" rows="3"
+                    placeholder="{{ 'USER_DASHBOARD.DESCRIPTION_PLACEHOLDER' | translate }}"></textarea>
             </div>
 
             <div class="form-group">
                 <label>{{ 'USER_DASHBOARD.DESCRIPTION_EN' | translate }}</label>
-                <textarea class="form-control" [(ngModel)]="currentProperty.DescriptionEn" name="DescriptionEn" rows="3" placeholder="{{ 'USER_DASHBOARD.DESCRIPTION_EN_PLACEHOLDER' | translate }}"></textarea>
+                <textarea class="form-control" [(ngModel)]="currentProperty.DescriptionEn" name="DescriptionEn" rows="3"
+                    placeholder="{{ 'USER_DASHBOARD.DESCRIPTION_EN_PLACEHOLDER' | translate }}"></textarea>
             </div>
 
             <div class="form-row">

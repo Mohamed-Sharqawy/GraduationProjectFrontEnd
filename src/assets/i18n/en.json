@@ -127,9 +127,12 @@
         "EDIT_PROPERTY": "Edit Property",
         "ADD_PROPERTY_TITLE": "Add New Property",
         "PROPERTY_TITLE_AR": "Property Title (Arabic)",
+        "PROPERTY_TITLE_AR_PLACEHOLDER": "e.g., Luxury Apartment in Cairo (Arabic)",
         "PROPERTY_TITLE_EN": "Property Title (English)",
+        "PROPERTY_TITLE_EN_PLACEHOLDER": "e.g., Luxury Apartment in Cairo",
         "PRICE": "Price (EGP)",
         "AREA": "Area (m²)",
+        "SQM": "m²",
         "CITY": "City",
         "SELECT_CITY": "Select City",
         "SEARCH_CITY": "Search city...",
@@ -257,5 +260,77 @@
         "SEARCH_PLACEHOLDER": "Search by location (e.g. Cairo)",
         "LANGUAGE_BTN": "عربي",
         "AND": "and"
+    },
+    "USER_PROFILE": {
+        "SIDEBAR": {
+            "PUBLISHED": "Published Properties",
+            "SAVED": "Saved Properties",
+            "SUBSCRIPTION": "Subscription",
+            "PERSONAL_INFO": "Personal Info",
+            "VERIFICATION": "Identity Verification"
+        },
+        "PUBLISHED": {
+            "TITLE": "My Published Properties",
+            "NO_PROPERTIES": "No properties published yet",
+            "START_SELLING": "Start selling your properties today.",
+            "LIST_BTN": "List a Property"
+        },
+        "SAVED": {
+            "TITLE": "Saved Properties",
+            "LOADING": "Loading saved properties...",
+            "NO_SAVED": "No saved properties",
+            "NO_SAVED_DESC": "Properties you like will appear here.",
+            "BROWSE_BTN": "Browse Properties",
+            "REMOVE_TOOLTIP": "Remove from saved",
+            "VIEW_DETAILS": "View Details",
+            "BEDS": "Beds",
+            "BATHS": "Baths",
+            "SQM": "m²"
+        },
+        "SUBSCRIPTION": {
+            "TITLE": "My Subscription",
+            "LOADING": "Loading subscription info...",
+            "ACTIVE_BADGE": "Active",
+            "PLAN_SUFFIX": "Plan",
+            "DAYS_REMAINING": "days remaining",
+            "PROPERTIES_REMAINING": "Properties Remaining",
+            "FEATURED_REMAINING": "Featured Remaining",
+            "NO_ACTIVE": "You don't have an active subscription. Subscribe to a plan to list properties and access the dashboard.",
+            "UPGRADE_TITLE": "Upgrade Plan",
+            "CHOOSE_TITLE": "Choose a Plan",
+            "DAYS": "days",
+            "PROPERTIES": "Properties",
+            "FEATURED": "Featured Properties",
+            "BUMP_UP": "Bump Up Available",
+            "PROCESSING": "Processing...",
+            "CURRENT_PLAN": "Current Plan",
+            "SUBSCRIBE": "Subscribe",
+            "GO_TO_DASHBOARD": "Go to Dashboard"
+        },
+        "PERSONAL_INFO": {
+            "TITLE": "Personal Information",
+            "FULL_NAME": "Full Name",
+            "EMAIL": "Email Address",
+            "VERIFIED": "Verified",
+            "PHONE": "Phone Number",
+            "WHATSAPP": "WhatsApp Number",
+            "EDIT_BTN": "Edit Personal Info",
+            "CANCEL_BTN": "Cancel",
+            "SAVE_BTN": "Save Changes"
+        },
+        "VERIFICATION": {
+            "TITLE": "Identity Verification",
+            "INFO_TITLE": "Verification Required",
+            "INFO_DESC": "To ensure the safety of our community, please upload the following documents for verification. Your information will be kept secure and confidential.",
+            "ID_FRONT": "National ID Front",
+            "ID_FRONT_DESC": "Upload the front side of your ID",
+            "ID_BACK": "National ID Back",
+            "ID_BACK_DESC": "Upload the back side of your ID",
+            "SELFIE": "Selfie with ID",
+            "SELFIE_DESC": "Take a selfie holding your ID",
+            "CHOOSE_FILE": "Choose File",
+            "SUBMITTING": "Submitting...",
+            "SUBMIT": "Submit for Verification"
+        }
     }
 }

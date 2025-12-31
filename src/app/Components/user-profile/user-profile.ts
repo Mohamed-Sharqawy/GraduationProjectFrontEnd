@@ -1,6 +1,7 @@
 import { Component, OnInit, ChangeDetectorRef, inject, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, ActivatedRoute, Router } from '@angular/router';
+import { TranslateModule } from '@ngx-translate/core';
 import { AuthService } from '../../Services/Auth-Service/auth-service';
 import { FormsModule } from '@angular/forms';
 import { UserRole } from '../../Models/user-role';
@@ -16,7 +17,7 @@ import { environment } from '../../../environments/environments';
 @Component({
     selector: 'app-user-profile',
     standalone: true,
-    imports: [CommonModule, RouterModule, FormsModule],
+    imports: [CommonModule, RouterModule, FormsModule, TranslateModule],
     templateUrl: './user-profile.html',
     styleUrl: './user-profile.css'
 })

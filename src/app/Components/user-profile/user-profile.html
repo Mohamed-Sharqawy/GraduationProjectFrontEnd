@@ -29,31 +29,31 @@
             <button (click)="setActiveTab('published')" [class.bg-green-50]="activeTab === 'published'"
                 [class.text-green-600]="activeTab === 'published'"
                 class="w-full text-left px-4 py-2.5 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-50 flex items-center gap-3 transition-colors border-none cursor-pointer bg-transparent">
-                <i class="fa fa-home border-none"></i> Published Properties
+                <i class="fa fa-home border-none"></i> {{ 'USER_PROFILE.SIDEBAR.PUBLISHED' | translate }}
             </button>
 
             <button (click)="setActiveTab('saved')" [class.bg-green-50]="activeTab === 'saved'"
                 [class.text-green-600]="activeTab === 'saved'"
                 class="w-full text-left px-4 py-2.5 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-50 flex items-center gap-3 transition-colors border-none cursor-pointer bg-transparent">
-                <i class="fa fa-heart border-none"></i> Saved Properties
+                <i class="fa fa-heart border-none"></i> {{ 'USER_PROFILE.SIDEBAR.SAVED' | translate }}
             </button>
 
             <button (click)="setActiveTab('subscription')" [class.bg-green-50]="activeTab === 'subscription'"
                 [class.text-green-600]="activeTab === 'subscription'"
                 class="w-full text-left px-4 py-2.5 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-50 flex items-center gap-3 transition-colors border-none cursor-pointer bg-transparent">
-                <i class="fa fa-credit-card border-none"></i> Subscription
+                <i class="fa fa-credit-card border-none"></i> {{ 'USER_PROFILE.SIDEBAR.SUBSCRIPTION' | translate }}
             </button>
 
             <button (click)="setActiveTab('personal-info')" [class.bg-green-50]="activeTab === 'personal-info'"
                 [class.text-green-600]="activeTab === 'personal-info'"
                 class="w-full text-left px-4 py-2.5 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-50 flex items-center gap-3 transition-colors border-none cursor-pointer bg-transparent">
-                <i class="fa fa-user border-none"></i> Personal Info
+                <i class="fa fa-user border-none"></i> {{ 'USER_PROFILE.SIDEBAR.PERSONAL_INFO' | translate }}
             </button>
 
             <button (click)="setActiveTab('verification')" [class.bg-green-50]="activeTab === 'verification'"
                 [class.text-green-600]="activeTab === 'verification'"
                 class="w-full text-left px-4 py-2.5 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-50 flex items-center gap-3 transition-colors border-none cursor-pointer bg-transparent">
-                <i class="fa fa-id-card border-none"></i> Identity Verification
+                <i class="fa fa-id-card border-none"></i> {{ 'USER_PROFILE.SIDEBAR.VERIFICATION' | translate }}
             </button>
 
         </nav>
@@ -64,14 +64,15 @@
 
         <!-- Published Properties Tab -->
         <div *ngIf="activeTab === 'published'">
-            <h2 class="text-2xl font-bold text-gray-800 mb-6">My Published Properties</h2>
+            <h2 class="text-2xl font-bold text-gray-800 mb-6">{{ 'USER_PROFILE.PUBLISHED.TITLE' | translate }}</h2>
             <div class="bg-white p-8 rounded-xl shadow-sm border border-gray-100 text-center py-20">
                 <div class="text-gray-400 mb-3 text-5xl"><i class="fa fa-building-o"></i></div>
-                <h3 class="text-lg font-medium text-gray-800 mb-2">No properties published yet</h3>
-                <p class="text-gray-500 mb-6">Start selling your properties today.</p>
+                <h3 class="text-lg font-medium text-gray-800 mb-2">{{ 'USER_PROFILE.PUBLISHED.NO_PROPERTIES' | translate
+                    }}</h3>
+                <p class="text-gray-500 mb-6">{{ 'USER_PROFILE.PUBLISHED.START_SELLING' | translate }}</p>
                 <button (click)="handleListProperty()"
                     class="bg-[#28b16d] text-white px-6 py-2.5 rounded-lg font-medium hover:bg-[#209e60] transition-colors border-none cursor-pointer">
-                    List a Property
+                    {{ 'USER_PROFILE.PUBLISHED.LIST_BTN' | translate }}
                 </button>
             </div>
         </div>
@@ -79,25 +80,25 @@
 
         <!-- Saved Properties Tab -->
         <div *ngIf="activeTab === 'saved'">
-            <h2 class="text-2xl font-bold text-gray-800 mb-6">Saved Properties</h2>
+            <h2 class="text-2xl font-bold text-gray-800 mb-6">{{ 'USER_PROFILE.SAVED.TITLE' | translate }}</h2>
 
             <!-- Loading State -->
             <div *ngIf="isLoadingSaved" class="text-center py-12">
                 <div
                     class="inline-block w-10 h-10 border-4 border-gray-200 border-t-[#28b16d] rounded-full animate-spin mb-4">
                 </div>
-                <p class="text-gray-500">Loading saved properties...</p>
+                <p class="text-gray-500">{{ 'USER_PROFILE.SAVED.LOADING' | translate }}</p>
             </div>
 
             <!-- Empty State -->
             <div *ngIf="!isLoadingSaved && savedProperties.length === 0"
                 class="bg-white p-8 rounded-xl shadow-sm border border-gray-100 text-center py-20">
                 <div class="text-gray-400 mb-3 text-5xl"><i class="fa fa-heart-o"></i></div>
-                <h3 class="text-lg font-medium text-gray-800 mb-2">No saved properties</h3>
-                <p class="text-gray-500 mb-6">Properties you like will appear here.</p>
+                <h3 class="text-lg font-medium text-gray-800 mb-2">{{ 'USER_PROFILE.SAVED.NO_SAVED' | translate }}</h3>
+                <p class="text-gray-500 mb-6">{{ 'USER_PROFILE.SAVED.NO_SAVED_DESC' | translate }}</p>
                 <button routerLink="/listingproperties"
                     class="bg-[#28b16d] text-white px-6 py-2.5 rounded-lg font-medium hover:bg-[#209e60] transition-colors border-none cursor-pointer">
-                    Browse Properties
+                    {{ 'USER_PROFILE.SAVED.BROWSE_BTN' | translate }}
                 </button>
             </div>
 
@@ -113,7 +114,7 @@
                             [alt]="saved.property.title" class="w-full h-full object-cover">
                         <button (click)="unsaveProperty(saved.property.id)"
                             class="absolute top-3 right-3 bg-white/90 hover:bg-red-100 text-red-500 rounded-full w-8 h-8 flex items-center justify-center transition-all border-none cursor-pointer"
-                            title="Remove from saved">
+                            [title]="'USER_PROFILE.SAVED.REMOVE_TOOLTIP' | translate">
                             <i class="fa fa-heart"></i>
                         </button>
                     </div>
@@ -128,16 +129,16 @@
                                 (saved.property.currency || 'EGP') :'symbol':'1.0-0' }}</span>
                             <a [routerLink]="['/propertyview', saved.property.id]"
                                 class="text-sm text-[#28b16d] hover:underline font-medium">
-                                View Details →
+                                {{ 'USER_PROFILE.SAVED.VIEW_DETAILS' | translate }} →
                             </a>
                         </div>
                         <div class="flex gap-4 mt-3 text-xs text-gray-500">
                             <span *ngIf="saved.property.bedrooms"><i class="fa fa-bed mr-1"></i>{{
-                                saved.property.bedrooms }} Beds</span>
+                                saved.property.bedrooms }} {{ 'USER_PROFILE.SAVED.BEDS' | translate }}</span>
                             <span *ngIf="saved.property.bathrooms"><i class="fa fa-bath mr-1"></i>{{
-                                saved.property.bathrooms }} Baths</span>
+                                saved.property.bathrooms }} {{ 'USER_PROFILE.SAVED.BATHS' | translate }}</span>
                             <span *ngIf="saved.property.area"><i class="fa fa-expand mr-1"></i>{{ saved.property.area }}
-                                m²</span>
+                                {{ 'USER_PROFILE.SAVED.SQM' | translate }}</span>
                         </div>
                     </div>
                 </div>
@@ -146,14 +147,14 @@
 
         <!-- Subscription Tab -->
         <div *ngIf="activeTab === 'subscription'">
-            <h2 class="text-2xl font-bold text-gray-800 mb-6">My Subscription</h2>
+            <h2 class="text-2xl font-bold text-gray-800 mb-6">{{ 'USER_PROFILE.SUBSCRIPTION.TITLE' | translate }}</h2>
 
             <!-- Loading State -->
             <div *ngIf="isLoadingSubscription || isLoadingPackages" class="text-center py-12">
                 <div
                     class="inline-block w-10 h-10 border-4 border-gray-200 border-t-[#28b16d] rounded-full animate-spin mb-4">
                 </div>
-                <p class="text-gray-500">Loading subscription info...</p>
+                <p class="text-gray-500">{{ 'USER_PROFILE.SUBSCRIPTION.LOADING' | translate }}</p>
             </div>
 
             <!-- Active Subscription Status -->
@@ -162,20 +163,25 @@
                 <div class="flex justify-between items-start mb-6">
                     <div>
                         <span
-                            class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide">Active</span>
-                        <h3 class="text-xl font-bold text-gray-800 mt-2">{{ subscriptionStatus?.packageName }} Plan</h3>
-                        <p class="text-sm text-gray-500 mt-1">{{ subscriptionStatus?.daysRemaining }} days remaining</p>
+                            class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide">{{
+                            'USER_PROFILE.SUBSCRIPTION.ACTIVE_BADGE' | translate }}</span>
+                        <h3 class="text-xl font-bold text-gray-800 mt-2">{{ subscriptionStatus?.packageName }} {{
+                            'USER_PROFILE.SUBSCRIPTION.PLAN_SUFFIX' | translate }}</h3>
+                        <p class="text-sm text-gray-500 mt-1">{{ subscriptionStatus?.daysRemaining }} {{
+                            'USER_PROFILE.SUBSCRIPTION.DAYS_REMAINING' | translate }}</p>
                     </div>
                 </div>
 
                 <div class="grid grid-cols-2 gap-6">
                     <div class="bg-gray-50 p-4 rounded-lg text-center">
                         <div class="text-2xl font-bold text-gray-800">{{ remainingAdsDisplay.standard }}</div>
-                        <div class="text-xs text-gray-500 uppercase font-semibold mt-1">Properties Remaining</div>
+                        <div class="text-xs text-gray-500 uppercase font-semibold mt-1">{{
+                            'USER_PROFILE.SUBSCRIPTION.PROPERTIES_REMAINING' | translate }}</div>
                     </div>
                     <div class="bg-gray-50 p-4 rounded-lg text-center">
                         <div class="text-2xl font-bold text-gray-800">{{ remainingAdsDisplay.featured }}</div>
-                        <div class="text-xs text-gray-500 uppercase font-semibold mt-1">Featured Remaining</div>
+                        <div class="text-xs text-gray-500 uppercase font-semibold mt-1">{{
+                            'USER_PROFILE.SUBSCRIPTION.FEATURED_REMAINING' | translate }}</div>
                     </div>
                 </div>
             </div>
@@ -185,13 +191,14 @@
                 class="bg-yellow-50 border border-yellow-200 p-4 rounded-lg mb-6">
                 <div class="flex items-center gap-3">
                     <i class="fa fa-exclamation-triangle text-yellow-600"></i>
-                    <p class="text-yellow-800 font-medium">You don't have an active subscription. Subscribe to a plan to
-                        list properties and access the dashboard.</p>
+                    <p class="text-yellow-800 font-medium">{{ 'USER_PROFILE.SUBSCRIPTION.NO_ACTIVE' | translate }}</p>
                 </div>
             </div>
 
             <!-- Packages Grid -->
-            <h3 class="text-lg font-bold text-gray-800 mb-4">{{ hasActiveSubscription ? 'Upgrade Plan' : 'Choose a Plan'
+            <h3 class="text-lg font-bold text-gray-800 mb-4">{{ hasActiveSubscription ?
+                ('USER_PROFILE.SUBSCRIPTION.UPGRADE_TITLE' | translate) : ('USER_PROFILE.SUBSCRIPTION.CHOOSE_TITLE' |
+                translate)
                 }}</h3>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div *ngFor="let pkg of packages"
@@ -204,18 +211,21 @@
                         <h3 class="text-xl font-bold text-gray-800 mb-2">{{ pkg.name }}</h3>
                         <div class="text-3xl font-bold text-gray-800 mb-2">{{ pkg.price |
                             currency:'EGP':'symbol':'1.0-0' }}</div>
-                        <p class="text-sm text-gray-500 mb-6">{{ pkg.durationDays }} days</p>
+                        <p class="text-sm text-gray-500 mb-6">{{ pkg.durationDays }} {{ 'USER_PROFILE.SUBSCRIPTION.DAYS'
+                            | translate }}</p>
 
                         <ul class="space-y-3 mb-8 flex-1 pl-0">
                             <li class="flex items-center gap-3 text-sm text-gray-600">
-                                <i class="fa fa-check text-green-500 text-xs"></i> {{ pkg.maxProperties }} Properties
+                                <i class="fa fa-check text-green-500 text-xs"></i> {{ pkg.maxProperties }} {{
+                                'USER_PROFILE.SUBSCRIPTION.PROPERTIES' | translate }}
                             </li>
                             <li class="flex items-center gap-3 text-sm text-gray-600">
-                                <i class="fa fa-check text-green-500 text-xs"></i> {{ pkg.maxFeatured }} Featured
-                                Properties
+                                <i class="fa fa-check text-green-500 text-xs"></i> {{ pkg.maxFeatured }} {{
+                                'USER_PROFILE.SUBSCRIPTION.FEATURED' | translate }}
                             </li>
                             <li *ngIf="pkg.canBumpUp" class="flex items-center gap-3 text-sm text-gray-600">
-                                <i class="fa fa-check text-green-500 text-xs"></i> Bump Up Available
+                                <i class="fa fa-check text-green-500 text-xs"></i> {{
+                                'USER_PROFILE.SUBSCRIPTION.BUMP_UP' | translate }}
                             </li>
                         </ul>
 
@@ -227,11 +237,13 @@
                             }"
                             [disabled]="(hasActiveSubscription && subscriptionStatus?.packageName === pkg.name) || isProcessingPayment">
                             <span *ngIf="isProcessingPayment && selectedPackageId === pkg.id">
-                                <i class="fa fa-spinner fa-spin mr-2"></i> Processing...
+                                <i class="fa fa-spinner fa-spin mr-2"></i> {{ 'USER_PROFILE.SUBSCRIPTION.PROCESSING' |
+                                translate }}
                             </span>
                             <span *ngIf="!isProcessingPayment || selectedPackageId !== pkg.id">
-                                {{ hasActiveSubscription && subscriptionStatus?.packageName === pkg.name ? 'Current
-                                Plan' : 'Subscribe' }}
+                                {{ hasActiveSubscription && subscriptionStatus?.packageName === pkg.name ?
+                                ('USER_PROFILE.SUBSCRIPTION.CURRENT_PLAN' | translate) :
+                                ('USER_PROFILE.SUBSCRIPTION.SUBSCRIBE' | translate) }}
                             </span>
                         </button>
                     </div>
@@ -242,7 +254,7 @@
             <div *ngIf="hasActiveSubscription" class="mt-8 text-center">
                 <button routerLink="/user-dashboard"
                     class="bg-[#28b16d] text-white px-8 py-3 rounded-lg font-bold text-lg hover:bg-[#21965c] transition-colors border-none cursor-pointer flex items-center gap-2 mx-auto">
-                    Go to Dashboard <i class="fa fa-arrow-right"></i>
+                    {{ 'USER_PROFILE.SUBSCRIPTION.GO_TO_DASHBOARD' | translate }} <i class="fa fa-arrow-right"></i>
                 </button>
             </div>
 
@@ -250,12 +262,13 @@
 
         <!-- Personal Info Tab -->
         <div *ngIf="activeTab === 'personal-info'">
-            <h2 class="text-2xl font-bold text-gray-800 mb-6">Personal Information</h2>
+            <h2 class="text-2xl font-bold text-gray-800 mb-6">{{ 'USER_PROFILE.PERSONAL_INFO.TITLE' | translate }}</h2>
             <div class="bg-white p-8 rounded-xl shadow-sm border border-gray-100 w-full h-full">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <!-- Full Name -->
                     <div class="col-span-2">
-                        <label class="block text-sm font-bold text-gray-700 mb-2">Full Name</label>
+                        <label class="block text-sm font-bold text-gray-700 mb-2">{{
+                            'USER_PROFILE.PERSONAL_INFO.FULL_NAME' | translate }}</label>
                         <input type="text" [(ngModel)]="formData.fullName"
                             class="w-full border border-gray-300 rounded-lg px-4 py-3 text-gray-700 focus:outline-none focus:border-green-500 transition-colors disabled:bg-gray-100 disabled:text-gray-500"
                             [disabled]="!isEditingProfile">
@@ -264,10 +277,11 @@
                     <!-- Email -->
                     <div class="col-span-2">
                         <label class="block text-sm font-bold text-gray-700 mb-2 flex items-center justify-between">
-                            Email Address
+                            {{ 'USER_PROFILE.PERSONAL_INFO.EMAIL' | translate }}
                             <span
                                 class="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full flex items-center gap-1">
-                                <i class="fa fa-check-circle"></i> Verified
+                                <i class="fa fa-check-circle"></i> {{ 'USER_PROFILE.PERSONAL_INFO.VERIFIED' | translate
+                                }}
                             </span>
                         </label>
                         <input type="email" [(ngModel)]="formData.email"
@@ -276,7 +290,8 @@
 
                     <!-- Phone -->
                     <div>
-                        <label class="block text-sm font-bold text-gray-700 mb-2">Phone Number</label>
+                        <label class="block text-sm font-bold text-gray-700 mb-2">{{ 'USER_PROFILE.PERSONAL_INFO.PHONE'
+                            | translate }}</label>
                         <input type="tel" [(ngModel)]="formData.phone"
                             class="w-full border border-gray-300 rounded-lg px-4 py-3 text-gray-700 focus:outline-none focus:border-green-500 transition-colors disabled:bg-gray-100 disabled:text-gray-500"
                             [disabled]="!isEditingProfile">
@@ -284,7 +299,8 @@
 
                     <!-- WhatsApp -->
                     <div>
-                        <label class="block text-sm font-bold text-gray-700 mb-2">WhatsApp Number</label>
+                        <label class="block text-sm font-bold text-gray-700 mb-2">{{
+                            'USER_PROFILE.PERSONAL_INFO.WHATSAPP' | translate }}</label>
                         <input type="tel" [(ngModel)]="formData.whatsapp"
                             class="w-full border border-gray-300 rounded-lg px-4 py-3 text-gray-700 focus:outline-none focus:border-green-500 transition-colors disabled:bg-gray-100 disabled:text-gray-500"
                             [disabled]="!isEditingProfile">
@@ -294,17 +310,17 @@
                 <div class="mt-8 pt-6 border-t border-gray-100 flex justify-end gap-3">
                     <button *ngIf="!isEditingProfile" (click)="startEditing()"
                         class="bg-[#28b16d] text-white px-8 py-3 rounded-lg font-bold hover:bg-[#209e60] transition-colors border-none cursor-pointer shadow-sm hover:shadow-md">
-                        <i class="fa fa-pencil mr-2"></i> Edit Personal Info
+                        <i class="fa fa-pencil mr-2"></i> {{ 'USER_PROFILE.PERSONAL_INFO.EDIT_BTN' | translate }}
                     </button>
 
                     <button *ngIf="isEditingProfile" (click)="cancelEditing()"
                         class="bg-gray-200 text-gray-700 px-6 py-3 rounded-lg font-bold hover:bg-gray-300 transition-colors border-none cursor-pointer">
-                        Cancel
+                        {{ 'USER_PROFILE.PERSONAL_INFO.CANCEL_BTN' | translate }}
                     </button>
 
                     <button *ngIf="isEditingProfile" (click)="saveProfile()"
                         class="bg-[#28b16d] text-white px-8 py-3 rounded-lg font-bold hover:bg-[#209e60] transition-colors border-none cursor-pointer shadow-sm hover:shadow-md">
-                        Save Changes
+                        {{ 'USER_PROFILE.PERSONAL_INFO.SAVE_BTN' | translate }}
                     </button>
                 </div>
             </div>
@@ -313,17 +329,17 @@
         <!-- Identity Verification Tab -->
         @if (activeTab === 'verification') {
         <div>
-            <h2 class="text-2xl font-bold text-gray-800 mb-6">Identity Verification</h2>
+            <h2 class="text-2xl font-bold text-gray-800 mb-6">{{ 'USER_PROFILE.VERIFICATION.TITLE' | translate }}</h2>
             <div class="bg-white p-8 rounded-xl shadow-sm border border-gray-100">
                 <div class="mb-6">
                     <div class="bg-blue-50 border border-blue-200 p-4 rounded-lg mb-6">
                         <div class="flex items-start gap-3">
                             <i class="fa fa-info-circle text-blue-600 mt-1"></i>
                             <div>
-                                <p class="text-blue-800 font-medium mb-1">Verification Required</p>
-                                <p class="text-sm text-blue-700">To ensure the safety of our community, please upload
-                                    the following documents for verification. Your information will be kept secure and
-                                    confidential.</p>
+                                <p class="text-blue-800 font-medium mb-1">{{ 'USER_PROFILE.VERIFICATION.INFO_TITLE' |
+                                    translate }}</p>
+                                <p class="text-sm text-blue-700">{{ 'USER_PROFILE.VERIFICATION.INFO_DESC' | translate }}
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -348,11 +364,13 @@
                         } @else {
                         <div (click)="idFrontInput.click()" class="cursor-pointer">
                             <div class="text-gray-400 mb-3 text-4xl"><i class="fa fa-id-card"></i></div>
-                            <h3 class="text-sm font-bold text-gray-800 mb-1">National ID Front</h3>
-                            <p class="text-xs text-gray-500 mb-3">Upload the front side of your ID</p>
+                            <h3 class="text-sm font-bold text-gray-800 mb-1">{{ 'USER_PROFILE.VERIFICATION.ID_FRONT' |
+                                translate }}</h3>
+                            <p class="text-xs text-gray-500 mb-3">{{ 'USER_PROFILE.VERIFICATION.ID_FRONT_DESC' |
+                                translate }}</p>
                             <button type="button"
                                 class="bg-gray-100 text-gray-700 px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-200 transition-colors border-none cursor-pointer">
-                                Choose File
+                                {{ 'USER_PROFILE.VERIFICATION.CHOOSE_FILE' | translate }}
                             </button>
                         </div>
                         }
@@ -376,11 +394,13 @@
                         } @else {
                         <div (click)="idBackInput.click()" class="cursor-pointer">
                             <div class="text-gray-400 mb-3 text-4xl"><i class="fa fa-id-card-o"></i></div>
-                            <h3 class="text-sm font-bold text-gray-800 mb-1">National ID Back</h3>
-                            <p class="text-xs text-gray-500 mb-3">Upload the back side of your ID</p>
+                            <h3 class="text-sm font-bold text-gray-800 mb-1">{{ 'USER_PROFILE.VERIFICATION.ID_BACK' |
+                                translate }}</h3>
+                            <p class="text-xs text-gray-500 mb-3">{{ 'USER_PROFILE.VERIFICATION.ID_BACK_DESC' |
+                                translate }}</p>
                             <button type="button"
                                 class="bg-gray-100 text-gray-700 px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-200 transition-colors border-none cursor-pointer">
-                                Choose File
+                                {{ 'USER_PROFILE.VERIFICATION.CHOOSE_FILE' | translate }}
                             </button>
                         </div>
                         }
@@ -404,11 +424,13 @@
                         } @else {
                         <div (click)="selfieInput.click()" class="cursor-pointer">
                             <div class="text-gray-400 mb-3 text-4xl"><i class="fa fa-camera"></i></div>
-                            <h3 class="text-sm font-bold text-gray-800 mb-1">Selfie with ID</h3>
-                            <p class="text-xs text-gray-500 mb-3">Take a selfie holding your ID</p>
+                            <h3 class="text-sm font-bold text-gray-800 mb-1">{{ 'USER_PROFILE.VERIFICATION.SELFIE' |
+                                translate }}</h3>
+                            <p class="text-xs text-gray-500 mb-3">{{ 'USER_PROFILE.VERIFICATION.SELFIE_DESC' | translate
+                                }}</p>
                             <button type="button"
                                 class="bg-gray-100 text-gray-700 px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-200 transition-colors border-none cursor-pointer">
-                                Choose File
+                                {{ 'USER_PROFILE.VERIFICATION.CHOOSE_FILE' | translate }}
                             </button>
                         </div>
                         }
@@ -424,10 +446,10 @@
                         class="bg-[#28b16d] text-white px-8 py-3 rounded-lg font-bold hover:bg-[#209e60] transition-colors border-none cursor-pointer shadow-sm hover:shadow-md flex items-center gap-2">
                         @if (isSubmittingVerification) {
                         <i class="fa fa-spinner fa-spin"></i>
-                        <span>Submitting...</span>
+                        <span>{{ 'USER_PROFILE.VERIFICATION.SUBMITTING' | translate }}</span>
                         } @else {
                         <i class="fa fa-check-circle"></i>
-                        <span>Submit for Verification</span>
+                        <span>{{ 'USER_PROFILE.VERIFICATION.SUBMIT' | translate }}</span>
                         }
                     </button>
                 </div>
