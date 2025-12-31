@@ -137,7 +137,8 @@
                            [disabled]="!currentProperty.CityId"
                            name="districtSearch">
                     <select class="form-control" [(ngModel)]="currentProperty.DistrictId" name="DistrictId"
-                            [disabled]="!currentProperty.CityId || isLoadingDistricts">
+                            [disabled]="!currentProperty.CityId || isLoadingDistricts"
+                            (change)="onDistrictChange(currentProperty.DistrictId)">
                         <option [ngValue]="null">{{ 'USER_DASHBOARD.SELECT_DISTRICT' | translate }}</option>
                         @if (isLoadingDistricts) {
                             <option disabled>{{ 'COMMON.LOADING' | translate }}...</option>

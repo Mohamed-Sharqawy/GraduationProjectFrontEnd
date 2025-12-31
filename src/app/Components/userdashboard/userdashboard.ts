@@ -141,6 +141,7 @@ export class UserDashboard {
         this.districts = [];
         this.filteredDistricts = [];
         this.districtSearchTerm = '';
+        this.projectSearchTerm = '';
 
         if (cityId) {
             // Load districts for selected city
@@ -159,6 +160,32 @@ export class UserDashboard {
             });
 
             // Filter projects by city
+            this.filteredProjects = this.projects.filter(p => p.cityId === cityId);
+        } else {
+            this.filteredProjects = this.projects;
+        }
+        this.cdr.detectChanges();
+    }
+
+    // ==================== District Change Handler ====================
+
+    onDistrictChange(districtId: number) {
+        console.log('🏘️ District changed to:', districtId);
+        
+        // Reset project
+        this.currentProperty.ProjectId = null;
+        this.projectSearchTerm = '';
+
+        const cityId = this.currentProperty.CityId;
+
+        if (districtId) {
+            // Filter projects by district (if available) or by city
+            this.filteredProjects = this.projects.filter(p => 
+                p.districtId === districtId || 
+                (p.cityId === cityId && !p.districtId)
+            );
+        } else if (cityId) {
+            // If no district selected, show all projects in the city
             this.filteredProjects = this.projects.filter(p => p.cityId === cityId);
         } else {
             this.filteredProjects = this.projects;
