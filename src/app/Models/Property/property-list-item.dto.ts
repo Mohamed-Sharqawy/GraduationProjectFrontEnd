@@ -1,26 +1,49 @@
 export interface PropertyListItemDto {
     id: number;
     title: string;
+    titleEn?: string;
     description?: string;
+    descriptionEn?: string;
     price: number;
-    rentPrice?: number;
+    rentPriceMonthly?: number;
     currency?: string;
-    area: number;
-    bedrooms: number;
-    bathrooms: number;
+    
+    // Property Type
     propertyType?: string;
-    purpose?: number; // 1=Buy, 2=Rent, 3=Both
-    status?: number; // 0=PendingReview, 1=Active, 2=SoldOrRented, 3=Hidden, 4=Rejected
-    finishingType?: number; // 0=None, 1=Semi, 2=Full
-    isFeatured?: boolean;
-    imageUrl?: string;
-    images?: string[];
-    location?: string;
-    cityName?: string;
-    districtName?: string;
+    propertyTypeEn?: string;
+    
+    // Location
+    city?: string;
+    cityEn?: string;
+    district?: string;
+    districtEn?: string;
     projectName?: string;
-    ownerName?: string;
-    ownerPhone?: string;
+    projectNameEn?: string;
+    projectLogoUrl?: string;
+    
+    // Specs
+    area?: number;
+    rooms?: number;
+    bathrooms?: number;
+    
+    // Images
+    mainImageUrl?: string;
+    
+    // Status & Features
+    isFeatured?: boolean;
+    status?: string;
+    purpose?: string; // ForSale, ForRent, Both
+    finishingType?: string;
+    
+    // Agent/Owner Info
+    agentId?: string;
+    agentName?: string;
+    agentProfileImage?: string;
+    
+    // Additional Info
     createdAt?: string;
-    updatedAt?: string;
+    viewCount?: number;
+    
+    // Computed
+    location?: string;
 }

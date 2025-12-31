@@ -1,33 +1,52 @@
 export interface Property {
   id: number;
   title: string;
+  titleEn?: string;
+  description?: string;
+  descriptionEn?: string;
   price: number;
   rentPriceMonthly: number;
   currency: string;
+  
+  // Property Type (bilingual)
   propertyType: string;
-  propertyTypeEn: string;
+  propertyTypeEn?: string;
+  
+  // Location (bilingual)
   city: string;
-  cityEn: string;
+  cityEn?: string;
   district: string;
-  districtEn: string;
+  districtEn?: string;
   projectName: string;
+  projectNameEn?: string;
+  projectLogoUrl?: string;
+  
+  // Location string (computed)
+  location: string;
+  locationEn?: string;
+  
+  // Specs
   area: number;
   rooms: number;
   bathrooms: number;
+  
+  // Images
   mainImageUrl: string;
+  
+  // Status & Features
   isFeatured: boolean;
   status: string;
   purpose: string;
   finishingType: string;
-  location: string;
+  
+  // Analytics
   viewCount: number;
   createdAt: string;
 
-  // Added fields to match PropertyService and Component usage
+  // Display fields
   adType?: string;
   type?: string;
   bedrooms?: number;
-  description?: string;
   imageUrl?: string;
   agentLogoUrl?: string;
   downPayment?: number;
@@ -35,6 +54,7 @@ export interface Property {
   developer?: string;
   handoverDate?: string;
 
+  // Agent fields
   agentId: string;
   agentName: string;
   agentProfileImage: string;

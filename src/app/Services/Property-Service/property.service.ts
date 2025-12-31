@@ -117,47 +117,70 @@ export class PropertyService {
      * Map backend DTO to frontend Property model
      */
     private mapToProperty(dto: PropertyListItemDto): Property {
+        // Build location strings for both languages
+        const locationAr = this.buildLocation(dto.city, dto.district, dto.projectName);
+        const locationEn = this.buildLocation(dto.cityEn, dto.districtEn, dto.projectNameEn);
+        
         return {
             id: dto.id,
-            title: dto.title,
+            title: dto.title || '',
+            titleEn: dto.titleEn || dto.title || '',
+            description: dto.description || '',
+            descriptionEn: dto.descriptionEn || dto.description || '',
             price: dto.price,
-            rentPriceMonthly: dto.rentPrice || 0,
+            rentPriceMonthly: dto.rentPriceMonthly || 0,
             currency: dto.currency || 'EGP',
-            propertyType: dto.propertyType || 'Apartment',
-            propertyTypeEn: dto.propertyType || 'Apartment',
-            city: dto.cityName || '',
-            cityEn: dto.cityName || '',
-            district: dto.districtName || '',
-            districtEn: dto.districtName || '',
+            
+            // Property Type (bilingual)
+            propertyType: dto.propertyType || 'شقة',
+            propertyTypeEn: dto.propertyTypeEn || dto.propertyType || 'Apartment',
+            
+            // Location (bilingual)
+            city: dto.city || '',
+            cityEn: dto.cityEn || dto.city || '',
+            district: dto.district || '',
+            districtEn: dto.districtEn || dto.district || '',
             projectName: dto.projectName || '',
-            area: dto.area,
-            rooms: dto.bedrooms,
-            bathrooms: dto.bathrooms,
-            mainImageUrl: dto.imageUrl || dto.images?.[0] || this.placeholderImage,
+            projectNameEn: dto.projectNameEn || dto.projectName || '',
+            projectLogoUrl: dto.projectLogoUrl || undefined,
+            
+            // Location strings
+            location: locationAr,
+            locationEn: locationEn,
+            
+            // Specs
+            area: dto.area || 0,
+            rooms: dto.rooms || 0,
+            bathrooms: dto.bathrooms || 0,
+            
+            // Images - use mainImageUrl from API, no placeholders
+            mainImageUrl: dto.mainImageUrl || '',
+            
+            // Status & Features
             isFeatured: dto.isFeatured || false,
-            status: this.mapStatus(dto.status),
-            purpose: this.mapPurpose(dto.purpose),
-            finishingType: this.mapFinishingType(dto.finishingType),
-            location: dto.location || this.buildLocation(dto.cityName, dto.districtName, dto.projectName),
-            viewCount: 0,
+            status: dto.status || 'Active',
+            purpose: dto.purpose || 'ForSale',
+            finishingType: dto.finishingType || 'None',
+            
+            // Analytics
+            viewCount: dto.viewCount || 0,
             createdAt: dto.createdAt || new Date().toISOString(),
 
-            // Optional fields
+            // Display fields
             adType: dto.isFeatured ? 'Featured' : 'Standard',
-            type: this.mapPropertyType(dto.propertyType),
-            bedrooms: dto.bedrooms,
-            description: dto.description || '',
-            imageUrl: dto.imageUrl || dto.images?.[0] || this.placeholderImage,
-            agentLogoUrl: this.placeholderLogo,
-            downPayment: dto.price * 0.05, // Estimate 5% down payment
-            monthlyInstallment: dto.price / 120, // Estimate 10-year installment
-            developer: dto.ownerName || 'Unknown Developer',
-            handoverDate: 'Q4 2026', // Default handover date
+            type: dto.propertyType || 'Apartment',
+            bedrooms: dto.rooms || 0,
+            imageUrl: dto.mainImageUrl || '',
+            agentLogoUrl: dto.agentProfileImage || undefined,
+            downPayment: dto.price * 0.05,
+            monthlyInstallment: dto.price / 120,
+            developer: dto.agentName || '',
+            handoverDate: '',
 
             // Agent fields
-            agentId: '',
-            agentName: dto.ownerName || 'Unknown Agent',
-            agentProfileImage: this.placeholderLogo
+            agentId: dto.agentId || '',
+            agentName: dto.agentName || '',
+            agentProfileImage: dto.agentProfileImage || ''
         };
     }
 
