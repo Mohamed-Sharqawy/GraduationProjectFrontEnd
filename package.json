@@ -5,7 +5,8 @@
     "ng": "ng",
     "start": "ng serve",
     "tailwind-init": "tailwindcss init",
-    "build": "ng build",
+    "build": "ng build --configuration=static-site",
+    "build:prod": "ng build --configuration=production",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "serve:ssr:HomeyUI": "node dist/HomeyUI/server/server.mjs"

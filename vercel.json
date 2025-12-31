@@ -1,8 +1,8 @@
 {
+  "version": 2,
   "buildCommand": "npm run build",
   "outputDirectory": "dist/HomeyUI/browser",
-  "devCommand": "npm start",
-  "framework": "angular",
+  "framework": null,
   "rewrites": [
     {
       "source": "/(.*)",

@@ -52,6 +52,19 @@
               "optimization": false,
               "extractLicenses": false,
               "sourceMap": true
+            },
+            "static-site": {
+              "outputMode": "static",
+              "prerender": false,
+              "ssr": false,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "700kB",
+                  "maximumError": "1.5MB"
+                }
+              ],
+              "outputHashing": "all"
             }
           },
           "defaultConfiguration": "production"
