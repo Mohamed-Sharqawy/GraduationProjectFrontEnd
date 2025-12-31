@@ -85,7 +85,9 @@ export interface AgentInfoDto {
 export interface PropertyDetailsDto {
     id: number;
     title: string;
+    titleEn?: string;
     description?: string;
+    descriptionEn?: string;
     price: number;
     rentPriceMonthly?: number;
     currency: string;
@@ -100,7 +102,9 @@ export interface PropertyDetailsDto {
     districtEn?: string;
     projectId?: number;
     projectName?: string;
+    projectNameEn?: string;
     addressDetails?: string;
+    addressDetailsEn?: string;
     latitude?: number;
     longitude?: number;
     area?: number;

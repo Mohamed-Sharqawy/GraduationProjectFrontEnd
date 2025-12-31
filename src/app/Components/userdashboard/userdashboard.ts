@@ -360,16 +360,16 @@ export class UserDashboard {
                 this.currentProperty = {
                     id: details.id,
                     Title: details.title,
-                    TitleEn: details.title, // Fallback if En not provided in DTO
+                    TitleEn: details.titleEn || details.title, // Use actual English field
                     Description: details.description,
-                    DescriptionEn: details.description, // Fallback
+                    DescriptionEn: details.descriptionEn || details.description, // Use actual English field
                     Price: details.price,
                     RentPriceMonthly: details.rentPriceMonthly,
                     CityId: details.cityId,
                     DistrictId: details.districtId,
                     ProjectId: details.projectId,
                     AddressDetails: details.addressDetails,
-                    AddressDetailsEn: details.addressDetails, // Fallback
+                    AddressDetailsEn: details.addressDetailsEn || details.addressDetails, // Use actual English field
                     PropertyTypeId: details.propertyTypeId,
                     Purpose: purposeId,
                     Rooms: details.rooms,
