@@ -171,8 +171,10 @@
     background-color: rgba(0, 0, 0, 0.5);
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
     z-index: 1000;
+    padding: 20px 0;
+    overflow-y: auto;
 }
 
 .modal-content {
@@ -180,9 +182,31 @@
     padding: 30px;
     border-radius: 12px;
     width: 90%;
-    max-width: 600px;
+    max-width: 700px;
+    max-height: calc(100vh - 40px);
+    overflow-y: auto;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
     animation: slideIn 0.3s ease-out;
+    margin: auto 0;
+}
+
+/* Custom scrollbar for modal */
+.modal-content::-webkit-scrollbar {
+    width: 8px;
+}
+
+.modal-content::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+.modal-content::-webkit-scrollbar-thumb {
+    background: var(--primary-green);
+    border-radius: 4px;
+}
+
+.modal-content::-webkit-scrollbar-thumb:hover {
+    background: #1e8e55;
 }
 
 @keyframes slideIn {
@@ -320,4 +344,23 @@ select.form-control:disabled {
         flex-direction: column;
         gap: 0;
     }
+}
+
+/* Global Scrollbar Styling */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1; 
+}
+ 
+::-webkit-scrollbar-thumb {
+    background: #ccc; 
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #bbb; 
 }
