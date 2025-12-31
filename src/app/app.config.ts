@@ -7,7 +7,6 @@ import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader, TRANSLATE_HTTP_LOADER_CONFIG } from '@ngx-translate/http-loader';
 
 import { routes } from './app.routes';
-import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
 import { authInterceptor } from './Interceptors/auth-interceptor';
 import { getAuthServiceProvider } from './testing/test-helpers';
 
@@ -34,7 +33,7 @@ export const appConfig: ApplicationConfig = {
       closeButton: true
     }),
 
-    provideClientHydration(withEventReplay()),
+    // Removed provideClientHydration since we are using static (client-side) build
     provideHttpClient(withInterceptors([authInterceptor]),withFetch()),
 
     // Provide the configuration for TranslateHttpLoader
