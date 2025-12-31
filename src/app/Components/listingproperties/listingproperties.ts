@@ -68,9 +68,12 @@ export class Listingproperties implements OnInit {
       this.cdr.detectChanges();
     });
 
-    this.loadLookups();
-    this.loadProperties();
-    this.loadSavedPropertyIds();
+    // Only load data in browser environment (not during SSR)
+    if (typeof window !== 'undefined') {
+      this.loadLookups();
+      this.loadProperties();
+      this.loadSavedPropertyIds();
+    }
   }
 
   // ==================== Lookups ====================
@@ -261,6 +264,11 @@ export class Listingproperties implements OnInit {
   // ==================== Saved Properties ====================
 
   loadSavedPropertyIds() {
+    // Only run in browser environment (not during SSR)
+    if (typeof window === 'undefined') {
+      return;
+    }
+
     if (!this.authService.isLoggedIn()) {
       return;
     }
@@ -271,6 +279,11 @@ export class Listingproperties implements OnInit {
         this.cdr.detectChanges();
       },
       error: (error) => {
+        // Silently handle 401 errors (user not authenticated)
+        if (error.status === 401) {
+          console.log('User not authenticated, skipping saved properties');
+          return;
+        }
         console.error('Failed to load saved properties:', error);
       }
     });
