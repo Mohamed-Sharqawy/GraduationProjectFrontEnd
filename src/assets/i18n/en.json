@@ -179,6 +179,8 @@
         "SESSION_EXPIRED": "Session expired. Please log in again.",
         "UPDATE_FAIL": "Failed to update property",
         "CREATE_FAIL": "Failed to create property",
+        "SAVING": "Saving",
+        "PROPERTY_PENDING_REVIEW": "Your listing has been added and is pending review",
         "RETRY": "Retry"
     },
     "SAVED_PROPERTIES": {
@@ -259,7 +261,9 @@
         "FIND": "Find",
         "SEARCH_PLACEHOLDER": "Search by location (e.g. Cairo)",
         "LANGUAGE_BTN": "عربي",
-        "AND": "and"
+        "AND": "and",
+        "SUCCESS": "Success",
+        "ERROR": "Error"
     },
     "USER_PROFILE": {
         "SIDEBAR": {

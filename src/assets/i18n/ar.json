@@ -179,6 +179,8 @@
         "SESSION_EXPIRED": "انتهت الجلسة. يرجى تسجيل الدخول مرة أخرى.",
         "UPDATE_FAIL": "فشل تحديث العقار",
         "CREATE_FAIL": "فشل إنشاء العقار",
+        "SAVING": "جاري الحفظ",
+        "PROPERTY_PENDING_REVIEW": "تم إضافة إعلانك في انتظار المراجعة",
         "RETRY": "إعادة المحاولة"
     },
     "SAVED_PROPERTIES": {
@@ -259,7 +261,9 @@
         "FIND": "بحث",
         "SEARCH_PLACEHOLDER": "ابحث بالموقع (مثل القاهرة)",
         "LANGUAGE_BTN": "English",
-        "AND": "و"
+        "AND": "و",
+        "SUCCESS": "نجاح",
+        "ERROR": "خطأ"
     },
     "USER_PROFILE": {
         "SIDEBAR": {

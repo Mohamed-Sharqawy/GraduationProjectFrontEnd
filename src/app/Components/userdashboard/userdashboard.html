@@ -228,12 +228,12 @@
                 </div>
             </div>
 
-            <!-- Show Rent Price only if Purpose is Rent or Both -->
-            @if (currentProperty.Purpose === 2 || currentProperty.Purpose === 3) {
+            <!-- Show Rent Price only if Purpose is Rent (2) or Both (3) -->
+            @if (+currentProperty.Purpose === 2 || +currentProperty.Purpose === 3) {
             <div class="form-group">
-                <label>{{ 'USER_DASHBOARD.RENT_PRICE_MONTHLY' | translate }}</label>
+                <label>{{ 'USER_DASHBOARD.RENT_PRICE_MONTHLY' | translate }} *</label>
                 <input type="number" class="form-control" [(ngModel)]="currentProperty.RentPriceMonthly"
-                    name="RentPriceMonthly" min="0"
+                    name="RentPriceMonthly" min="0" required
                     placeholder="{{ 'USER_DASHBOARD.RENT_PRICE_PLACEHOLDER' | translate }}">
             </div>
             }
@@ -272,9 +272,15 @@
             </div>
 
             <div class="modal-footer">
-                <button type="button" class="btn-cancel" (click)="cancel()">{{ 'USER_DASHBOARD.CANCEL' | translate
+                <button type="button" class="btn-cancel" (click)="cancel()" [disabled]="isSaving">{{ 'USER_DASHBOARD.CANCEL' | translate
                     }}</button>
-                <button type="submit" class="btn-save">{{ 'USER_DASHBOARD.SAVE_PROPERTY' | translate }}</button>
+                <button type="submit" class="btn-save" [disabled]="isSaving">
+                    @if (isSaving) {
+                        <span>{{ 'USER_DASHBOARD.SAVING' | translate }}...</span>
+                    } @else {
+                        {{ 'USER_DASHBOARD.SAVE_PROPERTY' | translate }}
+                    }
+                </button>
             </div>
         </form>
     </div>

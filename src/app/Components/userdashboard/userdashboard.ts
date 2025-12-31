@@ -8,6 +8,7 @@ import { AuthService } from '../../Services/Auth-Service/auth-service';
 import { TranslateService, TranslateModule } from '@ngx-translate/core';
 import { LookupService } from '../../Services/Lookup-Service/lookup.service';
 import { CityDto, DistrictDto, ProjectDto, PropertyTypeDto } from '../../Models/Lookups/lookup.models';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
     selector: 'app-user-dashboard',
@@ -21,6 +22,7 @@ export class UserDashboard {
     isFormVisible = false;
     isEditing = false;
     isLoading = false;
+    isSaving = false; // Prevent double submissions
     errorMessage: string | null = null;
     needsLogin = false;
 
@@ -63,7 +65,8 @@ export class UserDashboard {
         private cdr: ChangeDetectorRef,
         private router: Router,
         private authService: AuthService,
-        private translate: TranslateService
+        private translate: TranslateService,
+        private toastr: ToastrService
     ) {
         afterNextRender(() => {
             console.log('🔄 UserDashboard: afterNextRender triggered');
@@ -133,7 +136,9 @@ export class UserDashboard {
     // ==================== City Change Handler ====================
 
     onCityChange(cityId: number) {
-        console.log('🏙️ City changed to:', cityId);
+        // Convert to number in case it comes as string from select
+        const numericCityId = cityId ? Number(cityId) : null;
+        console.log('🏙️ City changed to:', numericCityId);
         
         // Reset district and project
         this.currentProperty.DistrictId = null;
@@ -143,10 +148,10 @@ export class UserDashboard {
         this.districtSearchTerm = '';
         this.projectSearchTerm = '';
 
-        if (cityId) {
+        if (numericCityId) {
             // Load districts for selected city
             this.isLoadingDistricts = true;
-            this.lookupService.getDistrictsByCityId(cityId).subscribe({
+            this.lookupService.getDistrictsByCityId(numericCityId).subscribe({
                 next: (districts) => {
                     this.districts = districts;
                     this.filteredDistricts = districts;
@@ -159,8 +164,9 @@ export class UserDashboard {
                 }
             });
 
-            // Filter projects by city
-            this.filteredProjects = this.projects.filter(p => p.cityId === cityId);
+            // Filter projects by city - show all projects that belong to this city
+            this.filteredProjects = this.projects.filter(p => Number(p.cityId) === numericCityId);
+            console.log('📦 Filtered projects for city:', this.filteredProjects.length, this.filteredProjects);
         } else {
             this.filteredProjects = this.projects;
         }
@@ -170,23 +176,29 @@ export class UserDashboard {
     // ==================== District Change Handler ====================
 
     onDistrictChange(districtId: number) {
-        console.log('🏘️ District changed to:', districtId);
+        // Convert to number in case it comes as string from select
+        const numericDistrictId = districtId ? Number(districtId) : null;
+        console.log('🏘️ District changed to:', numericDistrictId);
         
         // Reset project
         this.currentProperty.ProjectId = null;
         this.projectSearchTerm = '';
 
         const cityId = this.currentProperty.CityId;
+        const numericCityId = cityId ? Number(cityId) : null;
 
-        if (districtId) {
-            // Filter projects by district (if available) or by city
+        if (numericDistrictId) {
+            // Filter projects: show projects that belong to this district, 
+            // OR projects that belong to the city but don't have a specific district
             this.filteredProjects = this.projects.filter(p => 
-                p.districtId === districtId || 
-                (p.cityId === cityId && !p.districtId)
+                Number(p.districtId) === numericDistrictId || 
+                (Number(p.cityId) === numericCityId && !p.districtId)
             );
-        } else if (cityId) {
+            console.log('📦 Filtered projects for district:', this.filteredProjects.length, this.filteredProjects);
+        } else if (numericCityId) {
             // If no district selected, show all projects in the city
-            this.filteredProjects = this.projects.filter(p => p.cityId === cityId);
+            this.filteredProjects = this.projects.filter(p => Number(p.cityId) === numericCityId);
+            console.log('📦 Filtered projects for city (no district):', this.filteredProjects.length, this.filteredProjects);
         } else {
             this.filteredProjects = this.projects;
         }
@@ -423,6 +435,13 @@ export class UserDashboard {
     }
 
     saveProperty() {
+        // Prevent double submissions
+        if (this.isSaving) {
+            console.log('⚠️ Save already in progress, ignoring click');
+            return;
+        }
+
+        this.isSaving = true;
         const formData = new FormData();
 
         // 1. Append all basic fields
@@ -435,11 +454,11 @@ export class UserDashboard {
         }
 
         // 2. Handle nulls for optional fields if needed explicitly by backend
-        // (However, usually missing field = null in core. User asked to send empty values or 0)
         // Ensure RentPriceMonthly is sent if Purpose is Rent/Both
-        if (this.currentProperty.Purpose === 2 || this.currentProperty.Purpose === 3) {
+        const purpose = Number(this.currentProperty.Purpose);
+        if (purpose === 2 || purpose === 3) {
             if (!this.currentProperty.RentPriceMonthly) {
-                // If user didn't enter rent price, send 0 or validation error? User said 0 in snippet.
+                // If user didn't enter rent price, send 0
                 if (!formData.has('RentPriceMonthly')) formData.append('RentPriceMonthly', '0');
             }
         }
@@ -452,25 +471,41 @@ export class UserDashboard {
         if (this.isEditing) {
             this.propertiesService.updateProperty(this.currentProperty.id, formData).subscribe({
                 next: (res) => {
-                    alert(this.translate.instant('USER_DASHBOARD.UPDATE_SUCCESS'));
+                    this.isSaving = false;
+                    this.toastr.success(
+                        this.translate.instant('USER_DASHBOARD.UPDATE_SUCCESS'),
+                        this.translate.instant('COMMON.SUCCESS') || 'Success'
+                    );
                     this.closeForm();
                     this.loadProperties();
                 },
                 error: (err) => {
+                    this.isSaving = false;
                     console.error('Error updating property', err);
-                    alert(this.translate.instant('USER_DASHBOARD.UPDATE_FAIL') + ': ' + (err.error?.message || err.message));
+                    this.toastr.error(
+                        (err.error?.message || err.message || this.translate.instant('USER_DASHBOARD.UPDATE_FAIL')),
+                        this.translate.instant('COMMON.ERROR') || 'Error'
+                    );
                 }
             });
         } else {
             this.propertiesService.createProperty(formData).subscribe({
                 next: (res) => {
-                    alert(this.translate.instant('USER_DASHBOARD.CREATE_SUCCESS'));
+                    this.isSaving = false;
+                    this.toastr.success(
+                        this.translate.instant('USER_DASHBOARD.PROPERTY_PENDING_REVIEW') || 'تم إضافة إعلانك في انتظار المراجعة',
+                        this.translate.instant('COMMON.SUCCESS') || 'Success'
+                    );
                     this.closeForm();
                     this.loadProperties();
                 },
                 error: (err) => {
+                    this.isSaving = false;
                     console.error('Error creating property', err);
-                    alert(this.translate.instant('USER_DASHBOARD.CREATE_FAIL') + ': ' + (err.error?.message || err.message));
+                    this.toastr.error(
+                        (err.error?.message || err.message || this.translate.instant('USER_DASHBOARD.CREATE_FAIL')),
+                        this.translate.instant('COMMON.ERROR') || 'Error'
+                    );
                 }
             });
         }
@@ -482,6 +517,7 @@ export class UserDashboard {
 
     private closeForm() {
         this.isFormVisible = false;
+        this.isSaving = false;
         this.currentProperty = {};
         this.selectedFiles = [];
         this.districtSearchTerm = '';
