@@ -52,7 +52,7 @@ export const routes: Routes = [
     path: 'dashboard',
     component: Home, // Using Home component as placeholder for testing
     canActivate: [authGuard, subscriptionGuard]
-  }
-  // { path: '**', redirectTo: 'home' } // Wildcard route disabled for debugging
+  },
+  { path: '**', redirectTo: 'home' } // Wildcard route MUST be last
 ];
 
