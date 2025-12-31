@@ -1,6 +1,6 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute, RouterModule } from '@angular/router';
+import { ActivatedRoute, RouterModule, Router } from '@angular/router';
 import { PropertyService } from '../../Services/Property-Service/property.service';
 import { AgentService } from '../../Services/Agent-Service/agent.service';
 import { ChatbotService } from '../../Services/Chatbot-Service/chatbot.service';
@@ -78,7 +78,8 @@ export class Propertyview implements OnInit {
     private savedPropertyService: SavedPropertyService,
     public authService: AuthService,
     private cdr: ChangeDetectorRef,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private router: Router
   ) { }
 
   ngOnInit() {
@@ -286,7 +287,7 @@ export class Propertyview implements OnInit {
   // Navigate to agent profile
   viewAgentProfile() {
     if (this.agent.id) {
-      window.location.href = `/agent-profile/${this.agent.id}`;
+      this.router.navigate(['/agent-profile', this.agent.id]);
     }
   }
 
@@ -314,7 +315,7 @@ export class Propertyview implements OnInit {
    */
   toggleSave() {
     if (!this.authService.isLoggedIn()) {
-      window.location.href = '/login';
+      this.router.navigate(['/login']);
       return;
     }
 
