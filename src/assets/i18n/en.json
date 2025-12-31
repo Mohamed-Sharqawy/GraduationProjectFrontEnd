@@ -401,6 +401,9 @@
         "PROPERTY_INFO_TITLE": "Property Information",
         "DESCRIPTION_TITLE": "Description",
         "AMENITIES_TITLE": "Amenities",
-        "LOCATION_TITLE": "Location"
+        "LOCATION_TITLE": "Location",
+        "ANALYTICS_TITLE": "Property Analytics",
+        "VIEWS": "Views",
+        "WHATSAPP_CLICKS": "WhatsApp Clicks"
     }
 }

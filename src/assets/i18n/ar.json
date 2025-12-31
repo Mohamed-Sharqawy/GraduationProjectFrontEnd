@@ -401,6 +401,9 @@
         "PROPERTY_INFO_TITLE": "معلومات العقار",
         "DESCRIPTION_TITLE": "الوصف",
         "AMENITIES_TITLE": "المرافق",
-        "LOCATION_TITLE": "الموقع"
+        "LOCATION_TITLE": "الموقع",
+        "ANALYTICS_TITLE": "إحصائيات العقار",
+        "VIEWS": "المشاهدات",
+        "WHATSAPP_CLICKS": "تواصل واتساب"
     }
 }
