@@ -29,7 +29,7 @@ export class ChatbotService {
    */
   ask(message: string): Observable<ChatbotAskResponse> {
     const headers = { 'Content-Type': 'application/json' };
-    return this.http.post<ChatbotAskResponse>(`${this.apiUrl}/ask`, { Message: message }, { headers })
+    return this.http.post<ChatbotAskResponse>(`${this.apiUrl}/ask`, { message: message }, { headers })
       .pipe(timeout(120000)); // 2 minutes timeout
   }
 

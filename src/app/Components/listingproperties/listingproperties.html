@@ -172,7 +172,7 @@
                             class="text-white bg-black/40 hover:bg-black/60 rounded-full w-9 h-9 flex items-center justify-center transition-all"
                             [class.text-red-500]="isPropertySaved(prop.id)"
                             [title]="isPropertySaved(prop.id) ? ('LISTING_PROPERTIES.UNSAVE_TOOLTIP' | translate) : ('LISTING_PROPERTIES.SAVE_TOOLTIP' | translate)">
-                            <i class="fa bg-white" [class.fa-heart]="isPropertySaved(prop.id)"
+                            <i class="fa" [class.fa-heart]="isPropertySaved(prop.id)"
                                 [class.fa-heart-o]="!isPropertySaved(prop.id)"></i>
                         </button>
                     </div>
