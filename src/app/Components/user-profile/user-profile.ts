@@ -14,13 +14,12 @@ import { AgentService } from '../../Services/Agent-Service/agent.service';
 import { VerificationFiles } from '../../Models/Verification/verification.models';
 import { environment } from '../../../environments/environments';
 import { UserDashboard } from '../userdashboard/userdashboard';
-import { SavedPropertiesComponent } from '../saved-properties/saved-properties.component';
 import { ChangePasswordModalComponent } from '../change-password-modal/change-password-modal.component';
 
 @Component({
     selector: 'app-user-profile',
     standalone: true,
-    imports: [CommonModule, RouterModule, FormsModule, TranslateModule, UserDashboard, SavedPropertiesComponent, ChangePasswordModalComponent],
+    imports: [CommonModule, RouterModule, FormsModule, TranslateModule, UserDashboard, ChangePasswordModalComponent],
     templateUrl: './user-profile.html',
     styleUrl: './user-profile.css'
 })

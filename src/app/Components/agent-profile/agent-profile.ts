@@ -111,12 +111,28 @@ export class AgentProfile implements OnInit {
     return prop.title;
   }
 
-  getPropertyLocation(prop: any): string {
+    getPropertyLocation(prop: any): string {
+    // Debug log
+    // console.log(`Lang: ${this.currentLang}, CityEn: ${prop.cityEn}, DistEn: ${prop.districtEn}`);
+
     if (this.currentLang === 'en') {
-      // Prefer EN fields if available
-      return prop.locationEn || prop.cityEn || prop.city || '';
+      // English Mode
+      const city = prop.cityEn || prop.city;
+      // Use DistrictEn if available, otherwise DO NOT fallback to Arabic District
+      const district = prop.districtEn;
+      
+      if (district && city) {
+        return `${district}, ${city}`;
+      }
+      return city || '';
     }
-    return prop.location || prop.city || '';
+    // Arabic Mode
+    const city = prop.city;
+    const district = prop.district;
+    if (district && city) {
+      return `${district}, ${city}`;
+    }
+    return city || '';
   }
 
   getPropertyType(prop: any): string {
