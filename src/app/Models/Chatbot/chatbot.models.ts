@@ -13,8 +13,9 @@ export interface ChatbotAskRequest {
 }
 
 export interface ChatbotAskResponse {
-    response: string;
+    message: string; // Backend returns 'message'
     properties?: any[]; // For property suggestions in chat
+    success?: boolean;
 }
 
 export interface SimilarPropertiesResponse {

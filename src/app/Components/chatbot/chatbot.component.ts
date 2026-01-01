@@ -88,7 +88,7 @@ export class ChatbotComponent implements OnInit, AfterViewChecked {
     this.chatbotService.ask(userMsg).subscribe({
       next: (response) => {
         this.messages.push({
-          content: response.response,
+          content: response.message, // property is 'message' from backend
           sender: 'bot',
           timestamp: new Date()
         });
