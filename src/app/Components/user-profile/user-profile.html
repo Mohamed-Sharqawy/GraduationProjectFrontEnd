@@ -4,19 +4,14 @@
     <aside class="w-64 bg-white shadow-md flex-shrink-0">
         <div class="p-6 border-b border-gray-100">
             <div class="flex items-center gap-3">
-                <div class="relative cursor-pointer group" (click)="fileInput.click()">
+                <div class="relative">
                     <div
-                        class="w-12 h-12 rounded-full overflow-hidden bg-green-100 flex items-center justify-center text-green-600 font-bold text-xl border-2 border-transparent group-hover:border-green-400 transition-all">
+                        class="w-12 h-12 rounded-full overflow-hidden bg-green-100 flex items-center justify-center text-green-600 font-bold text-xl border-2 border-transparent">
                         <img *ngIf="getProfileImageUrl()" [src]="getProfileImageUrl()"
                             class="w-full h-full object-cover" alt="Profile">
                         <span *ngIf="!getProfileImageUrl()">{{
                             authService.currentUser()?.fullName?.charAt(0) || 'U' }}</span>
                     </div>
-                    <div
-                        class="absolute inset-0 bg-black/30 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                        <i class="fa fa-camera text-white text-xs"></i>
-                    </div>
-                    <input #fileInput type="file" class="hidden" (change)="onFileSelected($event)" accept="image/*">
                 </div>
                 <div>
                     <h3 class="font-bold text-gray-800 m-0 text-sm">{{ authService.currentUser()?.fullName }}</h3>
@@ -276,6 +271,27 @@
         <div *ngIf="activeTab === 'personal-info'">
             <h2 class="text-2xl font-bold text-gray-800 mb-6">{{ 'USER_PROFILE.PERSONAL_INFO.TITLE' | translate }}</h2>
             <div class="bg-white p-8 rounded-xl shadow-sm border border-gray-100 w-full h-full">
+                
+                <!-- Profile Image Upload Section -->
+                <div class="mb-8 pb-6 border-b border-gray-200">
+                    <label class="block text-sm font-bold text-gray-700 mb-3">{{ 'USER_PROFILE.PERSONAL_INFO.PROFILE_IMAGE' | translate }}</label>
+                    <div class="flex items-center gap-4">
+                        <div class="w-20 h-20 rounded-full overflow-hidden bg-green-100 flex items-center justify-center text-green-600 font-bold text-2xl border-2 border-gray-200">
+                            <img *ngIf="getProfileImageUrl()" [src]="getProfileImageUrl()" class="w-full h-full object-cover" alt="Profile">
+                            <span *ngIf="!getProfileImageUrl()">{{ authService.currentUser()?.fullName?.charAt(0) || 'U' }}</span>
+                        </div>
+                        <div>
+                            <button (click)="profileFileInput.click()" type="button"
+                                class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors border-none cursor-pointer flex items-center gap-2">
+                                <i class="fa fa-camera"></i>
+                                {{ 'USER_PROFILE.PERSONAL_INFO.UPLOAD_IMAGE' | translate }}
+                            </button>
+                            <p class="text-xs text-gray-500 mt-1">{{ 'USER_PROFILE.PERSONAL_INFO.IMAGE_REQUIREMENTS' | translate }}</p>
+                            <input #profileFileInput type="file" class="hidden" (change)="onFileSelected($event)" accept="image/*">
+                        </div>
+                    </div>
+                </div>
+
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <!-- Full Name -->
                     <div class="col-span-2">

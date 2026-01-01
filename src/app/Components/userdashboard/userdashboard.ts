@@ -65,7 +65,7 @@ export class UserDashboard {
         private cdr: ChangeDetectorRef,
         private router: Router,
         private authService: AuthService,
-        private translate: TranslateService,
+        public translationService: TranslateService,
         private toastr: ToastrService
     ) {
         afterNextRender(() => {
@@ -292,7 +292,7 @@ export class UserDashboard {
 
                 if (err.status === 401) {
                     this.needsLogin = true;
-                    this.errorMessage = this.translate.instant('USER_DASHBOARD.SESSION_EXPIRED');
+                    this.errorMessage = this.translationService.instant('USER_DASHBOARD.SESSION_EXPIRED');
                 } else {
                     this.errorMessage = 'Failed to load properties. ' + (err.error?.message || err.message || 'Unknown error');
                 }
@@ -424,15 +424,15 @@ export class UserDashboard {
     }
 
     deleteProperty(id: number) {
-        if (confirm(this.translate.instant('USER_DASHBOARD.CONFIRM_DELETE'))) {
+        if (confirm(this.translationService.instant('USER_DASHBOARD.CONFIRM_DELETE'))) {
             this.propertiesService.deleteProperty(id).subscribe({
                 next: () => {
                     this.userProperties = this.userProperties.filter(p => p.id !== id);
-                    alert(this.translate.instant('USER_DASHBOARD.DELETE_SUCCESS'));
+                    alert(this.translationService.instant('USER_DASHBOARD.DELETE_SUCCESS'));
                 },
                 error: (err) => {
                     console.error('Error deleting property', err);
-                    alert(this.translate.instant('USER_DASHBOARD.DELETE_FAIL'));
+                    alert(this.translationService.instant('USER_DASHBOARD.DELETE_FAIL'));
                 }
             });
         }
@@ -514,8 +514,8 @@ export class UserDashboard {
                 next: (res) => {
                     this.isSaving = false;
                     this.toastr.success(
-                        this.translate.instant('USER_DASHBOARD.UPDATE_SUCCESS'),
-                        this.translate.instant('COMMON.SUCCESS') || 'Success'
+                        this.translationService.instant('USER_DASHBOARD.UPDATE_SUCCESS'),
+                        this.translationService.instant('COMMON.SUCCESS') || 'Success'
                     );
                     this.closeForm();
                     this.loadProperties();
@@ -524,7 +524,7 @@ export class UserDashboard {
                     this.isSaving = false;
                     console.error('❌ Error updating property', err);
                     // Extract validation errors if available
-                    let errorMsg = this.translate.instant('USER_DASHBOARD.UPDATE_FAIL');
+                    let errorMsg = this.translationService.instant('USER_DASHBOARD.UPDATE_FAIL');
                     if (err.error?.errors) {
                         console.error('Validation Errors:', err.error.errors);
                         const validationErrors = Object.entries(err.error.errors)
@@ -536,7 +536,7 @@ export class UserDashboard {
                     }
                     this.toastr.error(
                         errorMsg,
-                        this.translate.instant('COMMON.ERROR') || 'Error'
+                        this.translationService.instant('COMMON.ERROR') || 'Error'
                     );
                 }
             });
@@ -545,8 +545,8 @@ export class UserDashboard {
                 next: (res) => {
                     this.isSaving = false;
                     this.toastr.success(
-                        this.translate.instant('USER_DASHBOARD.PROPERTY_PENDING_REVIEW') || 'تم إضافة إعلانك في انتظار المراجعة',
-                        this.translate.instant('COMMON.SUCCESS') || 'Success'
+                        this.translationService.instant('USER_DASHBOARD.PROPERTY_PENDING_REVIEW') || 'تم إضافة إعلانك في انتظار المراجعة',
+                        this.translationService.instant('COMMON.SUCCESS') || 'Success'
                     );
                     this.closeForm();
                     this.loadProperties();
@@ -555,8 +555,8 @@ export class UserDashboard {
                     this.isSaving = false;
                     console.error('Error creating property', err);
                     this.toastr.error(
-                        (err.error?.message || err.message || this.translate.instant('USER_DASHBOARD.CREATE_FAIL')),
-                        this.translate.instant('COMMON.ERROR') || 'Error'
+                        (err.error?.message || err.message || this.translationService.instant('USER_DASHBOARD.CREATE_FAIL')),
+                        this.translationService.instant('COMMON.ERROR') || 'Error'
                     );
                 }
             });

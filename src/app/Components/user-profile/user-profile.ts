@@ -1,7 +1,7 @@
 import { Component, OnInit, ChangeDetectorRef, inject, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, ActivatedRoute, Router } from '@angular/router';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { AuthService } from '../../Services/Auth-Service/auth-service';
 import { FormsModule } from '@angular/forms';
 import { UserRole } from '../../Models/user-role';
@@ -84,6 +84,7 @@ export class UserProfile implements OnInit {
     private router = inject(Router);
     private cdr = inject(ChangeDetectorRef);
     private toastr = inject(ToastrService);
+    private translationService = inject(TranslateService);
 
     // Verification state
     verificationFiles: VerificationFiles = {
@@ -97,6 +98,19 @@ export class UserProfile implements OnInit {
         selfieWithId: null
     };
     isSubmittingVerification = false;
+
+    /**
+     * Open change password modal/form
+     * TODO: Implement full modal with current password, new password, confirm password fields
+     * TODO: Add password visibility toggles  
+     * TODO: Integrate with /api/account/change-password endpoint
+     */
+    openChangePasswordModal() {
+        // Stub - placeholder for future implementation
+        alert(this.translationService.instant('USER_PROFILE.PERSONAL_INFO.CHANGE_PASSWORD_BTN'));
+        console.log('Change password feature - to be implemented');
+        // Future: Open modal component or navigate to change password page
+    }
 
     constructor() {
         // Initialize form data with current user using effect to stay in sync

@@ -148,6 +148,7 @@
         "ACTIVE": "نشط",
         "PENDING": "قيد الانتظار",
         "BEDS": "أسرة",
+        "ROOMS": "غرف",
         "BATHS": "حمامات",
         "EDIT": "تعديل",
         "DELETE": "حذف",
@@ -346,6 +347,10 @@
             "VERIFIED": "تم التحقق",
             "PHONE": "رقم الهاتف",
             "WHATSAPP": "رقم الواتساب",
+            "PROFILE_IMAGE": "صورة الملف الشخصي",
+            "UPLOAD_IMAGE": "رفع صورة",
+            "IMAGE_REQUIREMENTS": "الصور بتنسيق JPG أو PNG ، حد أقصى 2MB",
+            "CHANGE_PASSWORD_BTN": "تغيير كلمة المرور",
             "EDIT_BTN": "تعديل المعلومات",
             "CANCEL_BTN": "إلغاء",
             "SAVE_BTN": "حفظ التغييرات"

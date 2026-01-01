@@ -148,6 +148,7 @@
         "ACTIVE": "Active",
         "PENDING": "Pending",
         "BEDS": "Beds",
+        "ROOMS": "Rooms",
         "BATHS": "Baths",
         "EDIT": "Edit",
         "DELETE": "Delete",
@@ -346,6 +347,10 @@
             "VERIFIED": "Verified",
             "PHONE": "Phone Number",
             "WHATSAPP": "WhatsApp Number",
+            "PROFILE_IMAGE": "Profile Image",
+            "UPLOAD_IMAGE": "Upload Image",
+            "IMAGE_REQUIREMENTS": "JPG or PNG format, max 2MB",
+            "CHANGE_PASSWORD_BTN": "Change Password",
             "EDIT_BTN": "Edit Personal Info",
             "CANCEL_BTN": "Cancel",
             "SAVE_BTN": "Save Changes"

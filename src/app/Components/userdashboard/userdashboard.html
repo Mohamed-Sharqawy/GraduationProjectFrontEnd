@@ -49,13 +49,13 @@
                     === 1 ? 'USER_DASHBOARD.ACTIVE' : 'USER_DASHBOARD.PENDING') | translate}}</span>
             </div>
             <div class="card-content">
-                <h3 class="card-title">{{prop.title}}</h3>
+                <h3 class="card-title">{{translationService.currentLang === 'en' && prop.titleEn ? prop.titleEn : prop.title}}</h3>
                 <div class="card-price">{{prop.price | currency : 'EGP' : 'symbol' : '1.0-0'}}</div>
 
                 <div class="card-details">
-                    <div class="detail-item">🛏 {{prop.rooms || 0}} {{ 'USER_DASHBOARD.BEDS' | translate }}</div>
-                    <div class="detail-item">🚿 {{prop.bathrooms || 0}} {{ 'USER_DASHBOARD.BATHS' | translate }}</div>
-                    <div class="detail-item">📐 {{prop.area}} {{ 'USER_DASHBOARD.SQM' | translate }}</div>
+                    <div class="detail-item"><i class="fa fa-door-open"></i> {{prop.rooms || 0}} {{ 'USER_DASHBOARD.ROOMS' | translate }}</div>
+                    <div class="detail-item"><i class="fa fa-bath"></i> {{prop.bathrooms || 0}} {{ 'USER_DASHBOARD.BATHS' | translate }}</div>
+                    <div class="detail-item"><i class="fa fa-arrows-alt"></i> {{prop.area}} {{ 'USER_DASHBOARD.SQM' | translate }}</div>
                 </div>
 
                 <div style="margin-top: auto; display: flex; align-items: center; color: #666; font-size: 13px;">
