@@ -1,4 +1,4 @@
-import { Component, signal, inject, OnInit, HostListener } from '@angular/core';
+import { Component, signal, inject, OnInit, HostListener, ChangeDetectorRef } from '@angular/core';
 import { RouterLink, RouterOutlet, Router } from '@angular/router';
 import { AuthService } from './Services/Auth-Service/auth-service';
 import { Footer } from './Components/footer/footer';
@@ -22,6 +22,7 @@ export class App implements OnInit {
   public readonly translationService = inject(TranslationService);
   private readonly router = inject(Router);
   private readonly notificationService = inject(NotificationService);
+  private readonly cdr = inject(ChangeDetectorRef);
 
   // Notification state
   unreadCount = 0;
@@ -71,6 +72,7 @@ export class App implements OnInit {
         console.log('📊 Unread count response:', response);
         this.unreadCount = response.count;
         console.log('🔔 Unread count set to:', this.unreadCount);
+        this.cdr.detectChanges(); // Force UI update
       },
       error: (err) => {
         console.error('❌ Failed to load unread count:', err);
@@ -88,6 +90,9 @@ export class App implements OnInit {
     // No need to reload if we already have notifications (preloaded)
     // Just mark all as read when opening
     if (this.isNotificationDropdownOpen) {
+      if (this.notifications.length === 0) {
+        this.loadNotifications();
+      }
       this.markAllAsRead();
     }
   }
