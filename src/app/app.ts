@@ -36,12 +36,19 @@ export class App implements OnInit {
     // Load unread count on init if user is logged in
     if (this.authService.isLoggedIn()) {
       this.loadUnreadCount();
-      // Refresh count every 30 seconds
+      // Preload notifications so dropdown opens instantly
+      this.loadNotifications();
+      
+      // Refresh count every 10 seconds (faster updates)
       setInterval(() => {
         if (this.authService.isLoggedIn()) {
           this.loadUnreadCount();
+          // Also refresh notifications if dropdown is open
+          if (this.isNotificationDropdownOpen) {
+            this.refreshNotifications();
+          }
         }
-      }, 30000);
+      }, 3000); // Changed from 30000 to 10000 (10 seconds)
     }
   }
 
@@ -74,12 +81,20 @@ export class App implements OnInit {
     event.stopPropagation();
     this.isNotificationDropdownOpen = !this.isNotificationDropdownOpen;
     
-    if (this.isNotificationDropdownOpen && this.notifications.length === 0) {
-      // Load notifications when opening for the first time
-      this.loadNotifications();
-      // Mark all as read
+    // No need to reload if we already have notifications (preloaded)
+    // Just mark all as read when opening
+    if (this.isNotificationDropdownOpen) {
       this.markAllAsRead();
     }
+  }
+
+  /**
+   * Refresh notifications (reload from server)
+   */
+  refreshNotifications() {
+    this.currentPage = 1;
+    this.hasMoreNotifications = true;
+    this.loadNotifications(false);
   }
 
   /**
