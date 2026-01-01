@@ -368,6 +368,18 @@
             "CHOOSE_FILE": "اختر ملف",
             "SUBMITTING": "جاري الإرسال...",
             "SUBMIT": "إرسال للتحقق"
+        },
+        "CHANGE_PASSWORD": {
+            "TITLE": "تغيير كلمة المرور",
+            "CURRENT_PASSWORD": "كلمة المرور الحالية",
+            "CURRENT_PASSWORD_PLACEHOLDER": "أدخل كلمة المرور الحالية",
+            "NEW_PASSWORD": "كلمة المرور الجديدة",
+            "NEW_PASSWORD_PLACEHOLDER": "أدخل كلمة مرور جديدة",
+            "CONFIRM_PASSWORD": "تأكيد كلمة المرور",
+            "CONFIRM_PASSWORD_PLACEHOLDER": "أعد إدخال كلمة المرور",
+            "MIN_LENGTH_HINT": "يجب أن تكون 6 أحرف على الأقل",
+            "PASSWORDS_MISMATCH": "كلمات المرور غير متطابقة",
+            "SUBMIT": "حفظ كلمة المرور الجديدة"
         }
     },
     "PROPERTY_VIEW": {

@@ -14,11 +14,13 @@ import { AgentService } from '../../Services/Agent-Service/agent.service';
 import { VerificationFiles } from '../../Models/Verification/verification.models';
 import { environment } from '../../../environments/environments';
 import { UserDashboard } from '../userdashboard/userdashboard';
+import { SavedPropertiesComponent } from '../saved-properties/saved-properties.component';
+import { ChangePasswordModalComponent } from '../change-password-modal/change-password-modal.component';
 
 @Component({
     selector: 'app-user-profile',
     standalone: true,
-    imports: [CommonModule, RouterModule, FormsModule, TranslateModule, UserDashboard],
+    imports: [CommonModule, RouterModule, FormsModule, TranslateModule, UserDashboard, SavedPropertiesComponent, ChangePasswordModalComponent],
     templateUrl: './user-profile.html',
     styleUrl: './user-profile.css'
 })
@@ -99,17 +101,21 @@ export class UserProfile implements OnInit {
     };
     isSubmittingVerification = false;
 
+    // Password change modal state
+    showChangePasswordModal = false;
+
     /**
-     * Open change password modal/form
-     * TODO: Implement full modal with current password, new password, confirm password fields
-     * TODO: Add password visibility toggles  
-     * TODO: Integrate with /api/account/change-password endpoint
+     * Open change password modal
      */
     openChangePasswordModal() {
-        // Stub - placeholder for future implementation
-        alert(this.translationService.instant('USER_PROFILE.PERSONAL_INFO.CHANGE_PASSWORD_BTN'));
-        console.log('Change password feature - to be implemented');
-        // Future: Open modal component or navigate to change password page
+        this.showChangePasswordModal = true;
+    }
+
+    /**
+     * Close change password modal
+     */
+    closeChangePasswordModal() {
+        this.showChangePasswordModal = false;
     }
 
     constructor() {

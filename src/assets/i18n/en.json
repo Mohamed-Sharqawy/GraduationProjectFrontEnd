@@ -368,6 +368,18 @@
             "CHOOSE_FILE": "Choose File",
             "SUBMITTING": "Submitting...",
             "SUBMIT": "Submit for Verification"
+        },
+        "CHANGE_PASSWORD": {
+            "TITLE": "Change Password",
+            "CURRENT_PASSWORD": "Current Password",
+            "CURRENT_PASSWORD_PLACEHOLDER": "Enter current password",
+            "NEW_PASSWORD": "New Password",
+            "NEW_PASSWORD_PLACEHOLDER": "Enter new password",
+            "CONFIRM_PASSWORD": "Confirm Password",
+            "CONFIRM_PASSWORD_PLACEHOLDER": "Re-enter new password",
+            "MIN_LENGTH_HINT": "Must be at least 6 characters",
+            "PASSWORDS_MISMATCH": "Passwords do not match",
+            "SUBMIT": "Save New Password"
         }
     },
     "PROPERTY_VIEW": {

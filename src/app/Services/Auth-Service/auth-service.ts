@@ -152,4 +152,16 @@ export class AuthService {
     return !!this.token;
   }
 
+  /**
+   * Change user password
+   */
+  changePassword(currentPassword: string, newPassword: string) {
+    const payload = {
+      currentPassword,
+      newPassword,
+      confirmPassword: newPassword
+    };
+    return this.http.post(`${environment.apiUrl}/agents/change-password`, payload);
+  }
+
 }
