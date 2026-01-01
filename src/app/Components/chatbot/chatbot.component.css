@@ -1,10 +1,10 @@
 /* Floating Button */
 .chatbot-trigger {
     position: fixed;
-    bottom: 2rem;
-    right: 2rem;
-    width: 60px;
-    height: 60px;
+    bottom: 90px; /* Positioned above the WhatsApp button (approx 24px + 50px + gap) */
+    right: 1.5rem; /* Aligned with typical WhatsApp button position */
+    width: 50px; /* Reduced from 60px */
+    height: 50px; /* Reduced from 60px */
     border-radius: 50%;
     background: linear-gradient(135deg, #28b16d, #209e60);
     box-shadow: 0 4px 15px rgba(40, 177, 109, 0.4);
