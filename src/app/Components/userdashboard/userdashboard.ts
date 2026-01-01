@@ -503,6 +503,12 @@ export class UserDashboard {
             formData.append('Images', file, file.name);
         });
 
+        // DEBUG: Log FormData contents
+        console.log('📤 Sending Property Data:');
+        formData.forEach((value, key) => {
+            console.log(`  ${key}: ${value}`);
+        });
+
         if (this.isEditing) {
             this.propertiesService.updateProperty(this.currentProperty.id, formData).subscribe({
                 next: (res) => {
@@ -516,9 +522,20 @@ export class UserDashboard {
                 },
                 error: (err) => {
                     this.isSaving = false;
-                    console.error('Error updating property', err);
+                    console.error('❌ Error updating property', err);
+                    // Extract validation errors if available
+                    let errorMsg = this.translate.instant('USER_DASHBOARD.UPDATE_FAIL');
+                    if (err.error?.errors) {
+                        console.error('Validation Errors:', err.error.errors);
+                        const validationErrors = Object.entries(err.error.errors)
+                            .map(([key, value]) => `${key}: ${value}`)
+                            .join('\n');
+                        errorMsg = validationErrors || errorMsg;
+                    } else if (err.error?.message) {
+                        errorMsg = err.error.message;
+                    }
                     this.toastr.error(
-                        (err.error?.message || err.message || this.translate.instant('USER_DASHBOARD.UPDATE_FAIL')),
+                        errorMsg,
                         this.translate.instant('COMMON.ERROR') || 'Error'
                     );
                 }
