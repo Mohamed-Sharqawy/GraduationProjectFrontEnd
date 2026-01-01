@@ -7,7 +7,10 @@
         "LOGOUT": "تسجيل الخروج",
         "WELCOME": "مرحباً",
         "SAVED_PROPERTIES": "العقارات المحفوظة",
-        "LIST_PROPERTY": "أضف عقارك"
+        "LIST_PROPERTY": "أضف عقارك",
+        "NOTIFICATIONS": "الإشعارات",
+        "NEW": "جديد",
+        "NO_NOTIFICATIONS": "لا توجد إشعارات"
     },
     "FOOTER": {
         "TAGLINE": "رحلتك للمنزل المثالي تبدأ هنا.",

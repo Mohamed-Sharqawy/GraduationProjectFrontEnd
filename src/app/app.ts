@@ -1,23 +1,160 @@
-import { Component, signal, inject } from '@angular/core';
+import { Component, signal, inject, OnInit, HostListener } from '@angular/core';
 import { RouterLink, RouterOutlet, Router } from '@angular/router';
 import { AuthService } from './Services/Auth-Service/auth-service';
 import { Footer } from './Components/footer/footer';
 import { UserRole } from './Models/user-role';
 import { TranslationService } from './Services/Translation-Service/translation.service';
 import { TranslateModule } from '@ngx-translate/core';
+import { NotificationService } from './Services/Notification-Service/notification.service';
+import { NotificationDto } from './Models/Notification/notification.models';
+import { CommonModule } from '@angular/common';
 
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, RouterLink, Footer, TranslateModule],
+  imports: [RouterOutlet, RouterLink, Footer, TranslateModule, CommonModule],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
-export class App {
+export class App implements OnInit {
   protected readonly title = signal('HomeyUI');
   protected readonly authService = inject(AuthService);
   public readonly translationService = inject(TranslationService);
   private readonly router = inject(Router);
+  private readonly notificationService = inject(NotificationService);
+
+  // Notification state
+  unreadCount = 0;
+  notifications: NotificationDto[] = [];
+  isNotificationDropdownOpen = false;
+  isLoadingNotifications = false;
+  currentPage = 1;
+  pageSize = 10;
+  hasMoreNotifications = true;
+
+  ngOnInit() {
+    // Load unread count on init if user is logged in
+    if (this.authService.isLoggedIn()) {
+      this.loadUnreadCount();
+      // Refresh count every 30 seconds
+      setInterval(() => {
+        if (this.authService.isLoggedIn()) {
+          this.loadUnreadCount();
+        }
+      }, 30000);
+    }
+  }
+
+  // Close dropdown when clicking outside
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent) {
+    const target = event.target as HTMLElement;
+    // Check if click is outside notification bell and dropdown
+    if (!target.closest('.notification-container')) {
+      this.isNotificationDropdownOpen = false;
+    }
+  }
+
+  /**
+   * Load unread notifications count
+   */
+  loadUnreadCount() {
+    this.notificationService.getUnreadCount().subscribe({
+      next: (response) => {
+        this.unreadCount = response.count;
+      },
+      error: (err) => console.error('Failed to load unread count:', err)
+    });
+  }
+
+  /**
+   * Toggle notification dropdown
+   */
+  toggleNotificationDropdown(event: Event) {
+    event.stopPropagation();
+    this.isNotificationDropdownOpen = !this.isNotificationDropdownOpen;
+    
+    if (this.isNotificationDropdownOpen && this.notifications.length === 0) {
+      // Load notifications when opening for the first time
+      this.loadNotifications();
+      // Mark all as read
+      this.markAllAsRead();
+    }
+  }
+
+  /**
+   * Load notifications
+   */
+  loadNotifications(append: boolean = false) {
+    if (this.isLoadingNotifications || !this.hasMoreNotifications) return;
+
+    this.isLoadingNotifications = true;
+    this.notificationService.getNotifications(this.currentPage, this.pageSize).subscribe({
+      next: (response) => {
+        if (append) {
+          this.notifications = [...this.notifications, ...response.items];
+        } else {
+          this.notifications = response.items;
+        }
+        this.hasMoreNotifications = response.hasNextPage;
+        this.isLoadingNotifications = false;
+      },
+      error: (err) => {
+        console.error('Failed to load notifications:', err);
+        this.isLoadingNotifications = false;
+      }
+    });
+  }
+
+  /**
+   * Load more notifications (infinite scroll)
+   */
+  loadMoreNotifications() {
+    if (this.hasMoreNotifications && !this.isLoadingNotifications) {
+      this.currentPage++;
+      this.loadNotifications(true);
+    }
+  }
+
+  /**
+   * Mark all notifications as read
+   */
+  markAllAsRead() {
+    this.notificationService.markAllAsRead().subscribe({
+      next: () => {
+        this.unreadCount = 0;
+        this.notifications = this.notifications.map(n => ({ ...n, isRead: true }));
+      },
+      error: (err) => console.error('Failed to mark all as read:', err)
+    });
+  }
+
+  /**
+   * On scroll in notification dropdown
+   */
+  onNotificationScroll(event: Event) {
+    const element = event.target as HTMLElement;
+    const threshold = 100; // Load more when 100px from bottom
+    
+    if (element.scrollHeight - element.scrollTop - element.clientHeight < threshold) {
+      this.loadMoreNotifications();
+    }
+  }
+
+  /**
+   * Get time ago string
+   */
+  getTimeAgo(dateString: string): string {
+    const date = new Date(dateString);
+    const now = new Date();
+    const seconds = Math.floor((now.getTime() - date.getTime()) / 1000);
+
+    if (seconds < 60) return 'Just now';
+    if (seconds < 3600) return `${Math.floor(seconds / 60)}m ago`;
+    if (seconds < 86400) return `${Math.floor(seconds / 3600)}h ago`;
+    if (seconds < 604800) return `${Math.floor(seconds / 86400)}d ago`;
+    return date.toLocaleDateString();
+  }
 
   logout() {
     this.authService.logout();

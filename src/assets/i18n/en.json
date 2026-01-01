@@ -7,7 +7,10 @@
         "LOGOUT": "Logout",
         "WELCOME": "Welcome",
         "SAVED_PROPERTIES": "Saved Properties",
-        "LIST_PROPERTY": "List Property"
+        "LIST_PROPERTY": "List Your Property",
+        "NOTIFICATIONS": "Notifications",
+        "NEW": "new",
+        "NO_NOTIFICATIONS": "No notifications"
     },
     "FOOTER": {
         "TAGLINE": "Your journey to the perfect home starts here.",
