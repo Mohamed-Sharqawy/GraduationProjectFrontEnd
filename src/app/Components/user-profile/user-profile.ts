@@ -222,7 +222,19 @@ export class UserProfile implements OnInit {
         return this.backendBaseUrl + imageUrl;
     }
 
+    // Current language
+    currentLang: string = 'ar';
+
     ngOnInit() {
+        // Get current language
+        this.currentLang = this.translationService.currentLang || this.translationService.defaultLang || 'ar';
+        
+        // Subscribe to language changes
+        this.translationService.onLangChange.subscribe(event => {
+            this.currentLang = event.lang;
+            this.cdr.detectChanges();
+        });
+
         // Refresh user data from backend to ensure we have the latest profile image URL
         if (this.authService.isLoggedIn()) {
             this.authService.getCurrentUser().subscribe({
@@ -626,6 +638,26 @@ export class UserProfile implements OnInit {
                 this.cdr.detectChanges();
             }
         });
+    }
+
+    // Helper methods for Saved Properties
+    getSavedPropertyTitle(saved: SavedPropertyDto): string {
+        const prop = saved.property;
+        if (this.currentLang === 'en') {
+            return prop.titleEn || prop.title;
+        }
+        return prop.title;
+    }
+
+    getSavedPropertyLocation(saved: SavedPropertyDto): string {
+        const prop = saved.property;
+        if (this.currentLang === 'en') {
+             const city = prop.cityEn || prop.city;
+             const district = prop.districtEn || prop.district;
+             const loc = district ? `${district}, ${city}` : city || '';
+             return loc || prop.location || '';
+        }
+        return prop.location || prop.city || '';
     }
 
 }

@@ -128,8 +128,8 @@
 
                     <!-- Property Details -->
                     <div class="p-4">
-                        <h3 class="font-bold text-gray-800 mb-1 truncate">{{ saved.property.title }}</h3>
-                        <p class="text-sm text-gray-500 mb-2">{{ saved.property.location || saved.property.city }}
+                        <h3 class="font-bold text-gray-800 mb-1 truncate">{{ getSavedPropertyTitle(saved) }}</h3>
+                        <p class="text-sm text-gray-500 mb-2">{{ getSavedPropertyLocation(saved) }}
                         </p>
                         <div class="flex items-center justify-between">
                             <span class="text-lg font-bold text-[#28b16d]">{{ saved.property.price | currency:

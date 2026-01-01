@@ -104,14 +104,13 @@
                         <h3 class="property-price">EGP {{ prop.price | number }} <span class="period"></span>
                         </h3>
                         <p class="property-specs">
-                            <span class="type">{{ prop.propertyType }}</span>
+                            <span class="type">{{ getPropertyType(prop) }}</span>
                             <span class="specs"><i class="fas fa-bed"></i> {{ prop.rooms }}</span>
                             <span class="specs"><i class="fas fa-bath"></i> {{ prop.bathrooms }}</span>
                             <span class="area">{{ 'AGENT_PROFILE.AREA' | translate:{value: prop.area} }}</span>
                         </p>
-                        <h4 class="property-title">{{ prop.title }}</h4>
-                        <p class="property-location"><i class="fas fa-map-marker-alt"></i> {{ prop.location ||
-                            prop.cityName }}</p>
+                        <h4 class="property-title">{{ getPropertyTitle(prop) }}</h4>
+                        <p class="property-location"><i class="fas fa-map-marker-alt"></i> {{ getPropertyLocation(prop) }}</p>
 
                         <div class="property-actions">
                             <button class="prop-action-btn email"><i class="far fa-envelope"></i> {{

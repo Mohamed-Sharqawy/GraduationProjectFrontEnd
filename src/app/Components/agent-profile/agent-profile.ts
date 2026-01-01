@@ -4,7 +4,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AgentService } from '../../Services/Agent-Service/agent.service';
 import { AgentProfileDto } from '../../Models/Agent/agent-profile.dto';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { decodeAgentId } from '../../utils/agent-id.utils';
 
 @Component({
@@ -24,10 +24,23 @@ export class AgentProfile implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private agentsService: AgentService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private translate: TranslateService
   ) { }
 
+  // Current language
+  currentLang: string = 'ar';
+
   ngOnInit() {
+    // Get current language
+    this.currentLang = this.translate.currentLang || this.translate.defaultLang || 'ar';
+    
+    // Subscribe to language changes
+    this.translate.onLangChange.subscribe(event => {
+      this.currentLang = event.lang;
+      this.cdr.detectChanges();
+    });
+
     const encodedId = this.route.snapshot.paramMap.get('id');
     if (encodedId) {
       try {
@@ -72,8 +85,8 @@ export class AgentProfile implements OnInit {
     } else {
       const search = this.locationSearch.toLowerCase();
       this.filteredProperties = activeProperties.filter(prop =>
-        (prop.location && prop.location.toLowerCase().includes(search)) ||
-        (prop.city && prop.city.toLowerCase().includes(search))
+        (this.getPropertyLocation(prop).toLowerCase().includes(search)) ||
+        (this.getPropertyTitle(prop).toLowerCase().includes(search))
       );
     }
   }
@@ -88,5 +101,28 @@ export class AgentProfile implements OnInit {
 
   openWhatsApp(number: string) {
     if (number) window.open(`https://wa.me/${number}`, '_blank');
+  }
+
+  // Helper methods for localization
+  getPropertyTitle(prop: any): string {
+    if (this.currentLang === 'en') {
+      return prop.titleEn || prop.title;
+    }
+    return prop.title;
+  }
+
+  getPropertyLocation(prop: any): string {
+    if (this.currentLang === 'en') {
+      // Prefer EN fields if available
+      return prop.locationEn || prop.cityEn || prop.city || '';
+    }
+    return prop.location || prop.city || '';
+  }
+
+  getPropertyType(prop: any): string {
+    if (this.currentLang === 'en') {
+      return prop.propertyTypeEn || prop.propertyType;
+    }
+    return prop.propertyType;
   }
 }
