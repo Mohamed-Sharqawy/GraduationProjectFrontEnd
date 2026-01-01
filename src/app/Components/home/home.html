@@ -1,154 +1,126 @@
-<!-- Modern Real Estate Landing Page -->
-
-<!-- Hero Section -->
-<section class="hero-section">
-    <div class="hero-background" style="background-image: url('/assets/images/hero_cairo_luxury.png');">
-        <div class="hero-overlay"></div>
-        <div class="hero-content">
-            <div class="hero-text">
-                <h1 class="hero-title">{{ 'HOME.HERO_TITLE' | translate }}</h1>
-                <p class="hero-subtitle">{{ 'HOME.HERO_SUBTITLE' | translate }}</p>
-            </div>
-            
-            <!-- Prominent Search Bar -->
-            <div class="search-container">
-                <div class="search-bar">
-                    <input type="text" 
-                           [placeholder]="'HOME.SEARCH_PLACEHOLDER' | translate"
-                           class="search-input">
-                    <select class="search-select">
-                        <option>{{ 'HOME.ALL_TYPES' | translate }}</option>
-                        <option>{{ 'HOME.APARTMENTS' | translate }}</option>
-                        <option>{{ 'HOME.VILLAS' | translate }}</option>
-                        <option>{{ 'HOME.LAND' | translate }}</option>
-                    </select>
-                    <button class="search-btn" routerLink="/listingproperties">
-                        <i class="fa fa-search"></i> {{ 'HOME.SEARCH' | translate }}
-                    </button>
-                </div>
-            </div>
-        </div>
+<!-- Slider Hero Section -->
+<header class="hero-slider">
+    @for (image of heroImages; track $index) {
+    <div class="slide" [class.active]="$index === currentSlide" [style.background-image]="'url(' + image + ')'">
     </div>
-    
-    <!-- Stats Bar -->
-    <div class="stats-bar">
-        <div class="container stats-grid">
-            <div class="stat-item">
-                <div class="stat-number">10,000+</div>
-                <div class="stat-label">{{ 'HOME.PROPERTIES_AVAILABLE' | translate }}</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-number">500+</div>
-                <div class="stat-label">{{ 'HOME.VERIFIED_AGENTS' | translate }}</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-number">50+</div>
-                <div class="stat-label">{{ 'HOME.CITIES_COVERED' | translate }}</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-number">95%</div>
-                <div class="stat-label">{{ 'HOME.SATISFACTION_RATE' | translate }}</div>
-            </div>
-        </div>
+    }
+
+    <div class="slider-overlay">
+        <h1>{{ 'HOME.HERO_TITLE' | translate }}</h1>
     </div>
-</section>
 
-<!-- Services Section with Image Cards -->
-<section class="services-section">
-    <div class="container">
-        <div class="section-header">
-            <h2>{{ 'HOME.SERVICES_TITLE' | translate }}</h2>
-            <p>{{ 'HOME.SERVICES_SUBTITLE' | translate }}</p>
+    <div class="slider-dots">
+        @for (image of heroImages; track $index) {
+        <span class="dot" [class.active]="$index === currentSlide" (click)="currentSlide = $index">
+        </span>
+        }
+    </div>
+</header>
+
+<!-- Services Section -->
+<section class="features-section container">
+    <div class="section-header">
+        <h2>{{ 'HOME.SERVICES_TITLE' | translate }}</h2>
+        <p>{{ 'HOME.SERVICES_SUBTITLE' | translate }}</p>
+    </div>
+
+    <div class="feature-grid">
+        <!-- Feature 1: Finding a Property -->
+        <div class="feature-card cursor-pointer" routerLink="/listingproperties">
+            <div class="card-content">
+                <h3>{{ 'HOME.FIND_PROPERTY_TITLE' | translate }}</h3>
+                <p>{{ 'HOME.FIND_PROPERTY_DESC' | translate }}</p>
+                <a routerLink="/listingproperties" class="text-[#28b16d] font-bold no-underline hover:underline">
+                    {{ 'HOME.BROWSE_PROPERTIES' | translate }}</a>
+            </div>
+            <div class="card-icon">🏠</div>
         </div>
 
-        <div class="services-grid">
-            <!-- Find Property Card -->
-            <div class="service-card" routerLink="/listingproperties">
-                <div class="service-image" style="background-image: url('/assets/images/category_apartments.png');"></div>
-                <div class="service-content">
-                    <h3>{{ 'HOME.FIND_PROPERTY_TITLE' | translate }}</h3>
-                    <p>{{ 'HOME.FIND_PROPERTY_DESC' | translate }}</p>
-                    <a routerLink="/listingproperties" class="service-link">
-                        {{ 'HOME.BROWSE_PROPERTIES' | translate }} <i class="fa fa-arrow-right"></i>
-                    </a>
-                </div>
+        <!-- Feature 2: Finding an Agent -->
+        <div class="feature-card blue-card cursor-pointer" routerLink="/find-my-agent">
+            <div class="card-content">
+                <h3>{{ 'HOME.FIND_AGENT_TITLE' | translate }}</h3>
+                <p>{{ 'HOME.FIND_AGENT_DESC' | translate }}</p>
+                <a routerLink="/find-my-agent" class="text-[#28b16d] font-bold no-underline hover:underline">
+                    {{ 'HOME.FIND_AGENTS' | translate }}</a>
             </div>
+            <div class="card-icon">🤵</div>
+        </div>
 
-            <!-- Find Agent Card -->
-            <div class="service-card" routerLink="/find-my-agent">
-                <div class="service-image" style="background-image: url('/assets/images/find_agent_feature.png');"></div>
-                <div class="service-content">
-                    <h3>{{ 'HOME.FIND_AGENT_TITLE' | translate }}</h3>
-                    <p>{{ 'HOME.FIND_AGENT_DESC' | translate }}</p>
-                    <a routerLink="/find-my-agent" class="service-link">
-                        {{ 'HOME.FIND_AGENTS' | translate }} <i class="fa fa-arrow-right"></i>
-                    </a>
-                </div>
+        <!-- Feature 3: Sell Your Property -->
+        <div class="feature-card cursor-pointer" (click)="handleSellProperty()">
+            <div class="card-content">
+                <h3>{{ 'HOME.SELL_PROPERTY_TITLE' | translate }}</h3>
+                <p>{{ 'HOME.SELL_PROPERTY_DESC' | translate }}</p>
+                <a (click)="$event.stopPropagation(); handleSellProperty()"
+                    class="text-[#28b16d] font-bold no-underline hover:underline cursor-pointer">
+                    {{ 'HOME.LIST_PROPERTY' | translate }}</a>
             </div>
-
-            <!-- Sell Property Card -->
-            <div class="service-card" (click)="handleSellProperty()">
-                <div class="service-image" style="background-image: url('/assets/images/sell_property_feature.png');"></div>
-                <div class="service-content">
-                    <h3>{{ 'HOME.SELL_PROPERTY_TITLE' | translate }}</h3>
-                    <p>{{ 'HOME.SELL_PROPERTY_DESC' | translate }}</p>
-                    <a (click)="$event.stopPropagation(); handleSellProperty()" class="service-link cursor-pointer">
-                        {{ 'HOME.LIST_PROPERTY' | translate }} <i class="fa fa-arrow-right"></i>
-                    </a>
-                </div>
-            </div>
+            <div class="card-icon">🔑</div>
         </div>
     </div>
 </section>
 
-<!-- About Section -->
-<section class="about-section">
-    <div class="container about-grid">
-        <div class="about-content">
-            <h2>{{ 'HOME.ABOUT_TITLE' | translate }}</h2>
-            <p class="about-text">{{ 'HOME.ABOUT_DESC_1' | translate }}</p>
-            <p class="about-text">{{ 'HOME.ABOUT_DESC_2' | translate }}</p>
-            <button class="cta-btn" routerLink="/listingproperties">
-                {{ 'HOME.START_SEARCHING' | translate }}
-            </button>
+<!-- About Us Section -->
+<section class="about-section container" style="margin-top: 4rem; margin-bottom: 4rem;">
+    <div class="section-content" style="display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center;">
+        <div class="about-text">
+            <h2 style="font-size: 2rem; color: #333; margin-bottom: 1.5rem;">{{ 'HOME.ABOUT_TITLE' | translate }}</h2>
+            <p style="color: #666; line-height: 1.6; margin-bottom: 1rem;">
+                {{ 'HOME.ABOUT_DESC_1' | translate }}
+            </p>
+            <p style="color: #666; line-height: 1.6;">
+                {{ 'HOME.ABOUT_DESC_2' | translate }}
+            </p>
         </div>
-        <div class="about-image">
-            <img src="/assets/images/hero_cairo_luxury.png" alt="About" class="rounded-image">
+        <div class="about-image"
+            style="background-color: #f0fdf4; padding: 2rem; border-radius: 1rem; text-align: center;">
+            <span style="font-size: 5rem;">🏙️</span>
         </div>
     </div>
 </section>
 
-<!-- Vision Section -->
-<section class="vision-section">
+<!-- Our Vision Section -->
+<section class="vision-section" style="background-color: #f9f9f9; padding: 4rem 0;">
     <div class="container">
         <div class="section-header">
             <h2>{{ 'HOME.VISION_SECTION_TITLE' | translate }}</h2>
             <p>{{ 'HOME.VISION_SECTION_SUBTITLE' | translate }}</p>
         </div>
 
-        <div class="vision-grid">
-            <div class="vision-card">
-                <div class="vision-icon">
-                    <i class="fa fa-bullseye"></i>
-                </div>
-                <h3>{{ 'HOME.VISION_TITLE' | translate }}</h3>
-                <p>{{ 'HOME.VISION_DESC' | translate }}</p>
+        <div class="vision-grid"
+            style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-top: 3rem;">
+            <!-- Vision 1 -->
+            <div class="vision-card"
+                style="background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
+                <div class="icon" style="font-size: 2.5rem; margin-bottom: 1rem;">🎯</div>
+                <h3 style="font-size: 1.25rem; margin-bottom: 1rem; color: #333;">{{ 'HOME.VISION_TITLE' | translate }}
+                </h3>
+                <p style="color: #666; line-height: 1.6;">
+                    {{ 'HOME.VISION_DESC' | translate }}
+                </p>
             </div>
 
-            <div class="vision-card">
-                <div class="vision-icon">
-                    <i class="fa fa-handshake-o"></i>
-                </div>
-                <h3>{{ 'HOME.TRUST_TITLE' | translate }}</h3>
-                <p>{{ 'HOME.TRUST_DESC' | translate }}</p>
+            <!-- Vision 2 -->
+            <div class="vision-card"
+                style="background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
+                <div class="icon" style="font-size: 2.5rem; margin-bottom: 1rem;">🤝</div>
+                <h3 style="font-size: 1.25rem; margin-bottom: 1rem; color: #333;">{{ 'HOME.TRUST_TITLE' | translate }}
+                </h3>
+                <p style="color: #666; line-height: 1.6;">
+                    {{ 'HOME.TRUST_DESC' | translate }}
+                </p>
             </div>
 
-            <div class="vision-card">
-                <div class="vision-icon">
-                    <i class="fa fa-rocket"></i>
-                </div>
-                <h3>{{ 'HOME.INNOVATION_TITLE' | translate }}</h3>
-                <p>{{ 'HOME.INNOVATION_DESC' | translate }}</p>
+            <!-- Vision 3 -->
+            <div class="vision-card"
+                style="background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
+                <div class="icon" style="font-size: 2.5rem; margin-bottom: 1rem;">🚀</div>
+                <h3 style="font-size: 1.25rem; margin-bottom: 1rem; color: #333;">{{ 'HOME.INNOVATION_TITLE' | translate
+                    }}</h3>
+                <p style="color: #666; line-height: 1.6;">
+                    {{ 'HOME.INNOVATION_DESC' | translate }}
+                </p>
             </div>
         </div>
     </div>
