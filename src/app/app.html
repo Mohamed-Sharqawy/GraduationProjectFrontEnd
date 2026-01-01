@@ -55,9 +55,9 @@
       </a>
       <!-- Show Dashboard only for Agents -->
       @if (isAgent()) {
-      <a routerLink="/user-dashboard" routerLinkActive="text-[#28b16d]"
+      <a routerLink="/user-profile" routerLinkActive="text-[#28b16d]"
         class="no-underline hover:text-[#28b16d] transition-colors relative flex items-center gap-1 cursor-pointer">
-        {{ 'NAV.DASHBOARD' | translate }}
+        {{ 'NAV.PROFILE' | translate }}
       </a>
 
       }
