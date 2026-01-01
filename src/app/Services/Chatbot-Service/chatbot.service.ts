@@ -1,24 +1,35 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environments';
-import { PropertyListItemDto } from '../../Models/Property/property-list-item.dto';
+import { ChatbotAskRequest, ChatbotAskResponse, ChatbotWelcomeResponse } from '../../Models/Chatbot/chatbot.models';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ChatbotService {
-  private apiUrl = environment.apiUrl + '/Chatbot';
-
-  constructor(private http: HttpClient) { }
+  private http = inject(HttpClient);
+  // Using direct URL as requested by user instead of environment
+  private apiUrl = `https://homyapi.runasp.net/api/chatbot`;
 
   /**
-   * Get similar properties for a given property ID
+   * Get welcome message
    */
-  getSimilarProperties(propertyId: number): Observable<{ success: boolean; similarProperties: PropertyListItemDto[] }> {
-    return this.http.post<{ success: boolean; similarProperties: PropertyListItemDto[] }>(
-      `${this.apiUrl}/similar/${propertyId}`,
-      {}
-    );
+  getWelcomeMessage(): Observable<ChatbotWelcomeResponse> {
+    return this.http.get<ChatbotWelcomeResponse>(`${this.apiUrl}/welcome`);
+  }
+
+  /**
+   * Send message to AI
+   */
+  ask(message: string): Observable<ChatbotAskResponse> {
+    return this.http.post<ChatbotAskResponse>(`${this.apiUrl}/ask`, { message });
+  }
+
+  /**
+   * Get similar properties
+   */
+  getSimilarProperties(propertyId: number): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/similar/${propertyId}`, {});
   }
 }

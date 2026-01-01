@@ -8,11 +8,12 @@ import { TranslateModule } from '@ngx-translate/core';
 import { NotificationService } from './Services/Notification-Service/notification.service';
 import { NotificationDto } from './Models/Notification/notification.models';
 import { CommonModule } from '@angular/common';
+import { ChatbotComponent } from './Components/chatbot/chatbot.component';
 
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, RouterLink, Footer, TranslateModule, CommonModule],
+  imports: [RouterOutlet, RouterLink, Footer, TranslateModule, CommonModule, ChatbotComponent],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })

@@ -1,0 +1,55 @@
+<!-- Floating Trigger Button -->
+<button class="chatbot-trigger pulse" (click)="toggleChat()" *ngIf="!isOpen">
+    <div class="chatbot-icon">
+        <i class="fa fa-comments text-white text-2xl"></i>
+    </div>
+</button>
+
+<!-- Chat Window -->
+<div class="chatbot-window" *ngIf="isOpen">
+    <!-- Header -->
+    <div class="chat-header">
+        <div class="bot-info">
+            <div class="bot-avatar">
+                <i class="fa fa-rocket"></i>
+            </div>
+            <div>
+                <h3 class="font-bold text-sm m-0">Homy Assistant</h3>
+                <span class="text-xs opacity-90 flex items-center gap-1">
+                    <span class="status-dot"></span> Online
+                </span>
+            </div>
+        </div>
+        <button (click)="toggleChat()" class="bg-transparent border-none text-white cursor-pointer hover:opacity-80">
+            <i class="fa fa-times text-lg"></i>
+        </button>
+    </div>
+
+    <!-- Messages Area -->
+    <div class="chat-messages" #scrollContainer>
+        <div *ngFor="let msg of messages" class="message" [ngClass]="msg.sender">
+            {{ msg.content }}
+            <span class="time">{{ msg.timestamp | date:'shortTime' }}</span>
+        </div>
+
+        <div class="typing-indicator" *ngIf="isLoading">
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+        </div>
+    </div>
+
+    <!-- Input Area -->
+    <div class="chat-input">
+        <input 
+            type="text" 
+            [(ngModel)]="newMessage" 
+            (keyup.enter)="sendMessage()"
+            [placeholder]="'Type your message...' | translate"
+            [disabled]="isLoading">
+        
+        <button class="send-btn" (click)="sendMessage()" [disabled]="!newMessage.trim() || isLoading">
+            <i class="fa fa-paper-plane"></i>
+        </button>
+    </div>
+</div>
