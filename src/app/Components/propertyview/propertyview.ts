@@ -9,6 +9,7 @@ import { PropertyListItemDto } from '../../Models/Property/property-list-item.dt
 import { SavedPropertyService } from '../../Services/SavedProperty-Service/saved-property.service';
 import { AuthService } from '../../Services/Auth-Service/auth-service';
 import { TranslateService, TranslateModule } from '@ngx-translate/core';
+import { encodeAgentId } from '../../utils/agent-id.utils';
 
 @Component({
   selector: 'app-propertyview',
@@ -302,7 +303,8 @@ export class Propertyview implements OnInit {
   // Navigate to agent profile
   viewAgentProfile() {
     if (this.agent.id) {
-      this.router.navigate(['/agent-profile', this.agent.id]);
+      const encodedId = encodeAgentId(this.agent.id);
+      this.router.navigate(['/agent-profile', encodedId]);
     }
   }
 

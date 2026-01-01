@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { AgentService } from '../../Services/Agent-Service/agent.service';
 import { AgentProfileDto } from '../../Models/Agent/agent-profile.dto';
 import { TranslateModule } from '@ngx-translate/core';
+import { decodeAgentId } from '../../utils/agent-id.utils';
 
 @Component({
   selector: 'app-agent-profile',
@@ -27,13 +28,15 @@ export class AgentProfile implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.agentId = this.route.snapshot.paramMap.get('id');
-    if (this.agentId) {
-      // Clean the ID if it starts with a colon (common routing error)
-      if (this.agentId.startsWith(':')) {
-        this.agentId = this.agentId.substring(1);
+    const encodedId = this.route.snapshot.paramMap.get('id');
+    if (encodedId) {
+      try {
+        // Decode Base64 to get actual GUID
+        this.agentId = decodeAgentId(encodedId);
+        this.getAgentData(this.agentId);
+      } catch (error) {
+        console.error('Invalid agent ID format', error);
       }
-      this.getAgentData(this.agentId);
     }
   }
 

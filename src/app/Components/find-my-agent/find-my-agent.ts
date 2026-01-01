@@ -6,6 +6,7 @@ import { AgentService } from '../../Services/Agent-Service/agent.service';
 import { Agent } from '../../Models/Agents/Agents';
 import { AgentFilterDto } from '../../Models/Agents/agent-filter.dto';
 import { TranslateModule } from '@ngx-translate/core';
+import { encodeAgentId } from '../../utils/agent-id.utils';
 
 @Component({
   selector: 'app-find-my-agent',
@@ -82,5 +83,10 @@ export class FindMyAgentComponent implements OnInit {
 
   closeDropdown() {
     this.isDropdownOpen = false;
+  }
+
+  // Encode agent ID for URL
+  encodeAgentId(id: string): string {
+    return encodeAgentId(id);
   }
 }

@@ -30,7 +30,7 @@
             </div>
 
             @for (agent of agents; track agent.id) {
-            <div [routerLink]="['/agent-profile', agent.id]"
+            <div [routerLink]="['/agent-profile', encodeAgentId(agent.id)]"
                 class="bg-white border border-gray-200 rounded-lg p-0 mb-5 hover:shadow-lg transition-shadow duration-300 flex flex-col sm:flex-row h-auto min-h-[220px] overflow-hidden cursor-pointer">
 
                 <div class="w-full sm:w-48 h-56 sm:h-auto flex-shrink-0 relative bg-gray-100">
