@@ -335,6 +335,16 @@
                     </div>
                 </div>
 
+                <!-- Change Password Button -->
+                <div class="mt-6 pt-6 border-t border-gray-200">
+                    <button (click)="openChangePasswordModal()" type="button"
+                        class="bg-gradient-to-r from-gray-700 to-gray-900 text-white px-6 py-3 rounded-lg font-bold hover:from-gray-800 hover:to-black transition-all shadow-md hover:shadow-lg border-none cursor-pointer flex items-center gap-3">
+                        <i class="fa fa-lock text-lg"></i>
+                        <span>{{ 'USER_PROFILE.PERSONAL_INFO.CHANGE_PASSWORD_BTN' | translate }}</span>
+                        <i class="fa fa-arrow-left text-sm"></i>
+                    </button>
+                </div>
+
                 <div class="mt-8 pt-6 border-t border-gray-100 flex justify-end gap-3">
                     <button *ngIf="!isEditingProfile" (click)="startEditing()"
                         class="bg-[#28b16d] text-white px-8 py-3 rounded-lg font-bold hover:bg-[#209e60] transition-colors border-none cursor-pointer shadow-sm hover:shadow-md">
