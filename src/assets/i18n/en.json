@@ -223,7 +223,10 @@
         "CREATE_FAIL": "Failed to create property",
         "SAVING": "Saving",
         "PROPERTY_PENDING_REVIEW": "Your listing has been added and is pending review",
-        "RETRY": "Retry"
+        "RETRY": "Retry",
+        "REJECTED": "Rejected",
+        "HIDDEN": "Hidden",
+        "REASON": "Rejection Reason"
     },
     "SAVED_PROPERTIES": {
         "PAGE_TITLE": "My Saved Properties",
@@ -271,7 +274,31 @@
         "UNFURNISHED": "Unfurnished",
         "ULTRA_LUX": "Ultra Lux",
         "SUPER_LUX": "Super Lux",
-        "FREEHOLD": "Freehold"
+        "FREEHOLD": "Freehold",
+        "STATUS_LABEL": "Status",
+        "AGENT_SECTION_TITLE": "Agent Information",
+        "ACTIVE_LISTINGS": "Active Listings",
+        "CALL": "Call",
+        "EMAIL": "Email",
+        "WHATSAPP": "WhatsApp",
+        "VIEW_PROFILE": "View Profile",
+        "UNSAVE_PROPERTY": "Remove from Saved",
+        "SIMILAR_PROPERTIES": "Similar Properties",
+        "NO_SIMILAR": "No similar properties found",
+        "LOADING": "Loading...",
+        "BEDS": "Beds",
+        "BATHS": "Baths",
+        "MONTHLY_INSTALLMENT": "Monthly Installment",
+        "INSTALLMENT_PERIOD": "Installment Period",
+        "PRICE": "Price",
+        "MONTHLY_RENT": "Monthly Rent",
+        "DESCRIPTION_TITLE": "Description",
+        "AMENITIES_TITLE": "Amenities",
+        "LOCATION_TITLE": "Location",
+        "ANALYTICS_TITLE": "Property Analytics",
+        "VIEWS": "Views",
+        "WHATSAPP_CLICKS": "WhatsApp Clicks",
+        "RECOMMENDED": "Recommended Properties"
     },
     "HOME": {
         "HERO_TITLE": "Explore Our Hidden Gems for Sale and Rent",
@@ -405,12 +432,10 @@
             "CONFIRM_PASSWORD": "Confirm Password",
             "CONFIRM_PASSWORD_PLACEHOLDER": "Re-enter new password",
             "MIN_LENGTH_HINT": "Must be at least 6 characters",
-            "PASSWORDS_MISMATCH": "Passwords do not match",
-            "SUBMIT": "Save New Password"
+            "PASSWORDS_MISMATCH": "Passwords do not match"
         }
-    },
-    "PROPERTY_VIEW": {
-        "INVALID_ID": "Invalid property ID",
+    }
+}
         "LOAD_ERROR": "Error loading property data",
         "TYPE_LABEL": "Type",
         "PURPOSE_LABEL": "Purpose",

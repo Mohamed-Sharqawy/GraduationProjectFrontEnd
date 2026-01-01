@@ -16,6 +16,7 @@ export interface PropertyCardDto {
     area?: number;
     isFeatured: boolean;
     createdAt: string;
+    rejectionReason?: string;
 }
 
 export interface CreatePropertyDto {
