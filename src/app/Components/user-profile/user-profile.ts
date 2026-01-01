@@ -104,6 +104,67 @@ export class UserProfile implements OnInit {
     // Password change modal state
     showChangePasswordModal = false;
 
+    // Inline password change form
+    passwordForm = {
+        currentPassword: '',
+        newPassword: '',
+        confirmPassword: ''
+    };
+    showCurrentPassword = false;
+    showNewPassword = false;
+    showConfirmPassword = false;
+    isSubmittingPassword = false;
+
+    /**
+     * Check if password form is valid
+     */
+    isPasswordFormValid(): boolean {
+        return (
+            this.passwordForm.currentPassword.length >= 6 &&
+            this.passwordForm.newPassword.length >= 6 &&
+            this.passwordForm.confirmPassword.length >= 6 &&
+            this.passwordForm.newPassword === this.passwordForm.confirmPassword
+        );
+    }
+
+    /**
+     * Save password changes
+     */
+    async savePassword() {
+        if (!this.isPasswordFormValid()) {
+            return;
+        }
+
+        this.isSubmittingPassword = true;
+
+        try {
+            await this.authService.changePassword(
+                this.passwordForm.currentPassword,
+                this.passwordForm.newPassword
+            ).toPromise();
+
+            this.toastr.success(
+                this.translationService.instant('CHANGE_PASSWORD.SUCCESS'),
+                this.translationService.instant('COMMON.SUCCESS')
+            );
+
+            // Reset form
+            this.passwordForm = {
+                currentPassword: '',
+                newPassword: '',
+                confirmPassword: ''
+            };
+            this.showCurrentPassword = false;
+            this.showNewPassword = false;
+            this.showConfirmPassword = false;
+        } catch (error: any) {
+            const errorMessage = error?.error?.message || this.translationService.instant('CHANGE_PASSWORD.ERROR');
+            this.toastr.error(errorMessage, this.translationService.instant('COMMON.ERROR'));
+        } finally {
+            this.isSubmittingPassword = false;
+        }
+    }
+
     /**
      * Open change password modal
      */
