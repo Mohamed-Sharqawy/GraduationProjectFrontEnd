@@ -286,17 +286,21 @@ export class Propertyview implements OnInit {
   }
 
   private mapPurpose(val: string | undefined): string {
-    if (val === 'ForSale') return this.translate.instant('PROPERTY_VIEW.FOR_SALE');
-    if (val === 'ForRent') return this.translate.instant('PROPERTY_VIEW.FOR_RENT');
-    if (val === 'Both') return this.translate.instant('PROPERTY_VIEW.FOR_BOTH');
-    return val || '';
+    if (!val) return '';
+    const normalized = val.toLowerCase().replace(/\s+/g, '');
+    if (normalized === 'forsale' || normalized === 'sale') return this.translate.instant('PROPERTY_VIEW.FOR_SALE');
+    if (normalized === 'forrent' || normalized === 'rent') return this.translate.instant('PROPERTY_VIEW.FOR_RENT');
+    if (normalized === 'both' || normalized === 'forboth') return this.translate.instant('PROPERTY_VIEW.FOR_BOTH');
+    return val;
   }
 
   private mapFinishing(val?: string): string {
-    if (!val || val === 'None') return this.translate.instant('PROPERTY_VIEW.NO_FINISHING');
-    if (val === 'Semi') return this.translate.instant('PROPERTY_VIEW.SEMI_FINISHING');
-    if (val === 'Full') return this.translate.instant('PROPERTY_VIEW.FULL_FINISHING');
-    if (val === 'SuperLux') return this.translate.instant('PROPERTY_VIEW.SUPER_LUX');
+    if (!val) return this.translate.instant('PROPERTY_VIEW.NO_FINISHING');
+    const normalized = val.toLowerCase().replace(/\s+/g, '');
+    if (normalized === 'none' || normalized === 'nofinishing' || normalized === '0') return this.translate.instant('PROPERTY_VIEW.NO_FINISHING');
+    if (normalized === 'semi' || normalized === 'semifinished' || normalized === '1') return this.translate.instant('PROPERTY_VIEW.SEMI_FINISHING');
+    if (normalized === 'full' || normalized === 'fullyfinished' || normalized === '2') return this.translate.instant('PROPERTY_VIEW.FULL_FINISHING');
+    if (normalized === 'superlux' || normalized === 'lux' || normalized === '3') return this.translate.instant('PROPERTY_VIEW.SUPER_LUX');
     return val;
   }
 
