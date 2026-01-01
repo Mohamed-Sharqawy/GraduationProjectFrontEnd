@@ -303,7 +303,8 @@
         "LANGUAGE_BTN": "عربي",
         "AND": "and",
         "SUCCESS": "Success",
-        "ERROR": "Error"
+        "ERROR": "Error",
+        "CANCEL": "Cancel"
     },
     "USER_PROFILE": {
         "SIDEBAR": {
