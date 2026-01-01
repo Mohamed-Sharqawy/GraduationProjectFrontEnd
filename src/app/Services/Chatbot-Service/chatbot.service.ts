@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, timeout } from 'rxjs';
 import { environment } from '../../../environments/environments';
 import { ChatbotAskRequest, ChatbotAskResponse, ChatbotWelcomeResponse } from '../../Models/Chatbot/chatbot.models';
 import { TranslationService } from '../Translation-Service/translation.service';
@@ -29,7 +29,8 @@ export class ChatbotService {
    */
   ask(message: string): Observable<ChatbotAskResponse> {
     const headers = { 'Content-Type': 'application/json' };
-    return this.http.post<ChatbotAskResponse>(`${this.apiUrl}/ask`, { Message: message }, { headers });
+    return this.http.post<ChatbotAskResponse>(`${this.apiUrl}/ask`, { Message: message }, { headers })
+      .pipe(timeout(120000)); // 2 minutes timeout
   }
 
   /**
