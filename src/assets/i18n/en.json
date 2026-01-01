@@ -291,6 +291,7 @@
     },
     "USER_PROFILE": {
         "SIDEBAR": {
+            "MY_PROPERTIES": "My Properties",
             "PUBLISHED": "Published Properties",
             "SAVED": "Saved Properties",
             "SUBSCRIPTION": "Subscription",

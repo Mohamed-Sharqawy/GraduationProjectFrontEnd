@@ -13,16 +13,17 @@ import { ToastrService } from 'ngx-toastr';
 import { AgentService } from '../../Services/Agent-Service/agent.service';
 import { VerificationFiles } from '../../Models/Verification/verification.models';
 import { environment } from '../../../environments/environments';
+import { UserDashboard } from '../userdashboard/userdashboard';
 
 @Component({
     selector: 'app-user-profile',
     standalone: true,
-    imports: [CommonModule, RouterModule, FormsModule, TranslateModule],
+    imports: [CommonModule, RouterModule, FormsModule, TranslateModule, UserDashboard],
     templateUrl: './user-profile.html',
     styleUrl: './user-profile.css'
 })
 export class UserProfile implements OnInit {
-    activeTab: 'published' | 'subscription' | 'saved' | 'personal-info' | 'verification' = 'published';
+    activeTab: 'my-properties' | 'published' | 'subscription' | 'saved' | 'personal-info' | 'verification' = 'my-properties';
 
     // Backend base URL for images (remove /api from apiUrl)
     private backendBaseUrl = environment.apiUrl.replace('/api', '');
@@ -178,7 +179,7 @@ export class UserProfile implements OnInit {
         this.loadSubscriptionStatus();
     }
 
-    setActiveTab(tab: 'published' | 'subscription' | 'saved' | 'personal-info' | 'verification') {
+    setActiveTab(tab: 'my-properties' | 'published' | 'subscription' | 'saved' | 'personal-info' | 'verification') {
         this.activeTab = tab;
 
         // Load data when switching tabs

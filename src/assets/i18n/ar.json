@@ -291,6 +291,7 @@
     },
     "USER_PROFILE": {
         "SIDEBAR": {
+            "MY_PROPERTIES": "عقاراتي",
             "PUBLISHED": "العقارات المنشورة",
             "SAVED": "العقارات المحفوظة",
             "SUBSCRIPTION": "الاشتراك",
