@@ -432,7 +432,7 @@
             "CONFIRM_PASSWORD": "تأكيد كلمة المرور",
             "CONFIRM_PASSWORD_PLACEHOLDER": "أعد إدخال كلمة المرور",
             "MIN_LENGTH_HINT": "يجب أن تكون 6 أحرف على الأقل",
-            "PASSWORDS_MISMATCH": "كلمات المرور غير متطابقة",
+            "PASSWORDS_MISMATCH": "كلمات المرور غير متطابقة"
         }
     }
 }
