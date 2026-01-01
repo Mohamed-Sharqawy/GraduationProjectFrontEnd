@@ -163,14 +163,14 @@ export class App implements OnInit {
     }
   }
 
-  /**
-   * Get time ago string (supports Arabic and English)
-   */
   getTimeAgo(dateString: string): string {
     if (!dateString) return '';
     
     try {
-      const date = new Date(dateString);
+      // Create date object from string (assuming UTC from server)
+      // If the string doesn't have 'Z' or timezone, append 'Z' to force UTC interpretation
+      const cleanDateStr = dateString.endsWith('Z') ? dateString : `${dateString}Z`;
+      const date = new Date(cleanDateStr);
       const now = new Date();
       
       // Check if date is valid
@@ -179,8 +179,14 @@ export class App implements OnInit {
         return dateString;
       }
       
+      // Calculate difference in seconds
       const seconds = Math.floor((now.getTime() - date.getTime()) / 1000);
       const isArabic = this.translationService.currentLang() === 'ar';
+
+      // Handle future dates (clock skew issues)
+      if (seconds < 0) {
+        return isArabic ? 'الآن' : 'Just now';
+      }
 
       if (seconds < 60) {
         return isArabic ? 'الآن' : 'Just now';
