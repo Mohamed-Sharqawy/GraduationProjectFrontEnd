@@ -8,6 +8,7 @@ import { UserDashboard } from './Components/userdashboard/userdashboard';
 import { authGuard } from './Gaurds/auth-guard';
 import { agentGuard } from './Gaurds/agent-guard';
 import { subscriptionGuard } from './Gaurds/subscription-guard';
+import { guestGuard } from './Gaurds/guest-guard';
 
 export const routes: Routes = [
   { path: '', component: Home, pathMatch: 'full' }, // Use component instead of redirectTo
@@ -31,12 +32,14 @@ export const routes: Routes = [
     canActivate: [authGuard]
   },
   {
-    path: 'login', loadComponent: () =>
-      import('./Components/login/login').then(m => m.Login)
+    path: 'login', 
+    loadComponent: () => import('./Components/login/login').then(m => m.Login),
+    canActivate: [guestGuard] // Prevent logged-in users from accessing login
   },
   {
-    path: 'register', loadComponent: () =>
-      import('./Components/register/register').then(m => m.Register)
+    path: 'register', 
+    loadComponent: () => import('./Components/register/register').then(m => m.Register),
+    canActivate: [guestGuard] // Prevent logged-in users from accessing register
   },
   // Payment callback route for PayPal redirect
   {
