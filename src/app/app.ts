@@ -68,9 +68,13 @@ export class App implements OnInit {
   loadUnreadCount() {
     this.notificationService.getUnreadCount().subscribe({
       next: (response) => {
+        console.log('📊 Unread count response:', response);
         this.unreadCount = response.count;
+        console.log('🔔 Unread count set to:', this.unreadCount);
       },
-      error: (err) => console.error('Failed to load unread count:', err)
+      error: (err) => {
+        console.error('❌ Failed to load unread count:', err);
+      }
     });
   }
 
@@ -103,9 +107,11 @@ export class App implements OnInit {
   loadNotifications(append: boolean = false) {
     if (this.isLoadingNotifications || !this.hasMoreNotifications) return;
 
+    console.log(`📥 Loading notifications - Page: ${this.currentPage}, Append: ${append}`);
     this.isLoadingNotifications = true;
     this.notificationService.getNotifications(this.currentPage, this.pageSize).subscribe({
       next: (response) => {
+        console.log('✅ Notifications loaded:', response);
         if (append) {
           this.notifications = [...this.notifications, ...response.items];
         } else {
@@ -113,9 +119,10 @@ export class App implements OnInit {
         }
         this.hasMoreNotifications = response.hasNextPage;
         this.isLoadingNotifications = false;
+        console.log(`📋 Total notifications now: ${this.notifications.length}`);
       },
       error: (err) => {
-        console.error('Failed to load notifications:', err);
+        console.error('❌ Failed to load notifications:', err);
         this.isLoadingNotifications = false;
       }
     });
@@ -157,18 +164,52 @@ export class App implements OnInit {
   }
 
   /**
-   * Get time ago string
+   * Get time ago string (supports Arabic and English)
    */
   getTimeAgo(dateString: string): string {
-    const date = new Date(dateString);
-    const now = new Date();
-    const seconds = Math.floor((now.getTime() - date.getTime()) / 1000);
+    if (!dateString) return '';
+    
+    try {
+      const date = new Date(dateString);
+      const now = new Date();
+      
+      // Check if date is valid
+      if (isNaN(date.getTime())) {
+        console.warn('Invalid date:', dateString);
+        return dateString;
+      }
+      
+      const seconds = Math.floor((now.getTime() - date.getTime()) / 1000);
+      const isArabic = this.translationService.currentLang() === 'ar';
 
-    if (seconds < 60) return 'Just now';
-    if (seconds < 3600) return `${Math.floor(seconds / 60)}m ago`;
-    if (seconds < 86400) return `${Math.floor(seconds / 3600)}h ago`;
-    if (seconds < 604800) return `${Math.floor(seconds / 86400)}d ago`;
-    return date.toLocaleDateString();
+      if (seconds < 60) {
+        return isArabic ? 'الآن' : 'Just now';
+      }
+      
+      const minutes = Math.floor(seconds / 60);
+      if (seconds < 3600) {
+        return isArabic ? `منذ ${minutes} دقيقة` : `${minutes}m ago`;
+      }
+      
+      const hours = Math.floor(seconds / 3600);
+      if (seconds < 86400) {
+        return isArabic ? `منذ ${hours} ساعة` : `${hours}h ago`;
+      }
+      
+      const days = Math.floor(seconds / 86400);
+      if (seconds < 604800) {
+        return isArabic ? `منذ ${days} يوم` : `${days}d ago`;
+      }
+      
+      // Format date for older notifications
+      return date.toLocaleDateString(isArabic ? 'ar-EG' : 'en-US', {
+        month: 'short',
+        day: 'numeric'
+      });
+    } catch (error) {
+      console.error('Error parsing date:', dateString, error);
+      return dateString;
+    }
   }
 
   logout() {
