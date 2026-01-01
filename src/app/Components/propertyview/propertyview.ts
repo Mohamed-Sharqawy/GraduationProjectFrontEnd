@@ -214,7 +214,14 @@ export class Propertyview implements OnInit {
     // Update title and location based on language
     if (this.currentLang === 'en') {
       this.title = data.titleEn || data.title;
-      this.location = [data.projectNameEn, data.districtEn, data.cityEn].filter(Boolean).join(', ');
+      const parts = [data.projectNameEn, data.districtEn, data.cityEn].filter(Boolean);
+      // Fallback to default fields if En fields are empty, but prefer En if at least one exists
+      if (parts.length > 0) {
+        this.location = parts.join(', ');
+      } else {
+        // If no English location data, fallback to default (likely Arabic) rather than showing nothing
+        this.location = [data.projectName, data.district, data.city].filter(Boolean).join(', ');
+      }
     } else {
       this.title = data.title;
       this.location = [data.projectName, data.district, data.city].filter(Boolean).join(', ');
@@ -226,6 +233,32 @@ export class Propertyview implements OnInit {
 
     // Update property specs with current language
     this.updatePropertySpecs();
+  }
+
+  // ... (keeping other methods same)
+
+  // Helper methods for similar properties
+  getSimilarPropertyTitle(prop: PropertyListItemDto): string {
+    if (this.currentLang === 'en') {
+      return prop.titleEn || prop.title;
+    }
+    return prop.title;
+  }
+
+  getSimilarPropertyLocation(prop: PropertyListItemDto): string {
+    if (this.currentLang === 'en') {
+      // Prioritize English fields over the pre-computed location string (which might be Arabic)
+      const city = prop.cityEn || prop.city;
+      const district = prop.districtEn || prop.district;
+      
+      if (city || district) {
+        return district ? `${district}, ${city}` : city || '';
+      }
+      
+      // Fallback
+      return prop.location || '';
+    }
+    return prop.location || prop.city || '';
   }
 
   private updatePropertySpecs() {
@@ -349,25 +382,4 @@ export class Propertyview implements OnInit {
     });
   }
 
-  // Helper methods for similar properties
-  getSimilarPropertyTitle(prop: PropertyListItemDto): string {
-    if (this.currentLang === 'en') {
-      return prop.titleEn || prop.title;
-    }
-    return prop.title;
-  }
-
-  getSimilarPropertyLocation(prop: PropertyListItemDto): string {
-    if (this.currentLang === 'en') {
-      return prop.location || prop.cityEn || prop.city || '';
-    }
-    return prop.location || prop.city || '';
-  }
-
-  getSimilarPropertyType(prop: PropertyListItemDto): string {
-    if (this.currentLang === 'en') {
-      return prop.propertyTypeEn || prop.propertyType || '';
-    }
-    return prop.propertyType || '';
-  }
 }

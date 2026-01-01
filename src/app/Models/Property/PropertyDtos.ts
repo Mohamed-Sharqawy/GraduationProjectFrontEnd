@@ -8,6 +8,7 @@ export interface PropertyCardDto {
     city: string;
     cityEn?: string;
     district?: string;
+    districtEn?: string;
     primaryImageUrl?: string;
     purpose: number; // 1=Buy, 2=Rent
     status: string; // 'PendingReview', 'Active', 'SoldOrRented', 'Hidden', 'Rejected'

@@ -575,5 +575,14 @@ export class UserDashboard {
         this.districtSearchTerm = '';
         this.projectSearchTerm = '';
     }
+
+    getPropertyLocation(prop: PropertyCardDto): string {
+        if (this.translationService.currentLang === 'en') {
+             const city = prop.cityEn || prop.city;
+             const district = prop.districtEn || prop.district;
+             return district ? `${district}, ${city}` : city || '';
+        }
+        return (prop.district ? `${prop.district}, ` : '') + prop.city;
+    }
 }
 
