@@ -10,7 +10,7 @@ export interface PropertyCardDto {
     district?: string;
     primaryImageUrl?: string;
     purpose: number; // 1=Buy, 2=Rent
-    status: number; // 0=Pending, 1=Active, 2=Sold, 3=Hidden, 4=Rejected
+    status: string; // 'PendingReview', 'Active', 'SoldOrRented', 'Hidden', 'Rejected'
     rooms?: number;
     bathrooms?: number;
     area?: number;
