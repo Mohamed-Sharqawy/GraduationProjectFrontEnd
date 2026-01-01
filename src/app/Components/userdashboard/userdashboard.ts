@@ -579,10 +579,22 @@ export class UserDashboard {
     getPropertyLocation(prop: PropertyCardDto): string {
         if (this.translationService.currentLang === 'en') {
              const city = prop.cityEn || prop.city;
-             const district = prop.districtEn || prop.district;
-             return district ? `${district}, ${city}` : city || '';
+             // Only use district if we have an English version to avoid mixed languages (e.g. "Nasr City, Cairo" vs "مدينة نصر, Cairo")
+             // If DistrictEn is missing, better to show just CityEn than Mixed.
+             const district = prop.districtEn;
+             
+             if (district && city) {
+                 return `${district}, ${city}`;
+             }
+             return city || '';
         }
-        return (prop.district ? `${prop.district}, ` : '') + prop.city;
+        // Arabic Mode
+        const city = prop.city;
+        const district = prop.district;
+         if (district && city) {
+             return `${district}, ${city}`;
+         }
+        return city || '';
     }
 }
 
