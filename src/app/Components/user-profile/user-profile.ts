@@ -653,11 +653,23 @@ export class UserProfile implements OnInit {
         const prop = saved.property;
         if (this.currentLang === 'en') {
              const city = prop.cityEn || prop.city;
-             const district = prop.districtEn || prop.district;
-             const loc = district ? `${district}, ${city}` : city || '';
-             return loc || prop.location || '';
+             // Only use district if we have an English version to avoid mixed languages (e.g. "Nasr City, Cairo" vs "مدينة نصر, Cairo")
+             // If DistrictEn is missing, better to show just CityEn than Mixed.
+             const district = prop.districtEn;
+             
+             if (district && city) {
+                 return `${district}, ${city}`;
+             }
+             return city || prop.location || '';
         }
-        return prop.location || prop.city || '';
+        // Arabic Mode
+        const city = prop.city;
+        const district = prop.district;
+         if (district && city) {
+             return `${district}, ${city}`;
+         }
+        // If constructed location fails, fallback to backend location string
+        return prop.location || city || '';
     }
 
 }
