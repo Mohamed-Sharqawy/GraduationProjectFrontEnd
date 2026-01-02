@@ -389,4 +389,24 @@ export class Propertyview implements OnInit {
     });
   }
 
+  // Image slider navigation methods
+  nextImage() {
+    if (this.property && this.property.images.length > 0) {
+      this.currentImageIndex = (this.currentImageIndex + 1) % this.property.images.length;
+    }
+  }
+
+  previousImage() {
+    if (this.property && this.property.images.length > 0) {
+      this.currentImageIndex = this.currentImageIndex === 0 
+        ? this.property.images.length - 1 
+        : this.currentImageIndex - 1;
+    }
+  }
+
+  goToImage(index: number) {
+    if (this.property && index >= 0 && index < this.property.images.length) {
+      this.currentImageIndex = index;
+    }
+  }
 }
