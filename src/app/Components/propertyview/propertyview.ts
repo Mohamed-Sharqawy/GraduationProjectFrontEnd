@@ -47,6 +47,9 @@ export class Propertyview implements OnInit {
   // Image slider
   currentImageIndex = 0;
 
+  // View count tracking (per component instance, not session)
+  private hasIncrementedView = false;
+
   description: string[] = [];
   propertySpecs: { label: string; value: string }[] = [];
 
@@ -105,13 +108,10 @@ export class Propertyview implements OnInit {
         this.loadProperty(this.propertyId);
         this.checkIfSaved(this.propertyId);
         
-        // Only increment view count once per session (not on refresh)
-        const viewedKey = `property_viewed_${this.propertyId}`;
-        const hasViewed = sessionStorage.getItem(viewedKey);
-        
-        if (!hasViewed) {
+        // Only increment view count once per component instance (not on refresh/re-render)
+        if (!this.hasIncrementedView) {
           this.incrementViewCount(this.propertyId);
-          sessionStorage.setItem(viewedKey, 'true');
+          this.hasIncrementedView = true;
         }
         
         this.loadSimilarProperties(this.propertyId);
