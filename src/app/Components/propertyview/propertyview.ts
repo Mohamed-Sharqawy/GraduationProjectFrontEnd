@@ -44,6 +44,9 @@ export class Propertyview implements OnInit {
   isSaved = false;
   propertyId: number | null = null;
 
+  // Image slider
+  currentImageIndex = 0;
+
   description: string[] = [];
   propertySpecs: { label: string; value: string }[] = [];
 

@@ -1,10 +1,31 @@
 <div class="property-container" *ngIf="!isLoading && !errorMessage">
-    <!-- Image Gallery - Scrollable -->
+    <!-- Image Slider with Navigation Arrows -->
     <div class="gallery-section" *ngIf="property && property.images && property.images.length > 0">
-        <div class="image-gallery-scroll">
-            <div class="gallery-item" *ngFor="let img of property.images; let i = index">
-                <img [src]="img.imageUrl" [alt]="title + ' - Image ' + (i + 1)">
-                <span class="image-counter">{{ i + 1 }} / {{ property.images.length }}</span>
+        <div class="image-slider">
+            <img 
+                [src]="property.images[currentImageIndex].imageUrl" 
+                [alt]="title + ' - Image ' + (currentImageIndex + 1)"
+                class="slider-image">
+            
+            <!-- Navigation Arrows -->
+            <button class="slider-arrow prev" (click)="previousImage()" *ngIf="property.images.length > 1">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            <button class="slider-arrow next" (click)="nextImage()" *ngIf="property.images.length > 1">
+                <i class="fas fa-chevron-right"></i>
+            </button>
+            
+            <!-- Image Counter -->
+            <span class="image-counter">{{ currentImageIndex + 1 }} / {{ property.images.length }}</span>
+            
+            <!-- Thumbnail Indicators -->
+            <div class="thumbnail-indicators" *ngIf="property.images.length > 1">
+                <div 
+                    *ngFor="let img of property.images; let i = index" 
+                    class="thumbnail-dot"
+                    [class.active]="i === currentImageIndex"
+                    (click)="goToImage(i)">
+                </div>
             </div>
         </div>
     </div>
