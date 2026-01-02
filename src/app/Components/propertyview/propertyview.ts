@@ -104,7 +104,16 @@ export class Propertyview implements OnInit {
         this.propertyId = Number(id);
         this.loadProperty(this.propertyId);
         this.checkIfSaved(this.propertyId);
-        this.incrementViewCount(this.propertyId);
+        
+        // Only increment view count once per session (not on refresh)
+        const viewedKey = `property_viewed_${this.propertyId}`;
+        const hasViewed = sessionStorage.getItem(viewedKey);
+        
+        if (!hasViewed) {
+          this.incrementViewCount(this.propertyId);
+          sessionStorage.setItem(viewedKey, 'true');
+        }
+        
         this.loadSimilarProperties(this.propertyId);
         
         // Scroll to top when property changes
