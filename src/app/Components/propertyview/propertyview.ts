@@ -120,7 +120,11 @@ export class Propertyview implements OnInit {
 
   incrementViewCount(id: number) {
     this.propertyService.incrementViewCount(id).subscribe({
-      next: () => console.log('View count incremented'),
+      next: () => {
+        // Increment local viewCount to display immediately
+        this.viewCount++;
+        console.log('View count incremented');
+      },
       error: (err) => console.error('Failed to increment view count:', err)
     });
   }
