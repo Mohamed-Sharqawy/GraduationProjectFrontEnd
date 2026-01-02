@@ -129,7 +129,12 @@ export class Propertyview implements OnInit {
 
   incrementViewCount(id: number) {
     this.propertyService.incrementViewCount(id).subscribe({
-      next: () => console.log('View count incremented'),
+      next: () => {
+        // Increment local viewCount to show updated value immediately
+        this.viewCount++;
+        this.cdr.detectChanges();
+        console.log('View count incremented');
+      },
       error: (err) => console.error('Failed to increment view count:', err)
     });
   }
@@ -140,9 +145,6 @@ export class Propertyview implements OnInit {
       next: (data) => {
         this.property = data;
         this.mapData(data);
-        // Increment viewCount locally since we just called incrementViewCount on server
-        // This makes the updated count visible immediately without waiting for page refresh
-        this.viewCount++;
         this.isLoading = false;
         this.cdr.detectChanges();
       },
