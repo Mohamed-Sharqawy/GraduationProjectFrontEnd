@@ -208,6 +208,7 @@
         "DESCRIPTION_EN": "Description (English)",
         "DESCRIPTION_EN_PLACEHOLDER": "Write a detailed description...",
         "IS_FEATURED": "Featured Property",
+        "FEATURED_NOTE": "Featured listings are limited based on your current package",
         "IS_AGRICULTURAL": "Agricultural Land",
         "IMAGES": "Property Images",
         "IMAGES_NOTE": "Max 6 images. First one is primary.",

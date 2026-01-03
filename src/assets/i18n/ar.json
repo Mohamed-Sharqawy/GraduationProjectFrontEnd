@@ -208,6 +208,7 @@
         "DESCRIPTION_EN": "الوصف بالإنجليزية (Description English)",
         "DESCRIPTION_EN_PLACEHOLDER": "Write a detailed description...",
         "IS_FEATURED": "عقار مميز (Featured)",
+        "FEATURED_NOTE": "الإعلانات المميزة محدودة حسب باقتك الحالية",
         "IS_AGRICULTURAL": "أرض زراعية (Agricultural)",
         "IMAGES": "صور العقار (Images)",
         "IMAGES_NOTE": "حد أقصى 6 صور. الصورة الأولى هي الأساسية.",
