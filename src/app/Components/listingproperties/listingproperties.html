@@ -169,13 +169,18 @@
                     <!-- Save Button -->
                     <div class="absolute bottom-3 right-3">
                         <button (click)="toggleSave($event, prop.id)"
-                            class="rounded-full w-10 h-10 flex items-center justify-center transition-all shadow-md hover:scale-110 bg-white"
+                            class="rounded-full w-10 h-10 flex items-center justify-center transition-all shadow-md hover:scale-110 bg-white border border-gray-200"
                             [title]="isPropertySaved(prop.id) ? ('LISTING_PROPERTIES.UNSAVE_TOOLTIP' | translate) : ('LISTING_PROPERTIES.SAVE_TOOLTIP' | translate)">
-                            <i class="fa text-2xl transition-colors" 
-                                [class.fa-heart]="isPropertySaved(prop.id)"
-                                [class.fa-heart-o]="!isPropertySaved(prop.id)"
-                                [class.text-red-600]="isPropertySaved(prop.id)"
-                                [class.text-gray-600]="!isPropertySaved(prop.id)"></i>
+                            
+                            <!-- Saved: Red Heart -->
+                            @if (isPropertySaved(prop.id)) {
+                                <i class="fa fa-heart text-2xl" style="color: #dc3545;"></i>
+                            }
+                            
+                            <!-- Unsaved: Gray Outline Heart -->
+                            @if (!isPropertySaved(prop.id)) {
+                                <i class="fa fa-heart-o text-2xl" style="color: #666;"></i>
+                            }
                         </button>
                     </div>
                 </div>
