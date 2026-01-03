@@ -427,7 +427,10 @@
             "SELFIE_DESC": "Take a selfie holding your ID",
             "CHOOSE_FILE": "Choose File",
             "SUBMITTING": "Submitting...",
-            "SUBMIT": "Submit for Verification"
+            "SUBMIT": "Submit for Verification",
+            "VERIFIED_TITLE": "Your Account is Verified",
+            "VERIFIED_MESSAGE": "Your account has been verified successfully and you can now enjoy all platform features",
+            "VERIFIED_BADGE": "Verified Account"
         },
         "CHANGE_PASSWORD": {
             "TITLE": "Change Password",
