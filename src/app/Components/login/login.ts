@@ -14,6 +14,7 @@ import { TranslateModule } from '@ngx-translate/core';
 export class Login {
   email = '';
   password = '';
+  validationErrors: any = {}; // For inline validation
 
   constructor(
     private authService: AuthService,
@@ -21,9 +22,32 @@ export class Login {
     private toastr: ToastrService
   ) { }
 
+  validateLogin(): boolean {
+    this.validationErrors = {};
+
+    if (!this.email || this.email.trim() === '') {
+      this.validationErrors.email = 'البريد الإلكتروني مطلوب';
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(this.email)) {
+      this.validationErrors.email = 'البريد الإلكتروني غير صحيح';
+    }
+
+    if (!this.password || this.password.trim() === '') {
+      this.validationErrors.password = 'كلمة المرور مطلوبة';
+    } else if (this.password.length < 6) {
+      this.validationErrors.password = 'كلمة المرور يجب أن تكون 6 أحرف على الأقل';
+    }
+
+    return Object.keys(this.validationErrors).length === 0;
+  }
+
   login() {
     console.log('🔐 Login function called!');
     console.log('📧 Login values:', { email: this.email, password: this.password });
+
+    // Validate before submission
+    if (!this.validateLogin()) {
+      return;
+    }
 
     this.authService.login({
       email: this.email,

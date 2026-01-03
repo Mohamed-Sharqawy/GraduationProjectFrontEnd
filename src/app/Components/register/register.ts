@@ -23,12 +23,54 @@ export class Register {
   confirmPassword = '';
   email = '';
   role: UserRole = UserRole.Owner; // Use UserRole enum type instead of string
+  validationErrors: any = {}; // For inline validation
 
   constructor(
     private authService: AuthService,
     private router: Router,
     private toastr: ToastrService
   ) { }
+
+  validateRegister(): boolean {
+    this.validationErrors = {};
+
+    // Full Name validation
+    if (!this.fullName || this.fullName.trim() === '') {
+      this.validationErrors.fullName = 'الاسم الكامل مطلوب';
+    } else if (this.fullName.trim().length < 3) {
+      this.validationErrors.fullName = 'الاسم يجب أن يكون 3 أحرف على الأقل';
+    }
+
+    // Email validation
+    if (!this.email || this.email.trim() === '') {
+      this.validationErrors.email = 'البريد الإلكتروني مطلوب';
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(this.email)) {
+      this.validationErrors.email = 'البريد الإلكتروني غير صحيح';
+    }
+
+    // Phone validation
+    if (!this.phoneNumber || this.phoneNumber.trim() === '') {
+      this.validationErrors.phoneNumber = 'رقم الهاتف مطلوب';
+    } else if (!/^[0-9]{11}$/.test(this.phoneNumber.replace(/[\s-]/g, ''))) {
+      this.validationErrors.phoneNumber = 'رقم الهاتف يجب أن يكون 11 رقم';
+    }
+
+    // Password validation
+    if (!this.password || this.password.trim() === '') {
+      this.validationErrors.password = 'كلمة المرور مطلوبة';
+    } else if (this.password.length < 6) {
+      this.validationErrors.password = 'كلمة المرور يجب أن تكون 6 أحرف على الأقل';
+    }
+
+    // Confirm Password validation
+    if (!this.confirmPassword || this.confirmPassword.trim() === '') {
+      this.validationErrors.confirmPassword = 'تأكيد كلمة المرور مطلوب';
+    } else if (this.password !== this.confirmPassword) {
+      this.validationErrors.confirmPassword = 'كلمتا المرور غير متطابقتين';
+    }
+
+    return Object.keys(this.validationErrors).length === 0;
+  }
 
   register() {
     console.log('📝 Register function called!');
@@ -42,15 +84,8 @@ export class Register {
       confirmPassword: this.confirmPassword
     });
 
-    // Validate password match
-    if (this.password !== this.confirmPassword) {
-      this.toastr.error('Passwords do not match!', 'Validation Error');
-      return;
-    }
-
-    // Validate required fields
-    if (!this.fullName || !this.email || !this.phoneNumber || !this.password) {
-      this.toastr.error('Please fill in all required fields!', 'Validation Error');
+    // Validate before submission
+    if (!this.validateRegister()) {
       return;
     }
 
