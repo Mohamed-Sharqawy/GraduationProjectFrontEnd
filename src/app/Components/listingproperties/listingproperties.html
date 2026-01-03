@@ -172,15 +172,9 @@
                             class="rounded-full w-10 h-10 flex items-center justify-center transition-all shadow-md hover:scale-110 bg-white border border-gray-200"
                             [title]="isPropertySaved(prop.id) ? ('LISTING_PROPERTIES.UNSAVE_TOOLTIP' | translate) : ('LISTING_PROPERTIES.SAVE_TOOLTIP' | translate)">
                             
-                            <!-- Saved: Red Heart -->
-                            @if (isPropertySaved(prop.id)) {
-                                <i class="fa fa-heart text-2xl" style="color: #dc3545;"></i>
-                            }
-                            
-                            <!-- Unsaved: Gray Outline Heart -->
-                            @if (!isPropertySaved(prop.id)) {
-                                <i class="fa fa-heart-o text-2xl" style="color: #666;"></i>
-                            }
+                            <!-- Heart Icon: Always Solid, Change Color -->
+                            <i class="fa fa-heart text-2xl transition-colors"
+                               [style.color]="isPropertySaved(prop.id) ? '#dc3545' : '#aaaaaa'"></i>
                         </button>
                     </div>
                 </div>
