@@ -266,20 +266,18 @@
                     placeholder="{{ 'USER_DASHBOARD.DESCRIPTION_EN_PLACEHOLDER' | translate }}"></textarea>
             </div>
 
-            <!-- <div class="form-row">
-                <div class="form-group">
-                    <label>
-                        <input type="checkbox" [(ngModel)]="currentProperty.IsFeatured" name="IsFeatured">
-                        {{ 'USER_DASHBOARD.IS_FEATURED' | translate }}
-                    </label>
-                </div>
-                <div class="form-group">
-                    <label>
-                        <input type="checkbox" [(ngModel)]="currentProperty.IsAgricultural" name="IsAgricultural">
-                        {{ 'USER_DASHBOARD.IS_AGRICULTURAL' | translate }}
-                    </label>
-                </div>
-            </div> -->
+            <!-- Featured Property Checkbox (only when creating new property) -->
+            @if (!isEditing) {
+            <div class="form-group full-width">
+                <label class="checkbox-label">
+                    <input type="checkbox" [(ngModel)]="currentProperty.IsFeatured" name="IsFeatured">
+                    <span>{{ 'USER_DASHBOARD.IS_FEATURED' | translate }}</span>
+                </label>
+                <small style="color: #666; display: block; margin-top: 5px;">
+                    {{ 'USER_DASHBOARD.FEATURED_NOTE' | translate }}
+                </small>
+            </div>
+            }
 
             @if (!isEditing) {
             <div class="form-group">
