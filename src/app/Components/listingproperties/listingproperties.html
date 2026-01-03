@@ -33,7 +33,7 @@
 
             <!-- Filters Row -->
             <div class="bg-white rounded-lg shadow-sm p-4 border border-gray-200">
-                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
+                <div class="listing-filter-grid grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
                     <!-- City Filter -->
                     <div class="flex flex-col">
                         <label class="text-xs text-gray-500 mb-1">{{ 'LISTING_PROPERTIES.CITY' | translate }}</label>
@@ -171,14 +171,14 @@
                         <button (click)="toggleSave($event, prop.id)"
                             class="rounded-full w-10 h-10 flex items-center justify-center transition-all shadow-md hover:scale-110 bg-white border border-gray-200"
                             [title]="isPropertySaved(prop.id) ? ('LISTING_PROPERTIES.UNSAVE_TOOLTIP' | translate) : ('LISTING_PROPERTIES.SAVE_TOOLTIP' | translate)">
-                            
+
                             <!-- Heart Icon: Always Solid, Change Color -->
                             <i class="fa fa-heart text-2xl transition-colors"
-                               [style.color]="isPropertySaved(prop.id) ? '#dc3545' : '#aaaaaa'"></i>
+                                [style.color]="isPropertySaved(prop.id) ? '#dc3545' : '#aaaaaa'"></i>
                         </button>
                     </div>
                 </div>
- 
+
                 <!-- Content Section -->
                 <div class="flex-1 p-5 flex flex-col relative">
 
@@ -210,7 +210,7 @@
                     </div>
 
                     <!-- Price Section -->
-                    <div class="bg-gray-50 rounded-md p-3 flex items-center gap-6 mb-4 max-w-md">
+                    <div class="property-price-section bg-gray-50 rounded-md p-3 flex items-center gap-6 mb-4 max-w-md">
                         <div class="flex flex-col">
                             <span class="text-[10px] font-bold text-gray-400 uppercase">{{
                                 'LISTING_PROPERTIES.PRICE' | translate }}</span>

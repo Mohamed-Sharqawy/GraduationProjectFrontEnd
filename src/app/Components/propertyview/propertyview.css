@@ -486,7 +486,8 @@
     content: '';
     position: absolute;
     bottom: 0;
-    left: 0; /* Align left for LTR, check RTL later */
+    left: 0;
+    /* Align left for LTR, check RTL later */
     width: 60px;
     height: 4px;
     background: #28b16d;
@@ -538,7 +539,8 @@
 }
 
 .property-card:hover .card-image img {
-    transform: scale(1.05); /* Zoom effect on hover */
+    transform: scale(1.05);
+    /* Zoom effect on hover */
 }
 
 .card-image .badge {
@@ -640,7 +642,8 @@
 }
 
 .property-card:hover .view-btn {
-    gap: 8px; /* Arrow moves on hover */
+    gap: 8px;
+    /* Arrow moves on hover */
 }
 
 /* Loading State */
@@ -662,8 +665,13 @@
 }
 
 @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
 }
 
 .loading-state p {
@@ -684,26 +692,80 @@
     font-weight: 600;
 }
 
-/* Responsive */
+/* Responsive Styles */
+@media (max-width: 1024px) {
+    .image-slider {
+        height: 450px;
+    }
+}
+
 @media (max-width: 768px) {
     .content-layout {
         flex-direction: column;
     }
-    
+
     .sidebar {
         max-width: 100%;
+        order: 2;
+        /* Content first, sidebar details after */
     }
-    
+
+    .property-details {
+        order: 1;
+    }
+
     .properties-grid {
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    }
+
+    .image-slider {
+        height: 400px;
+    }
+
+    .grid-info {
         grid-template-columns: 1fr;
     }
-    
-    .gallery-item {
-        min-width: 300px;
-        height: 250px;
+
+    .specs-horizontal {
+        flex-wrap: wrap;
+        gap: 15px;
     }
-    
-    .grid-info {
+}
+
+@media (max-width: 640px) {
+    .image-slider {
+        height: 300px;
+        /* Reduced specific height for mobile */
+    }
+
+    .slider-arrow {
+        width: 40px;
+        height: 40px;
+        font-size: 16px;
+    }
+
+    .price-row h1 {
+        font-size: 24px;
+    }
+
+    .actions {
+        flex-wrap: wrap;
+    }
+
+    .btn-email,
+    .btn-call,
+    .btn-whatsapp {
+        flex: 1 1 100%;
+        /* Full width buttons on mobile */
+        justify-content: center;
+    }
+
+    .broker-header {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .amenities-grid {
         grid-template-columns: 1fr;
     }
 }

@@ -347,3 +347,16 @@
 .role-card input[type="radio"]:checked+.role-content:hover {
     border-color: #28b16d;
 }
+
+/* Register Specific Responsive Styles */
+@media (max-width: 480px) {
+
+    /* Stack role options on small mobile screens */
+    .role-options {
+        grid-template-columns: 1fr;
+    }
+
+    .auth-container {
+        padding: 1rem;
+    }
+}

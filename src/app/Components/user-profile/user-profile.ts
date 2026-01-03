@@ -26,6 +26,17 @@ import { ChangePasswordModalComponent } from '../change-password-modal/change-pa
 export class UserProfile implements OnInit {
     activeTab: 'my-properties' | 'published' | 'subscription' | 'saved' | 'personal-info' | 'verification' = 'my-properties';
 
+    // Sidebar state
+    isSidebarOpen = false;
+
+    toggleSidebar() {
+        this.isSidebarOpen = !this.isSidebarOpen;
+    }
+
+    closeSidebar() {
+        this.isSidebarOpen = false;
+    }
+
     // Backend base URL for images (remove /api from apiUrl)
     private backendBaseUrl = environment.apiUrl.replace('/api', '');
 
@@ -227,7 +238,7 @@ export class UserProfile implements OnInit {
     ngOnInit() {
         // Get current language
         this.currentLang = this.translationService.currentLang || this.translationService.defaultLang || 'ar';
-        
+
         // Subscribe to language changes
         this.translationService.onLangChange.subscribe(event => {
             this.currentLang = event.lang;
@@ -651,22 +662,22 @@ export class UserProfile implements OnInit {
     getSavedPropertyLocation(saved: SavedPropertyDto): string {
         const prop = saved.property;
         if (this.currentLang === 'en') {
-             const city = prop.cityEn || prop.city;
-             // Only use district if we have an English version to avoid mixed languages (e.g. "Nasr City, Cairo" vs "مدينة نصر, Cairo")
-             // If DistrictEn is missing, better to show just CityEn than Mixed.
-             const district = prop.districtEn;
-             
-             if (district && city) {
-                 return `${district}, ${city}`;
-             }
-             return city || prop.location || '';
+            const city = prop.cityEn || prop.city;
+            // Only use district if we have an English version to avoid mixed languages (e.g. "Nasr City, Cairo" vs "مدينة نصر, Cairo")
+            // If DistrictEn is missing, better to show just CityEn than Mixed.
+            const district = prop.districtEn;
+
+            if (district && city) {
+                return `${district}, ${city}`;
+            }
+            return city || prop.location || '';
         }
         // Arabic Mode
         const city = prop.city;
         const district = prop.district;
-         if (district && city) {
-             return `${district}, ${city}`;
-         }
+        if (district && city) {
+            return `${district}, ${city}`;
+        }
         // If constructed location fails, fallback to backend location string
         return prop.location || city || '';
     }

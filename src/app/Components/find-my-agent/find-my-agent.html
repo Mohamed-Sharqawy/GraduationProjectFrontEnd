@@ -33,7 +33,7 @@
             <div [routerLink]="['/agent-profile', encodeAgentId(agent.id)]"
                 class="bg-white border border-gray-200 rounded-lg p-0 mb-5 hover:shadow-lg transition-shadow duration-300 flex flex-col sm:flex-row h-auto min-h-[220px] overflow-hidden cursor-pointer">
 
-                <div class="w-full sm:w-48 h-56 sm:h-auto flex-shrink-0 relative bg-gray-100">
+                <div class="agent-card-image w-full sm:w-48 h-56 sm:h-auto flex-shrink-0 relative bg-gray-100">
                     <img [src]="agent.profileImageUrl || 'https://placehold.co/400x400?text=No+Image'"
                         [alt]="agent.fullName" class="w-full h-full object-cover">
                 </div>
@@ -62,8 +62,8 @@
                         </div>
                     </div>
 
-                    <div class="flex items-end justify-between mt-3">
-                        <div class="flex gap-3">
+                    <div class="flex items-end justify-between mt-3 agent-actions-wrapper">
+                        <div class="flex gap-3 agent-actions-container">
                             <a [href]="'mailto:' + agent.email" (click)="$event.stopPropagation()"
                                 class="bg-[#eef5f6] hover:bg-[#e0ecef] text-[#0e5c65] px-5 py-2.5 rounded-[6px] font-bold text-sm flex items-center gap-2 transition-colors cursor-pointer">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
