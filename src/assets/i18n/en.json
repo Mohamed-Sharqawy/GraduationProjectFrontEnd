@@ -443,5 +443,17 @@
             "MIN_LENGTH_HINT": "Must be at least 6 characters",
             "PASSWORDS_MISMATCH": "Passwords do not match"
         }
+    },
+    "VALIDATION": {
+        "VALIDATION_ERROR": "Validation Error",
+        "TITLE_REQUIRED": "Title is required",
+        "DESCRIPTION_REQUIRED": "Description is required",
+        "PROPERTY_TYPE_REQUIRED": "Property type is required",
+        "CITY_REQUIRED": "City is required",
+        "PRICE_REQUIRED": "Price is required and must be greater than zero",
+        "AREA_REQUIRED": "Area is required and must be greater than zero",
+        "PURPOSE_REQUIRED": "Purpose is required (sale or rent)",
+        "IMAGES_REQUIRED": "At least one image is required",
+        "RENT_PRICE_REQUIRED": "Monthly rent price is required for rental properties"
     }
 }

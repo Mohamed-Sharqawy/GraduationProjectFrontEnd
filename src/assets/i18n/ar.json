@@ -443,5 +443,17 @@
             "MIN_LENGTH_HINT": "يجب أن تكون 6 أحرف على الأقل",
             "PASSWORDS_MISMATCH": "كلمات المرور غير متطابقة"
         }
+    },
+    "VALIDATION": {
+        "VALIDATION_ERROR": "خطأ في البيانات المدخلة",
+        "TITLE_REQUIRED": "العنوان مطلوب",
+        "DESCRIPTION_REQUIRED": "الوصف مطلوب",
+        "PROPERTY_TYPE_REQUIRED": "نوع العقار مطلوب",
+        "CITY_REQUIRED": "المدينة مطلوبة",
+        "PRICE_REQUIRED": "السعر مطلوب ويجب أن يكون أكبر من صفر",
+        "AREA_REQUIRED": "المساحة مطلوبة ويجب أن تكون أكبر من صفر",
+        "PURPOSE_REQUIRED": "الغرض من البيع مطلوب (بيع أو إيجار)",
+        "IMAGES_REQUIRED": "يجب رفع صورة واحدة على الأقل",
+        "RENT_PRICE_REQUIRED": "سعر الإيجار الشهري مطلوب للعقارات المعروضة للإيجار"
     }
 }
