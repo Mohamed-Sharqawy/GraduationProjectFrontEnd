@@ -169,17 +169,13 @@
                     <!-- Save Button -->
                     <div class="absolute bottom-3 right-3">
                         <button (click)="toggleSave($event, prop.id)"
-                            class="rounded-full w-10 h-10 flex items-center justify-center transition-all shadow-xl border-2 hover:scale-110"
-                            [class.bg-gray-800]="!isPropertySaved(prop.id)"
-                            [class.bg-gray-800]="isPropertySaved(prop.id)"
-                            [class.border-gray-700]="!isPropertySaved(prop.id)"
-                            [class.border-red-500]="isPropertySaved(prop.id)"
+                            class="rounded-full w-10 h-10 flex items-center justify-center transition-all shadow-md hover:scale-110 bg-white"
                             [title]="isPropertySaved(prop.id) ? ('LISTING_PROPERTIES.UNSAVE_TOOLTIP' | translate) : ('LISTING_PROPERTIES.SAVE_TOOLTIP' | translate)">
-                            <i class="far fa-heart text-2xl transition-colors" 
+                            <i class="fa text-2xl transition-colors" 
                                 [class.fa-heart]="isPropertySaved(prop.id)"
                                 [class.fa-heart-o]="!isPropertySaved(prop.id)"
-                                [class.text-red-500]="isPropertySaved(prop.id)"
-                                [class.text-white]="!isPropertySaved(prop.id)"></i>
+                                [class.text-red-600]="isPropertySaved(prop.id)"
+                                [class.text-gray-600]="!isPropertySaved(prop.id)"></i>
                         </button>
                     </div>
                 </div>
