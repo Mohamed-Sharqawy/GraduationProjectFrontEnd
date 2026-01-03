@@ -116,12 +116,12 @@
                 <div class="form-group">
                     <label>{{ 'USER_DASHBOARD.PRICE' | translate }}</label>
                     <input type="number" class="form-control" [(ngModel)]="currentProperty.Price" name="Price" required
-                        min="1">
+                        min="1" [disabled]="isEditing">
                 </div>
                 <div class="form-group">
                     <label>{{ 'USER_DASHBOARD.AREA' | translate }}</label>
                     <input type="number" class="form-control" [(ngModel)]="currentProperty.Area" name="Area" required
-                        min="1">
+                        min="1" [disabled]="isEditing">
                 </div>
             </div>
 
@@ -130,9 +130,9 @@
                     <label>{{ 'USER_DASHBOARD.CITY' | translate }} *</label>
                     <input type="text" class="form-control search-input" [(ngModel)]="citySearchTerm"
                         (input)="filterCities()" placeholder="{{ 'USER_DASHBOARD.SEARCH_CITY' | translate }}"
-                        name="citySearch">
+                        name="citySearch" [disabled]="isEditing">
                     <select class="form-control" [(ngModel)]="currentProperty.CityId" name="CityId"
-                        (change)="onCityChange(currentProperty.CityId)" required>
+                        (change)="onCityChange(currentProperty.CityId)" required [disabled]="isEditing">
                         <option [ngValue]="null" disabled selected>{{ 'USER_DASHBOARD.SELECT_CITY' | translate }}
                         </option>
                         @if (isLoadingCities) {
@@ -147,9 +147,9 @@
                     <label>{{ 'USER_DASHBOARD.DISTRICT' | translate }}</label>
                     <input type="text" class="form-control search-input" [(ngModel)]="districtSearchTerm"
                         (input)="filterDistricts()" placeholder="{{ 'USER_DASHBOARD.SEARCH_DISTRICT' | translate }}"
-                        [disabled]="!currentProperty.CityId" name="districtSearch">
+                        [disabled]="!currentProperty.CityId || isEditing" name="districtSearch">
                     <select class="form-control" [(ngModel)]="currentProperty.DistrictId" name="DistrictId"
-                        [disabled]="!currentProperty.CityId || isLoadingDistricts"
+                        [disabled]="!currentProperty.CityId || isLoadingDistricts || isEditing"
                         (change)="onDistrictChange(currentProperty.DistrictId)">
                         <option [ngValue]="null">{{ 'USER_DASHBOARD.SELECT_DISTRICT' | translate }}</option>
                         @if (isLoadingDistricts) {
@@ -168,8 +168,8 @@
                     <label>{{ 'USER_DASHBOARD.PROJECT' | translate }}</label>
                     <input type="text" class="form-control search-input" [(ngModel)]="projectSearchTerm"
                         (input)="filterProjects()" placeholder="{{ 'USER_DASHBOARD.SEARCH_PROJECT' | translate }}"
-                        name="projectSearch">
-                    <select class="form-control" [(ngModel)]="currentProperty.ProjectId" name="ProjectId">
+                        name="projectSearch" [disabled]="isEditing">
+                    <select class="form-control" [(ngModel)]="currentProperty.ProjectId" name="ProjectId" [disabled]="isEditing">
                         <option [ngValue]="null">{{ 'USER_DASHBOARD.SELECT_PROJECT' | translate }}</option>
                         @if (isLoadingProjects) {
                         <option disabled>{{ 'COMMON.LOADING' | translate }}...</option>
@@ -183,7 +183,7 @@
                     <label>{{ 'USER_DASHBOARD.ADDRESS_DETAILS' | translate }}</label>
                     <input type="text" class="form-control" [(ngModel)]="currentProperty.AddressDetails"
                         name="AddressDetails"
-                        placeholder="{{ 'USER_DASHBOARD.ADDRESS_DETAILS_PLACEHOLDER' | translate }}">
+                        placeholder="{{ 'USER_DASHBOARD.ADDRESS_DETAILS_PLACEHOLDER' | translate }}" [disabled]="isEditing">
                 </div>
             </div>
 
@@ -192,9 +192,9 @@
                     <label>{{ 'USER_DASHBOARD.PROPERTY_TYPE' | translate }} *</label>
                     <input type="text" class="form-control search-input" [(ngModel)]="propertyTypeSearchTerm"
                         (input)="filterPropertyTypes()"
-                        placeholder="{{ 'USER_DASHBOARD.SEARCH_PROPERTY_TYPE' | translate }}" name="propertyTypeSearch">
+                        placeholder="{{ 'USER_DASHBOARD.SEARCH_PROPERTY_TYPE' | translate }}" name="propertyTypeSearch" [disabled]="isEditing">
                     <select class="form-control" [(ngModel)]="currentProperty.PropertyTypeId" name="PropertyTypeId"
-                        required>
+                        required [disabled]="isEditing">
                         <option [ngValue]="null" disabled selected>{{ 'USER_DASHBOARD.SELECT_TYPE' | translate }}
                         </option>
                         @if (isLoadingPropertyTypes) {
@@ -207,7 +207,7 @@
                 </div>
                 <div class="form-group">
                     <label>{{ 'USER_DASHBOARD.PURPOSE' | translate }} *</label>
-                    <select class="form-control" [(ngModel)]="currentProperty.Purpose" name="Purpose" required>
+                    <select class="form-control" [(ngModel)]="currentProperty.Purpose" name="Purpose" required [disabled]="isEditing">
                         <option [value]="1">{{ 'USER_DASHBOARD.FOR_SALE' | translate }}</option>
                         <option [value]="2">{{ 'USER_DASHBOARD.FOR_RENT' | translate }}</option>
                         <option [value]="3">{{ 'USER_DASHBOARD.FOR_BOTH' | translate }}</option>
@@ -218,12 +218,12 @@
             <div class="form-row">
                 <div class="form-group">
                     <label>{{ 'USER_DASHBOARD.BEDROOMS' | translate }}</label>
-                    <input type="number" class="form-control" [(ngModel)]="currentProperty.Rooms" name="Rooms" min="0">
+                    <input type="number" class="form-control" [(ngModel)]="currentProperty.Rooms" name="Rooms" min="0" [disabled]="isEditing">
                 </div>
                 <div class="form-group">
                     <label>{{ 'USER_DASHBOARD.BATHROOMS' | translate }}</label>
                     <input type="number" class="form-control" [(ngModel)]="currentProperty.Bathrooms" name="Bathrooms"
-                        min="0">
+                        min="0" [disabled]="isEditing">
                 </div>
             </div>
 
@@ -231,11 +231,11 @@
                 <div class="form-group">
                     <label>{{ 'USER_DASHBOARD.FLOOR_NUMBER' | translate }}</label>
                     <input type="number" class="form-control" [(ngModel)]="currentProperty.FloorNumber"
-                        name="FloorNumber" min="0">
+                        name="FloorNumber" min="0" [disabled]="isEditing">
                 </div>
                 <div class="form-group">
                     <label>{{ 'USER_DASHBOARD.FINISHING_TYPE' | translate }}</label>
-                    <select class="form-control" [(ngModel)]="currentProperty.FinishingType" name="FinishingType">
+                    <select class="form-control" [(ngModel)]="currentProperty.FinishingType" name="FinishingType" [disabled]="isEditing">
                         <option [value]="0">{{ 'USER_DASHBOARD.NO_FINISHING' | translate }}</option>
                         <option [value]="1">{{ 'USER_DASHBOARD.SEMI_FINISHING' | translate }}</option>
                         <option [value]="2">{{ 'USER_DASHBOARD.FULL_FINISHING' | translate }}</option>
