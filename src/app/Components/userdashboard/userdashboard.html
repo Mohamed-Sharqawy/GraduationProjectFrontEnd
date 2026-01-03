@@ -249,7 +249,7 @@
             <div class="form-group">
                 <label>{{ 'USER_DASHBOARD.RENT_PRICE_MONTHLY' | translate }} *</label>
                 <input type="number" class="form-control" [(ngModel)]="currentProperty.RentPriceMonthly"
-                    name="RentPriceMonthly" min="0" required
+                    name="RentPriceMonthly" min="0" required [disabled]="isEditing"
                     placeholder="{{ 'USER_DASHBOARD.RENT_PRICE_PLACEHOLDER' | translate }}">
             </div>
             }
@@ -281,11 +281,13 @@
                 </div>
             </div> -->
 
+            @if (!isEditing) {
             <div class="form-group">
                 <label>{{ 'USER_DASHBOARD.IMAGES' | translate }} *</label>
                 <input type="file" class="form-control" multiple (change)="onFileSelect($event)" accept="image/*">
                 <small style="color: #666">{{ 'USER_DASHBOARD.IMAGES_NOTE' | translate }}</small>
             </div>
+            }
 
             <div class="modal-footer">
                 <button type="button" class="btn-cancel" (click)="cancel()" [disabled]="isSaving">{{ 'USER_DASHBOARD.CANCEL' | translate
