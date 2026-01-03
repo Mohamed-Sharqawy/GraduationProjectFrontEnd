@@ -1,5 +1,44 @@
-/* Custom styles have been migrated to Tailwind utility classes in the HTML template. 
-   This file is kept for any specific, non-Tailwind overrides needed in the future. */
-:host {
-    display: block;
+/* Listing Properties Responsive Styles */
+
+@media (max-width: 640px) {
+
+    /* Stack filter grid to 1 column on very small screens if needed, otherwise 2 is fine */
+    .listing-filter-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (max-width: 480px) {
+
+    /* On very small screens (portrait phones), stack filters */
+    .listing-filter-grid {
+        grid-template-columns: 1fr !important;
+    }
+
+    /* Adjust property price section */
+    .property-price-section {
+        flex-wrap: wrap;
+        gap: 1rem !important;
+        /* Reduce gap */
+    }
+
+    /* Vertical separators in price section */
+    .property-price-section .w-px {
+        display: none;
+        /* Hide vertical dividers when wrapping */
+    }
+
+    .property-price-section>div {
+        flex: 1 1 45%;
+        /* 2 items per row */
+        min-width: 100px;
+    }
+}
+
+/* Pagination Adjustments */
+@media (max-width: 640px) {
+    .flex.justify-center.items-center.gap-2.mt-8 button {
+        padding: 0.5rem 0.75rem;
+        font-size: 0.8rem;
+    }
 }

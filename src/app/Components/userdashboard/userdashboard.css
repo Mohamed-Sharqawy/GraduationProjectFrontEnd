@@ -168,23 +168,32 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.6); /* دكنت الخلفية قليلاً */
+    background-color: rgba(0, 0, 0, 0.6);
+    /* دكنت الخلفية قليلاً */
     display: flex;
     justify-content: center;
-    align-items: center; /* توسيط عمودي وأفقي */
-    z-index: 2000; /* رفع الـ z-index للتأكد من ظهوره فوق كل شيء */
-    padding: 20px; /* مسافة أمان للحواف */
-    backdrop-filter: blur(5px); /* تأثير ضبابي للخلفية */
+    align-items: center;
+    /* توسيط عمودي وأفقي */
+    z-index: 2000;
+    /* رفع الـ z-index للتأكد من ظهوره فوق كل شيء */
+    padding: 20px;
+    /* مسافة أمان للحواف */
+    backdrop-filter: blur(5px);
+    /* تأثير ضبابي للخلفية */
 }
 
 .modal-content {
     background: white;
     padding: 30px;
-    border-radius: 16px; /* زيادة الانحناء قليلاً */
+    border-radius: 16px;
+    /* زيادة الانحناء قليلاً */
     width: 100%;
-    max-width: 800px; /* عرض مناسب للفورم */
-    max-height: 90vh; /* أقصى ارتفاع 90% من الشاشة */
-    overflow-y: auto; /* سكرول داخلي فقط للمحتوى */
+    max-width: 800px;
+    /* عرض مناسب للفورم */
+    max-height: 90vh;
+    /* أقصى ارتفاع 90% من الشاشة */
+    overflow-y: auto;
+    /* سكرول داخلي فقط للمحتوى */
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
     animation: zoomIn 0.3s ease-out;
     position: relative;
@@ -217,6 +226,7 @@
         opacity: 0;
         transform: scale(0.95);
     }
+
     to {
         opacity: 1;
         transform: scale(1);
@@ -339,12 +349,53 @@ select.form-control:disabled {
     .dashboard-header {
         flex-direction: column;
         gap: 15px;
-        align-items: flex-start;
+        align-items: stretch;
+        text-align: center;
+    }
+
+    .dashboard-header>div {
+        align-self: center;
+    }
+
+    .add-btn {
+        justify-content: center;
     }
 
     .form-row {
         flex-direction: column;
         gap: 0;
+    }
+
+    .properties-grid {
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    }
+
+    .modal-content {
+        padding: 20px;
+        margin: 10px;
+        max-height: 85vh;
+    }
+}
+
+@media (max-width: 480px) {
+    .properties-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .card-actions {
+        flex-direction: column;
+        /* Stack buttons on very small screens */
+    }
+
+    .action-btn {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .modal-overlay {
+        padding: 10px;
+        align-items: flex-end;
+        /* Bottom sheet feeling maybe? or just stick to center */
     }
 }
 
@@ -355,14 +406,14 @@ select.form-control:disabled {
 }
 
 ::-webkit-scrollbar-track {
-    background: #f1f1f1; 
+    background: #f1f1f1;
 }
- 
+
 ::-webkit-scrollbar-thumb {
-    background: #ccc; 
+    background: #ccc;
     border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background: #bbb; 
+    background: #bbb;
 }

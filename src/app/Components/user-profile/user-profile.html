@@ -1,8 +1,13 @@
 <div class="user-profile-container flex min-h-screen bg-gray-50 font-sans">
 
+    <!-- Mobile Sidebar Overlay -->
+    <div *ngIf="isSidebarOpen" class="fixed inset-0 bg-black/50 z-20 lg:hidden" (click)="closeSidebar()"></div>
+
     <!-- Sidebar -->
-    <aside class="w-64 bg-white shadow-md flex-shrink-0">
-        <div class="p-6 border-b border-gray-100">
+    <aside
+        class="fixed lg:static inset-y-0 left-0 z-30 w-64 bg-white shadow-md flex-shrink-0 transform transition-transform duration-300 lg:translate-x-0"
+        [class.translate-x-0]="isSidebarOpen" [class.-translate-x-full]="!isSidebarOpen">
+        <div class="p-6 border-b border-gray-100 flex justify-between items-center">
             <div class="flex items-center gap-3">
                 <div class="relative">
                     <div
@@ -18,42 +23,49 @@
                     <span class="text-xs text-gray-500">{{ authService.currentUser()?.email }}</span>
                 </div>
             </div>
+            <!-- Close button for mobile -->
+            <button class="lg:hidden text-gray-500 hover:text-gray-700 bg-transparent border-none cursor-pointer"
+                (click)="closeSidebar()">
+                <i class="fa fa-times text-xl"></i>
+            </button>
         </div>
 
         <nav class="p-4 space-y-2">
             <!-- My Properties - NEW -->
-            <button (click)="setActiveTab('my-properties')" [class.bg-green-50]="activeTab === 'my-properties'"
+            <button (click)="setActiveTab('my-properties'); closeSidebar()"
+                [class.bg-green-50]="activeTab === 'my-properties'"
                 [class.text-green-600]="activeTab === 'my-properties'"
                 class="w-full text-left px-4 py-2.5 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-50 flex items-center gap-3 transition-colors border-none cursor-pointer bg-transparent">
                 <i class="fa fa-building border-none"></i> {{ 'USER_PROFILE.SIDEBAR.MY_PROPERTIES' | translate }}
             </button>
 
-            <!-- <button (click)="setActiveTab('published')" [class.bg-green-50]="activeTab === 'published'"
+            <!-- <button (click)="setActiveTab('published'); closeSidebar()" [class.bg-green-50]="activeTab === 'published'"
                 [class.text-green-600]="activeTab === 'published'"
                 class="w-full text-left px-4 py-2.5 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-50 flex items-center gap-3 transition-colors border-none cursor-pointer bg-transparent">
                 <i class="fa fa-home border-none"></i> {{ 'USER_PROFILE.SIDEBAR.PUBLISHED' | translate }}
             </button> -->
 
-            <button (click)="setActiveTab('saved')" [class.bg-green-50]="activeTab === 'saved'"
+            <button (click)="setActiveTab('saved'); closeSidebar()" [class.bg-green-50]="activeTab === 'saved'"
                 [class.text-green-600]="activeTab === 'saved'"
                 class="w-full text-left px-4 py-2.5 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-50 flex items-center gap-3 transition-colors border-none cursor-pointer bg-transparent">
                 <i class="fa fa-heart border-none"></i> {{ 'USER_PROFILE.SIDEBAR.SAVED' | translate }}
             </button>
 
-            <button (click)="setActiveTab('subscription')" [class.bg-green-50]="activeTab === 'subscription'"
-                [class.text-green-600]="activeTab === 'subscription'"
+            <button (click)="setActiveTab('subscription'); closeSidebar()"
+                [class.bg-green-50]="activeTab === 'subscription'" [class.text-green-600]="activeTab === 'subscription'"
                 class="w-full text-left px-4 py-2.5 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-50 flex items-center gap-3 transition-colors border-none cursor-pointer bg-transparent">
                 <i class="fa fa-credit-card border-none"></i> {{ 'USER_PROFILE.SIDEBAR.SUBSCRIPTION' | translate }}
             </button>
 
-            <button (click)="setActiveTab('personal-info')" [class.bg-green-50]="activeTab === 'personal-info'"
+            <button (click)="setActiveTab('personal-info'); closeSidebar()"
+                [class.bg-green-50]="activeTab === 'personal-info'"
                 [class.text-green-600]="activeTab === 'personal-info'"
                 class="w-full text-left px-4 py-2.5 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-50 flex items-center gap-3 transition-colors border-none cursor-pointer bg-transparent">
                 <i class="fa fa-user border-none"></i> {{ 'USER_PROFILE.SIDEBAR.PERSONAL_INFO' | translate }}
             </button>
 
-            <button (click)="setActiveTab('verification')" [class.bg-green-50]="activeTab === 'verification'"
-                [class.text-green-600]="activeTab === 'verification'"
+            <button (click)="setActiveTab('verification'); closeSidebar()"
+                [class.bg-green-50]="activeTab === 'verification'" [class.text-green-600]="activeTab === 'verification'"
                 class="w-full text-left px-4 py-2.5 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-50 flex items-center gap-3 transition-colors border-none cursor-pointer bg-transparent">
                 <i class="fa fa-id-card border-none"></i> {{ 'USER_PROFILE.SIDEBAR.VERIFICATION' | translate }}
             </button>
@@ -62,7 +74,16 @@
     </aside>
 
     <!-- Main Content -->
-    <main class="flex-1 p-8">
+    <main class="flex-1 p-4 lg:p-8 pt-20 lg:pt-8 relative">
+        <!-- Mobile Header with Toggle -->
+        <div
+            class="lg:hidden absolute top-0 left-0 right-0 bg-white shadow-sm p-4 flex items-center justify-between z-10 w-full">
+            <button (click)="toggleSidebar()" class="text-gray-600 bg-transparent border-none cursor-pointer p-0">
+                <i class="fa fa-bars text-xl"></i>
+            </button>
+            <span class="font-bold text-gray-800">User Profile</span>
+            <div class="w-5"></div> <!-- Spacer -->
+        </div>
 
         <!-- My Properties Tab - User Dashboard Component -->
         <div *ngIf="activeTab === 'my-properties'">
@@ -140,8 +161,10 @@
                             </a>
                         </div>
                         <div class="flex gap-4 mt-3 text-xs text-gray-500">
-                            <span *ngIf="saved.property.bedrooms || saved.property.rooms"><i class="fa fa-bed mr-1"></i>{{
-                                saved.property.bedrooms || saved.property.rooms }} {{ 'USER_PROFILE.SAVED.BEDS' | translate }}</span>
+                            <span *ngIf="saved.property.bedrooms || saved.property.rooms"><i
+                                    class="fa fa-bed mr-1"></i>{{
+                                saved.property.bedrooms || saved.property.rooms }} {{ 'USER_PROFILE.SAVED.BEDS' |
+                                translate }}</span>
                             <span *ngIf="saved.property.bathrooms"><i class="fa fa-bath mr-1"></i>{{
                                 saved.property.bathrooms }} {{ 'USER_PROFILE.SAVED.BATHS' | translate }}</span>
                             <span *ngIf="saved.property.area"><i class="fa fa-expand mr-1"></i>{{ saved.property.area }}
@@ -271,14 +294,18 @@
         <div *ngIf="activeTab === 'personal-info'">
             <h2 class="text-2xl font-bold text-gray-800 mb-6">{{ 'USER_PROFILE.PERSONAL_INFO.TITLE' | translate }}</h2>
             <div class="bg-white p-8 rounded-xl shadow-sm border border-gray-100 w-full h-full">
-                
+
                 <!-- Profile Image Upload Section -->
                 <div class="mb-8 pb-6 border-b border-gray-200">
-                    <label class="block text-sm font-bold text-gray-700 mb-3">{{ 'USER_PROFILE.PERSONAL_INFO.PROFILE_IMAGE' | translate }}</label>
+                    <label class="block text-sm font-bold text-gray-700 mb-3">{{
+                        'USER_PROFILE.PERSONAL_INFO.PROFILE_IMAGE' | translate }}</label>
                     <div class="flex items-center gap-4">
-                        <div class="w-20 h-20 rounded-full overflow-hidden bg-green-100 flex items-center justify-center text-green-600 font-bold text-2xl border-2 border-gray-200">
-                            <img *ngIf="getProfileImageUrl()" [src]="getProfileImageUrl()" class="w-full h-full object-cover" alt="Profile">
-                            <span *ngIf="!getProfileImageUrl()">{{ authService.currentUser()?.fullName?.charAt(0) || 'U' }}</span>
+                        <div
+                            class="w-20 h-20 rounded-full overflow-hidden bg-green-100 flex items-center justify-center text-green-600 font-bold text-2xl border-2 border-gray-200">
+                            <img *ngIf="getProfileImageUrl()" [src]="getProfileImageUrl()"
+                                class="w-full h-full object-cover" alt="Profile">
+                            <span *ngIf="!getProfileImageUrl()">{{ authService.currentUser()?.fullName?.charAt(0) || 'U'
+                                }}</span>
                         </div>
                         <div>
                             <button (click)="profileFileInput.click()" type="button"
@@ -286,8 +313,10 @@
                                 <i class="fa fa-camera"></i>
                                 {{ 'USER_PROFILE.PERSONAL_INFO.UPLOAD_IMAGE' | translate }}
                             </button>
-                            <p class="text-xs text-gray-500 mt-1">{{ 'USER_PROFILE.PERSONAL_INFO.IMAGE_REQUIREMENTS' | translate }}</p>
-                            <input #profileFileInput type="file" class="hidden" (change)="onFileSelected($event)" accept="image/*">
+                            <p class="text-xs text-gray-500 mt-1">{{ 'USER_PROFILE.PERSONAL_INFO.IMAGE_REQUIREMENTS' |
+                                translate }}</p>
+                            <input #profileFileInput type="file" class="hidden" (change)="onFileSelected($event)"
+                                accept="image/*">
                         </div>
                     </div>
                 </div>
@@ -368,7 +397,7 @@
         @if (activeTab === 'verification') {
         <div>
             <h2 class="text-2xl font-bold text-gray-800 mb-6">{{ 'USER_PROFILE.VERIFICATION.TITLE' | translate }}</h2>
-            
+
             <!-- Already Verified Message -->
             @if (authService.currentUser()?.isVerified) {
             <div class="bg-white p-8 rounded-xl shadow-sm border border-green-200">
@@ -522,4 +551,5 @@
     </main>
 </div>
 <!-- Change Password Modal -->
-<app-change-password-modal *ngIf="showChangePasswordModal" (close)="closeChangePasswordModal()"></app-change-password-modal>
+<app-change-password-modal *ngIf="showChangePasswordModal"
+    (close)="closeChangePasswordModal()"></app-change-password-modal>

@@ -1,0 +1,51 @@
+/* App Component Responsive Styles */
+
+/* Hamburger button animation */
+.hamburger-btn.active .hamburger-line:first-child {
+    transform: rotate(45deg) translateY(8px);
+}
+
+.hamburger-btn.active .hamburger-line:nth-child(2) {
+    opacity: 0;
+}
+
+.hamburger-btn.active .hamburger-line:last-child {
+    transform: rotate(-45deg) translateY(-8px);
+}
+
+/* Mobile menu drawer - initial state hidden */
+.mobile-menu-container {
+    transform: translateX(100%);
+}
+
+.mobile-menu-container.translate-x-0 {
+    transform: translateX(0);
+}
+
+/* Ensure navbar is sticky on scroll */
+.navbar {
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+/* Mobile responsive adjustments */
+@media (max-width: 768px) {
+    /* Top bar adjustments */
+    .top-bar {
+        padding-top: 8px;
+        padding-bottom: 8px;
+    }
+
+    /* Navbar adjustments */
+    .navbar {
+        padding-top: 12px;
+        padding-bottom: 12px;
+    }
+}
+
+@media (max-width: 640px) {
+    /* Even smaller screens */
+    .top-bar .max-w-\[1140px\] {
+        padding-left: 12px;
+        padding-right: 12px;
+    }
+}
