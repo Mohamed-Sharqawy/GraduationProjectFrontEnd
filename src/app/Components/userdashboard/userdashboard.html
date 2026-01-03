@@ -104,7 +104,11 @@
             <div class="form-group">
                 <label>{{ 'USER_DASHBOARD.PROPERTY_TITLE_AR' | translate }}</label>
                 <input type="text" class="form-control" [(ngModel)]="currentProperty.Title" name="Title"
-                    [placeholder]="'USER_DASHBOARD.PROPERTY_TITLE_AR_PLACEHOLDER' | translate" required>
+                    [placeholder]="'USER_DASHBOARD.PROPERTY_TITLE_AR_PLACEHOLDER' | translate" 
+                    [class.is-invalid]="validationErrors.Title" required>
+                @if (validationErrors.Title) {
+                    <small class="error-message">{{ validationErrors.Title }}</small>
+                }
             </div>
             <div class="form-group">
                 <label>{{ 'USER_DASHBOARD.PROPERTY_TITLE_EN' | translate }}</label>
@@ -116,12 +120,18 @@
                 <div class="form-group">
                     <label>{{ 'USER_DASHBOARD.PRICE' | translate }}</label>
                     <input type="number" class="form-control" [(ngModel)]="currentProperty.Price" name="Price" required
-                        min="1" [disabled]="isEditing">
+                        min="1" [disabled]="isEditing" [class.is-invalid]="validationErrors.Price">
+                    @if (validationErrors.Price) {
+                        <small class="error-message">{{ validationErrors.Price }}</small>
+                    }
                 </div>
                 <div class="form-group">
                     <label>{{ 'USER_DASHBOARD.AREA' | translate }}</label>
                     <input type="number" class="form-control" [(ngModel)]="currentProperty.Area" name="Area" required
-                        min="1" [disabled]="isEditing">
+                        min="1" [disabled]="isEditing" [class.is-invalid]="validationErrors.Area">
+                    @if (validationErrors.Area) {
+                        <small class="error-message">{{ validationErrors.Area }}</small>
+                    }
                 </div>
             </div>
 
@@ -132,7 +142,8 @@
                         (input)="filterCities()" placeholder="{{ 'USER_DASHBOARD.SEARCH_CITY' | translate }}"
                         name="citySearch" [disabled]="isEditing">
                     <select class="form-control" [(ngModel)]="currentProperty.CityId" name="CityId"
-                        (change)="onCityChange(currentProperty.CityId)" required [disabled]="isEditing">
+                        (change)="onCityChange(currentProperty.CityId)" required [disabled]="isEditing"
+                        [class.is-invalid]="validationErrors.CityId">
                         <option [ngValue]="null" disabled selected>{{ 'USER_DASHBOARD.SELECT_CITY' | translate }}
                         </option>
                         @if (isLoadingCities) {
@@ -142,6 +153,9 @@
                         <option [value]="city.id">{{city.name}} {{city.nameEn ? '(' + city.nameEn + ')' : ''}}</option>
                         }
                     </select>
+                    @if (validationErrors.CityId) {
+                        <small class="error-message">{{ validationErrors.CityId }}</small>
+                    }
                 </div>
                 <div class="form-group">
                     <label>{{ 'USER_DASHBOARD.DISTRICT' | translate }}</label>
@@ -194,7 +208,7 @@
                         (input)="filterPropertyTypes()"
                         placeholder="{{ 'USER_DASHBOARD.SEARCH_PROPERTY_TYPE' | translate }}" name="propertyTypeSearch" [disabled]="isEditing">
                     <select class="form-control" [(ngModel)]="currentProperty.PropertyTypeId" name="PropertyTypeId"
-                        required [disabled]="isEditing">
+                        required [disabled]="isEditing" [class.is-invalid]="validationErrors.PropertyTypeId">
                         <option [ngValue]="null" disabled selected>{{ 'USER_DASHBOARD.SELECT_TYPE' | translate }}
                         </option>
                         @if (isLoadingPropertyTypes) {
@@ -204,14 +218,21 @@
                         <option [value]="type.id">{{type.name}} {{type.nameEn ? '(' + type.nameEn + ')' : ''}}</option>
                         }
                     </select>
+                    @if (validationErrors.PropertyTypeId) {
+                        <small class="error-message">{{ validationErrors.PropertyTypeId }}</small>
+                    }
                 </div>
                 <div class="form-group">
                     <label>{{ 'USER_DASHBOARD.PURPOSE' | translate }} *</label>
-                    <select class="form-control" [(ngModel)]="currentProperty.Purpose" name="Purpose" required [disabled]="isEditing">
+                    <select class="form-control" [(ngModel)]="currentProperty.Purpose" name="Purpose" required [disabled]="isEditing"
+                        [class.is-invalid]="validationErrors.Purpose">
                         <option [value]="1">{{ 'USER_DASHBOARD.FOR_SALE' | translate }}</option>
                         <option [value]="2">{{ 'USER_DASHBOARD.FOR_RENT' | translate }}</option>
                         <option [value]="3">{{ 'USER_DASHBOARD.FOR_BOTH' | translate }}</option>
                     </select>
+                    @if (validationErrors.Purpose) {
+                        <small class="error-message">{{ validationErrors.Purpose }}</small>
+                    }
                 </div>
             </div>
 
@@ -250,14 +271,22 @@
                 <label>{{ 'USER_DASHBOARD.RENT_PRICE_MONTHLY' | translate }} *</label>
                 <input type="number" class="form-control" [(ngModel)]="currentProperty.RentPriceMonthly"
                     name="RentPriceMonthly" min="0" required [disabled]="isEditing"
-                    placeholder="{{ 'USER_DASHBOARD.RENT_PRICE_PLACEHOLDER' | translate }}">
+                    placeholder="{{ 'USER_DASHBOARD.RENT_PRICE_PLACEHOLDER' | translate }}"
+                    [class.is-invalid]="validationErrors.RentPriceMonthly">
+                @if (validationErrors.RentPriceMonthly) {
+                    <small class="error-message">{{ validationErrors.RentPriceMonthly }}</small>
+                }
             </div>
             }
 
             <div class="form-group">
                 <label>{{ 'USER_DASHBOARD.DESCRIPTION_AR' | translate }}</label>
                 <textarea class="form-control" [(ngModel)]="currentProperty.Description" name="Description" rows="3"
-                    placeholder="{{ 'USER_DASHBOARD.DESCRIPTION_PLACEHOLDER' | translate }}"></textarea>
+                    placeholder="{{ 'USER_DASHBOARD.DESCRIPTION_PLACEHOLDER' | translate }}"
+                    [class.is-invalid]="validationErrors.Description"></textarea>
+                @if (validationErrors.Description) {
+                    <small class="error-message">{{ validationErrors.Description }}</small>
+                }
             </div>
 
             <div class="form-group">
@@ -282,8 +311,13 @@
             @if (!isEditing) {
             <div class="form-group">
                 <label>{{ 'USER_DASHBOARD.IMAGES' | translate }} *</label>
-                <input type="file" class="form-control" multiple (change)="onFileSelect($event)" accept="image/*">
-                <small style="color: #666">{{ 'USER_DASHBOARD.IMAGES_NOTE' | translate }}</small>
+                <input type="file" class="form-control" multiple (change)="onFileSelect($event)" accept="image/*"
+                    [class.is-invalid]="validationErrors.Images">
+                <small style="color: #666; display: block; margin-top: 5px;">{{ 'USER_DASHBOARD.IMAGES_NOTE' | translate
+                    }}</small>
+                @if (validationErrors.Images) {
+                    <small class="error-message">{{ validationErrors.Images }}</small>
+                }
             </div>
             }
 

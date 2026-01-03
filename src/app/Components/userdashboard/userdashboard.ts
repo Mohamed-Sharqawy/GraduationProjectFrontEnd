@@ -59,6 +59,9 @@ export class UserDashboard {
     isLoadingProjects = false;
     isLoadingPropertyTypes = false;
 
+    // Validation errors for inline display
+    validationErrors: any = {};
+
     constructor(
         private propertiesService: PropertyService,
         private lookupService: LookupService,
@@ -445,45 +448,46 @@ export class UserDashboard {
     }
 
     // ==================== Client-Side Validation ====================
-    validateProperty(): { valid: boolean; errors: string[] } {
-        const errors: string[] = [];
+    validateProperty(): boolean {
+        // Clear previous errors
+        this.validationErrors = {};
         const prop = this.currentProperty;
 
         // Required fields validation
         if (!prop.Title || prop.Title.trim() === '') {
-            errors.push(this.translationService.instant('VALIDATION.TITLE_REQUIRED') || 'العنوان مطلوب');
+            this.validationErrors.Title = this.translationService.instant('VALIDATION.TITLE_REQUIRED') || 'العنوان مطلوب';
         }
         if (!prop.Description || prop.Description.trim() === '') {
-            errors.push(this.translationService.instant('VALIDATION.DESCRIPTION_REQUIRED') || 'الوصف مطلوب');
+            this.validationErrors.Description = this.translationService.instant('VALIDATION.DESCRIPTION_REQUIRED') || 'الوصف مطلوب';
         }
         if (!prop.PropertyTypeId) {
-            errors.push(this.translationService.instant('VALIDATION.PROPERTY_TYPE_REQUIRED') || 'نوع العقار مطلوب');
+            this.validationErrors.PropertyTypeId = this.translationService.instant('VALIDATION.PROPERTY_TYPE_REQUIRED') || 'نوع العقار مطلوب';
         }
         if (!prop.CityId) {
-            errors.push(this.translationService.instant('VALIDATION.CITY_REQUIRED') || 'المدينة مطلوبة');
+            this.validationErrors.CityId = this.translationService.instant('VALIDATION.CITY_REQUIRED') || 'المدينة مطلوبة';
         }
         if (!prop.Price || prop.Price <= 0) {
-            errors.push(this.translationService.instant('VALIDATION.PRICE_REQUIRED') || 'السعر مطلوب');
+            this.validationErrors.Price = this.translationService.instant('VALIDATION.PRICE_REQUIRED') || 'السعر مطلوب';
         }
         if (!prop.Area || prop.Area <= 0) {
-            errors.push(this.translationService.instant('VALIDATION.AREA_REQUIRED') || 'المساحة مطلوبة');
+            this.validationErrors.Area = this.translationService.instant('VALIDATION.AREA_REQUIRED') || 'المساحة مطلوبة';
         }
         if (!prop.Purpose) {
-            errors.push(this.translationService.instant('VALIDATION.PURPOSE_REQUIRED') || 'الغرض من البيع مطلوب');
+            this.validationErrors.Purpose = this.translationService.instant('VALIDATION.PURPOSE_REQUIRED') || 'الغرض من البيع مطلوب';
         }
 
         // Images validation (only for new properties)
         if (!this.isEditing && this.selectedFiles.length === 0) {
-            errors.push(this.translationService.instant('VALIDATION.IMAGES_REQUIRED') || 'يجب رفع صورة واحدة على الأقل');
+            this.validationErrors.Images = this.translationService.instant('VALIDATION.IMAGES_REQUIRED') || 'يجب رفع صورة واحدة على الأقل';
         }
 
         // RentPriceMonthly validation for rent properties
         const purpose = Number(prop.Purpose);
         if ((purpose === 2 || purpose === 3) && (!prop.RentPriceMonthly || prop.RentPriceMonthly <= 0)) {
-            errors.push(this.translationService.instant('VALIDATION.RENT_PRICE_REQUIRED') || 'سعر الإيجار الشهري مطلوب');
+            this.validationErrors.RentPriceMonthly = this.translationService.instant('VALIDATION.RENT_PRICE_REQUIRED') || 'سعر الإيجار الشهري مطلوب';
         }
 
-        return { valid: errors.length === 0, errors };
+        return Object.keys(this.validationErrors).length === 0;
     }
 
     saveProperty() {
@@ -494,14 +498,10 @@ export class UserDashboard {
         }
 
         // Client-side validation
-        const validation = this.validateProperty();
-        if (!validation.valid) {
-            const errorMsg = validation.errors.join('\n');
-            this.toastr.error(
-                errorMsg,
-                this.translationService.instant('VALIDATION.VALIDATION_ERROR') || 'خطأ في البيانات',
-                { timeOut: 8000, enableHtml: true }
-            );
+        const isValid = this.validateProperty();
+        if (!isValid) {
+            // Errors are already stored in validationErrors object
+            // Scroll to first error for better UX
             return;
         }
 
@@ -644,6 +644,7 @@ export class UserDashboard {
         this.isSaving = false;
         this.currentProperty = {};
         this.selectedFiles = [];
+        this.validationErrors = {}; // Clear validation errors
         this.districtSearchTerm = '';
         this.projectSearchTerm = '';
     }
