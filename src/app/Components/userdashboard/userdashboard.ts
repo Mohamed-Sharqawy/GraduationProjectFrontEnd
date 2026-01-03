@@ -444,10 +444,64 @@ export class UserDashboard {
         }
     }
 
+    // ==================== Client-Side Validation ====================
+    validateProperty(): { valid: boolean; errors: string[] } {
+        const errors: string[] = [];
+        const prop = this.currentProperty;
+
+        // Required fields validation
+        if (!prop.Title || prop.Title.trim() === '') {
+            errors.push(this.translationService.instant('VALIDATION.TITLE_REQUIRED') || 'العنوان مطلوب');
+        }
+        if (!prop.Description || prop.Description.trim() === '') {
+            errors.push(this.translationService.instant('VALIDATION.DESCRIPTION_REQUIRED') || 'الوصف مطلوب');
+        }
+        if (!prop.PropertyTypeId) {
+            errors.push(this.translationService.instant('VALIDATION.PROPERTY_TYPE_REQUIRED') || 'نوع العقار مطلوب');
+        }
+        if (!prop.CityId) {
+            errors.push(this.translationService.instant('VALIDATION.CITY_REQUIRED') || 'المدينة مطلوبة');
+        }
+        if (!prop.Price || prop.Price <= 0) {
+            errors.push(this.translationService.instant('VALIDATION.PRICE_REQUIRED') || 'السعر مطلوب');
+        }
+        if (!prop.Area || prop.Area <= 0) {
+            errors.push(this.translationService.instant('VALIDATION.AREA_REQUIRED') || 'المساحة مطلوبة');
+        }
+        if (!prop.Purpose) {
+            errors.push(this.translationService.instant('VALIDATION.PURPOSE_REQUIRED') || 'الغرض من البيع مطلوب');
+        }
+
+        // Images validation (only for new properties)
+        if (!this.isEditing && this.selectedFiles.length === 0) {
+            errors.push(this.translationService.instant('VALIDATION.IMAGES_REQUIRED') || 'يجب رفع صورة واحدة على الأقل');
+        }
+
+        // RentPriceMonthly validation for rent properties
+        const purpose = Number(prop.Purpose);
+        if ((purpose === 2 || purpose === 3) && (!prop.RentPriceMonthly || prop.RentPriceMonthly <= 0)) {
+            errors.push(this.translationService.instant('VALIDATION.RENT_PRICE_REQUIRED') || 'سعر الإيجار الشهري مطلوب');
+        }
+
+        return { valid: errors.length === 0, errors };
+    }
+
     saveProperty() {
         // Prevent double submissions
         if (this.isSaving) {
             console.log('⚠️ Save already in progress, ignoring click');
+            return;
+        }
+
+        // Client-side validation
+        const validation = this.validateProperty();
+        if (!validation.valid) {
+            const errorMsg = validation.errors.join('\n');
+            this.toastr.error(
+                errorMsg,
+                this.translationService.instant('VALIDATION.VALIDATION_ERROR') || 'خطأ في البيانات',
+                { timeOut: 8000, enableHtml: true }
+            );
             return;
         }
 
@@ -553,10 +607,28 @@ export class UserDashboard {
                 },
                 error: (err) => {
                     this.isSaving = false;
-                    console.error('Error creating property', err);
+                    console.error('❌ Error creating property', err);
+                    
+                    // Extract detailed validation errors
+                    let errorMsg = this.translationService.instant('USER_DASHBOARD.CREATE_FAIL');
+                    
+                    if (err.error?.errors) {
+                        // Validation errors object
+                        console.error('🔍 Validation Errors:', err.error.errors);
+                        const validationErrors = Object.entries(err.error.errors)
+                            .map(([key, value]) => `${key}: ${Array.isArray(value) ? value.join(', ') : value}`)
+                            .join('\n');
+                        errorMsg = validationErrors || errorMsg;
+                    } else if (err.error?.message) {
+                        errorMsg = err.error.message;
+                    } else if (err.message) {
+                        errorMsg = err.message;
+                    }
+                    
                     this.toastr.error(
-                        (err.error?.message || err.message || this.translationService.instant('USER_DASHBOARD.CREATE_FAIL')),
-                        this.translationService.instant('COMMON.ERROR') || 'Error'
+                        errorMsg,
+                        this.translationService.instant('COMMON.ERROR') || 'Error',
+                        { timeOut: 10000 } // Longer timeout to read validation errors
                     );
                 }
             });
