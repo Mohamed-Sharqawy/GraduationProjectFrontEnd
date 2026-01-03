@@ -6,7 +6,7 @@ import { AuthService } from '../../Services/Auth-Service/auth-service';
 import { FormsModule } from '@angular/forms';
 import { RouterModule, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-register',
@@ -28,7 +28,8 @@ export class Register {
   constructor(
     private authService: AuthService,
     private router: Router,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private translate: TranslateService
   ) { }
 
   validateRegister(): boolean {
@@ -36,37 +37,37 @@ export class Register {
 
     // Full Name validation
     if (!this.fullName || this.fullName.trim() === '') {
-      this.validationErrors.fullName = 'الاسم الكامل مطلوب';
+      this.validationErrors.fullName = this.translate.instant('AUTH_VALIDATION.NAME_REQUIRED');
     } else if (this.fullName.trim().length < 3) {
-      this.validationErrors.fullName = 'الاسم يجب أن يكون 3 أحرف على الأقل';
+      this.validationErrors.fullName = this.translate.instant('AUTH_VALIDATION.NAME_MIN_LENGTH');
     }
 
     // Email validation
     if (!this.email || this.email.trim() === '') {
-      this.validationErrors.email = 'البريد الإلكتروني مطلوب';
+      this.validationErrors.email = this.translate.instant('AUTH_VALIDATION.EMAIL_REQUIRED');
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(this.email)) {
-      this.validationErrors.email = 'البريد الإلكتروني غير صحيح';
+      this.validationErrors.email = this.translate.instant('AUTH_VALIDATION.EMAIL_INVALID');
     }
 
     // Phone validation
     if (!this.phoneNumber || this.phoneNumber.trim() === '') {
-      this.validationErrors.phoneNumber = 'رقم الهاتف مطلوب';
+      this.validationErrors.phoneNumber = this.translate.instant('AUTH_VALIDATION.PHONE_REQUIRED');
     } else if (!/^[0-9]{11}$/.test(this.phoneNumber.replace(/[\s-]/g, ''))) {
-      this.validationErrors.phoneNumber = 'رقم الهاتف يجب أن يكون 11 رقم';
+      this.validationErrors.phoneNumber = this.translate.instant('AUTH_VALIDATION.PHONE_INVALID');
     }
 
     // Password validation
     if (!this.password || this.password.trim() === '') {
-      this.validationErrors.password = 'كلمة المرور مطلوبة';
+      this.validationErrors.password = this.translate.instant('AUTH_VALIDATION.PASSWORD_REQUIRED');
     } else if (this.password.length < 6) {
-      this.validationErrors.password = 'كلمة المرور يجب أن تكون 6 أحرف على الأقل';
+      this.validationErrors.password = this.translate.instant('AUTH_VALIDATION.PASSWORD_MIN_LENGTH');
     }
 
     // Confirm Password validation
     if (!this.confirmPassword || this.confirmPassword.trim() === '') {
-      this.validationErrors.confirmPassword = 'تأكيد كلمة المرور مطلوب';
+      this.validationErrors.confirmPassword = this.translate.instant('AUTH_VALIDATION.CONFIRM_PASSWORD_REQUIRED');
     } else if (this.password !== this.confirmPassword) {
-      this.validationErrors.confirmPassword = 'كلمتا المرور غير متطابقتين';
+      this.validationErrors.confirmPassword = this.translate.instant('AUTH_VALIDATION.PASSWORDS_MISMATCH');
     }
 
     return Object.keys(this.validationErrors).length === 0;

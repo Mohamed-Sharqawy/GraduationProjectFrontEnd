@@ -3,7 +3,7 @@ import { AuthService } from '../../Services/Auth-Service/auth-service';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-login',
@@ -19,22 +19,23 @@ export class Login {
   constructor(
     private authService: AuthService,
     private router: Router,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private translate: TranslateService
   ) { }
 
   validateLogin(): boolean {
     this.validationErrors = {};
 
     if (!this.email || this.email.trim() === '') {
-      this.validationErrors.email = 'البريد الإلكتروني مطلوب';
+      this.validationErrors.email = this.translate.instant('AUTH_VALIDATION.EMAIL_REQUIRED');
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(this.email)) {
-      this.validationErrors.email = 'البريد الإلكتروني غير صحيح';
+      this.validationErrors.email = this.translate.instant('AUTH_VALIDATION.EMAIL_INVALID');
     }
 
     if (!this.password || this.password.trim() === '') {
-      this.validationErrors.password = 'كلمة المرور مطلوبة';
+      this.validationErrors.password = this.translate.instant('AUTH_VALIDATION.PASSWORD_REQUIRED');
     } else if (this.password.length < 6) {
-      this.validationErrors.password = 'كلمة المرور يجب أن تكون 6 أحرف على الأقل';
+      this.validationErrors.password = this.translate.instant('AUTH_VALIDATION.PASSWORD_MIN_LENGTH');
     }
 
     return Object.keys(this.validationErrors).length === 0;

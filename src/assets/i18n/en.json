@@ -456,5 +456,17 @@
         "PURPOSE_REQUIRED": "Purpose is required (sale or rent)",
         "IMAGES_REQUIRED": "At least one image is required",
         "RENT_PRICE_REQUIRED": "Monthly rent price is required for rental properties"
+    },
+    "AUTH_VALIDATION": {
+        "EMAIL_REQUIRED": "Email is required",
+        "EMAIL_INVALID": "Invalid email format",
+        "PASSWORD_REQUIRED": "Password is required",
+        "PASSWORD_MIN_LENGTH": "Password must be at least 6 characters",
+        "NAME_REQUIRED": "Full Name is required",
+        "NAME_MIN_LENGTH": "Name must be at least 3 characters",
+        "PHONE_REQUIRED": "Phone number is required",
+        "PHONE_INVALID": "Phone number must be 11 digits",
+        "CONFIRM_PASSWORD_REQUIRED": "Password confirmation is required",
+        "PASSWORDS_MISMATCH": "Passwords do not match"
     }
 }

@@ -456,5 +456,17 @@
         "PURPOSE_REQUIRED": "الغرض من البيع مطلوب (بيع أو إيجار)",
         "IMAGES_REQUIRED": "يجب رفع صورة واحدة على الأقل",
         "RENT_PRICE_REQUIRED": "سعر الإيجار الشهري مطلوب للعقارات المعروضة للإيجار"
+    },
+    "AUTH_VALIDATION": {
+        "EMAIL_REQUIRED": "البريد الإلكتروني مطلوب",
+        "EMAIL_INVALID": "البريد الإلكتروني غير صحيح",
+        "PASSWORD_REQUIRED": "كلمة المرور مطلوبة",
+        "PASSWORD_MIN_LENGTH": "كلمة المرور يجب أن تكون 6 أحرف على الأقل",
+        "NAME_REQUIRED": "الاسم الكامل مطلوب",
+        "NAME_MIN_LENGTH": "الاسم يجب أن يكون 3 أحرف على الأقل",
+        "PHONE_REQUIRED": "رقم الهاتف مطلوب",
+        "PHONE_INVALID": "رقم الهاتف يجب أن يكون 11 رقم",
+        "CONFIRM_PASSWORD_REQUIRED": "تأكيد كلمة المرور مطلوب",
+        "PASSWORDS_MISMATCH": "كلمتا المرور غير متطابقتين"
     }
 }
