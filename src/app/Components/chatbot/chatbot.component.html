@@ -41,13 +41,9 @@
 
     <!-- Input Area -->
     <div class="chat-input">
-        <input 
-            type="text" 
-            [(ngModel)]="newMessage" 
-            (keyup.enter)="sendMessage()"
-            [placeholder]="'Type your message...' | translate"
-            [disabled]="isLoading">
-        
+        <textarea [(ngModel)]="newMessage" (keydown.enter)="onEnter($event)"
+            [placeholder]="'Type your message...' | translate" [disabled]="isLoading" rows="1"></textarea>
+
         <button class="send-btn" (click)="sendMessage()" [disabled]="!newMessage.trim() || isLoading">
             <i class="fa fa-paper-plane"></i>
         </button>

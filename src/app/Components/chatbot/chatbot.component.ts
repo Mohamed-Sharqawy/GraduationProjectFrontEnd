@@ -33,7 +33,7 @@ export class ChatbotComponent implements OnInit, AfterViewChecked {
   scrollToBottom(): void {
     try {
       this.scrollContainer.nativeElement.scrollTop = this.scrollContainer.nativeElement.scrollHeight;
-    } catch(err) { }
+    } catch (err) { }
   }
 
   toggleChat() {
@@ -67,6 +67,12 @@ export class ChatbotComponent implements OnInit, AfterViewChecked {
         this.hasLoadedWelcome = true;
       }
     });
+  }
+
+  onEnter(event: Event) {
+    if ((event as KeyboardEvent).shiftKey) return;
+    event.preventDefault();
+    this.sendMessage();
   }
 
   sendMessage() {
