@@ -27,28 +27,36 @@
     <div class="feature-grid">
         <!-- Feature 1: Finding a Property -->
         <div class="feature-card cursor-pointer" routerLink="/listingproperties">
+            <div class="card-icon">
+                <img src="https://images.unsplash.com/photo-1570129477492-45c003edd2be?w=200&h=200&fit=crop"
+                    alt="Property">
+            </div>
             <div class="card-content">
                 <h3>{{ 'HOME.FIND_PROPERTY_TITLE' | translate }}</h3>
                 <p>{{ 'HOME.FIND_PROPERTY_DESC' | translate }}</p>
                 <a routerLink="/listingproperties" class="text-[#28b16d] font-bold no-underline hover:underline">
                     {{ 'HOME.BROWSE_PROPERTIES' | translate }}</a>
             </div>
-            <div class="card-icon">🏠</div>
         </div>
 
         <!-- Feature 2: Finding an Agent -->
         <div class="feature-card blue-card cursor-pointer" routerLink="/find-my-agent">
+            <div class="card-icon">
+                <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=200&h=200&fit=crop" alt="Agent">
+            </div>
             <div class="card-content">
                 <h3>{{ 'HOME.FIND_AGENT_TITLE' | translate }}</h3>
                 <p>{{ 'HOME.FIND_AGENT_DESC' | translate }}</p>
                 <a routerLink="/find-my-agent" class="text-[#28b16d] font-bold no-underline hover:underline">
                     {{ 'HOME.FIND_AGENTS' | translate }}</a>
             </div>
-            <div class="card-icon">🤵</div>
         </div>
 
         <!-- Feature 3: Sell Your Property -->
         <div class="feature-card cursor-pointer" (click)="handleSellProperty()">
+            <div class="card-icon">
+                <img src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=200&h=200&fit=crop" alt="Sell">
+            </div>
             <div class="card-content">
                 <h3>{{ 'HOME.SELL_PROPERTY_TITLE' | translate }}</h3>
                 <p>{{ 'HOME.SELL_PROPERTY_DESC' | translate }}</p>
@@ -56,7 +64,6 @@
                     class="text-[#28b16d] font-bold no-underline hover:underline cursor-pointer">
                     {{ 'HOME.LIST_PROPERTY' | translate }}</a>
             </div>
-            <div class="card-icon">🔑</div>
         </div>
     </div>
 </section>
@@ -74,7 +81,10 @@
             </p>
         </div>
         <div class="about-image">
-            <span>🏙️</span>
+            <div class="about-image-inner">
+                <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=800&q=80" alt="About Us"
+                    class="w-full h-full object-cover">
+            </div>
         </div>
     </div>
 </section>
@@ -90,7 +100,10 @@
         <div class="vision-grid">
             <!-- Vision 1 -->
             <div class="vision-card">
-                <div class="icon">🎯</div>
+                <div class="icon">
+                    <img src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=100&h=100&fit=crop"
+                        alt="Vision">
+                </div>
                 <h3>{{ 'HOME.VISION_TITLE' | translate }}
                 </h3>
                 <p>
@@ -100,7 +113,10 @@
 
             <!-- Vision 2 -->
             <div class="vision-card">
-                <div class="icon">🤝</div>
+                <div class="icon">
+                    <img src="https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?w=100&h=100&fit=crop"
+                        alt="Trust">
+                </div>
                 <h3>{{ 'HOME.TRUST_TITLE' | translate }}
                 </h3>
                 <p>
@@ -110,7 +126,10 @@
 
             <!-- Vision 3 -->
             <div class="vision-card">
-                <div class="icon">🚀</div>
+                <div class="icon">
+                    <img src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=100&h=100&fit=crop"
+                        alt="Innovation">
+                </div>
                 <h3>{{ 'HOME.INNOVATION_TITLE' | translate
                     }}</h3>
                 <p>
