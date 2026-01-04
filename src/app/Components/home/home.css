@@ -224,11 +224,10 @@
 }
 
 .card-icon {
-    font-size: 2.5rem;
     margin-left: 0;
     margin-bottom: 25px;
-    width: 80px;
-    height: 80px;
+    width: 90px;
+    height: 90px;
     background: linear-gradient(135deg, #f0fdf4, #dcfce7);
     border-radius: 50%;
     display: flex;
@@ -236,6 +235,13 @@
     justify-content: center;
     color: var(--primary-green);
     transition: transform 0.4s ease;
+    overflow: hidden;
+}
+
+.card-icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
 .feature-card:hover .card-icon {
@@ -428,9 +434,20 @@
 }
 
 .vision-card .icon {
-    font-size: 3rem;
+    width: 60px;
+    height: 60px;
     margin-bottom: 20px;
     display: inline-block;
+    border-radius: 50%;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 10px;
+}
+
+.vision-card .icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
 .vision-card h3 {
