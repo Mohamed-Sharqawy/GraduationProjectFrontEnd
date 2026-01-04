@@ -1,5 +1,5 @@
 <!-- Top Bar -->
-<div class="bg-[#fcfcfc] border-b border-gray-200 text-xs py-2 text-gray-500 font-sans">
+<div class="top-bar bg-[#fcfcfc] border-b border-gray-200 text-xs py-2 text-gray-500 font-sans">
   <div class="max-w-[1140px] mx-auto px-4 flex justify-between items-center">
     <div class="language-container relative">
       <div class="flex gap-2 items-center cursor-pointer hover:text-gray-700 py-2"
@@ -31,7 +31,7 @@
       </div>
       }
     </div>
-    <div class="flex gap-4 items-center cursor-pointer hover:text-gray-700">
+    <div class="hidden md:flex gap-4 items-center cursor-pointer hover:text-gray-700">
       @if (authService.currentUser()) {
       <!-- Agent: Show Profile Link -->
       @if (isAgent()) {
@@ -130,7 +130,7 @@
 </div>
 
 <!-- Navbar -->
-<nav class="bg-white py-4 font-sans border-b border-transparent">
+<nav class="navbar bg-white py-4 font-sans border-b border-transparent sticky top-0 z-40">
   <div class="max-w-[1140px] mx-auto px-4 flex justify-between items-center">
     <!-- Logo -->
     <a routerLink="/" class="flex items-center gap-1.5 text-2xl font-bold text-[#28b16d] cursor-pointer no-underline">
@@ -139,12 +139,11 @@
       Homey
     </a>
 
-    <!-- Nav Links -->
-    <div class="flex items-center gap-6 font-semibold text-gray-800">
+    <!-- Desktop Nav Links -->
+    <div class="hidden md:flex items-center gap-6 font-semibold text-gray-800">
       <a routerLink="/find-my-agent"
         class="no-underline hover:text-[#28b16d] transition-colors relative flex items-center gap-1">
         {{ 'NAV.FIND_AGENT' | translate }}
-        <!-- <span class="bg-red-500 text-white text-[9px] px-1.5 rounded-[3px] align-top">NEW</span> -->
       </a>
       <!-- Show Dashboard only for Agents -->
       @if (isAgent()) {
@@ -152,13 +151,78 @@
         class="no-underline hover:text-[#28b16d] transition-colors relative flex items-center gap-1 cursor-pointer">
         {{ 'NAV.DASHBOARD' | translate }}
       </a>
-
       }
       <a routerLink="/listingproperties" class="no-underline hover:text-[#28b16d] transition-colors">{{ 'NAV.PROPERTIES'
         | translate }}</a>
     </div>
+
+    <!-- Hamburger Menu Button (Mobile) -->
+    <button class="hamburger-btn md:hidden flex flex-col gap-1.5 p-2 bg-transparent border-none cursor-pointer" 
+            (click)="toggleMobileMenu()" 
+            [class.active]="isMobileMenuOpen">
+      <span class="hamburger-line w-6 h-0.5 bg-gray-700 transition-all duration-300" [class.rotate-45]="isMobileMenuOpen" [class.translate-y-2]="isMobileMenuOpen"></span>
+      <span class="hamburger-line w-6 h-0.5 bg-gray-700 transition-all duration-300" [class.opacity-0]="isMobileMenuOpen"></span>
+      <span class="hamburger-line w-6 h-0.5 bg-gray-700 transition-all duration-300" [class.-rotate-45]="isMobileMenuOpen" [class.-translate-y-2]="isMobileMenuOpen"></span>
+    </button>
   </div>
 </nav>
+
+<!-- Mobile Menu Overlay -->
+@if (isMobileMenuOpen) {
+<div class="mobile-menu-overlay fixed inset-0 bg-black/50 z-50 md:hidden" (click)="toggleMobileMenu()"></div>
+}
+
+<!-- Mobile Menu Drawer -->
+<div class="mobile-menu-container fixed top-0 right-0 h-full w-72 bg-white shadow-xl z-50 transform transition-transform duration-300 md:hidden"
+     [class.translate-x-full]="!isMobileMenuOpen"
+     [class.translate-x-0]="isMobileMenuOpen">
+  <div class="p-4 border-b border-gray-200 flex justify-between items-center">
+    <span class="text-lg font-bold text-[#28b16d]">Menu</span>
+    <button (click)="toggleMobileMenu()" class="text-gray-500 hover:text-gray-700 bg-transparent border-none cursor-pointer text-2xl">
+      ×
+    </button>
+  </div>
+  
+  <nav class="p-4 flex flex-col gap-2">
+    <a routerLink="/find-my-agent" (click)="toggleMobileMenu()"
+       class="block py-3 px-4 text-gray-700 font-semibold no-underline hover:bg-gray-50 rounded-lg transition-colors">
+      <i class="fa fa-user-secret mr-3"></i>{{ 'NAV.FIND_AGENT' | translate }}
+    </a>
+    <a routerLink="/listingproperties" (click)="toggleMobileMenu()"
+       class="block py-3 px-4 text-gray-700 font-semibold no-underline hover:bg-gray-50 rounded-lg transition-colors">
+      <i class="fa fa-building mr-3"></i>{{ 'NAV.PROPERTIES' | translate }}
+    </a>
+    @if (isAgent()) {
+    <a routerLink="/user-profile" (click)="toggleMobileMenu()"
+       class="block py-3 px-4 text-gray-700 font-semibold no-underline hover:bg-gray-50 rounded-lg transition-colors">
+      <i class="fa fa-tachometer mr-3"></i>{{ 'NAV.DASHBOARD' | translate }}
+    </a>
+    }
+    
+    <hr class="my-4 border-gray-200">
+    
+    @if (authService.currentUser()) {
+    @if (isOwner()) {
+    <a routerLink="/saved-properties" (click)="toggleMobileMenu()"
+       class="block py-3 px-4 text-gray-700 font-semibold no-underline hover:bg-gray-50 rounded-lg transition-colors">
+      <i class="fa fa-heart mr-3"></i>{{ 'NAV.SAVED_PROPERTIES' | translate }}
+    </a>
+    }
+    <div class="py-3 px-4 text-gray-600 text-sm">
+      <i class="fa fa-user mr-2"></i>{{ authService.currentUser()?.fullName }}
+    </div>
+    <button (click)="logout(); toggleMobileMenu()"
+            class="w-full text-left py-3 px-4 text-red-500 font-semibold bg-transparent border-none cursor-pointer hover:bg-red-50 rounded-lg transition-colors">
+      <i class="fa fa-sign-out mr-3"></i>{{ 'NAV.LOGOUT' | translate }}
+    </button>
+    } @else {
+    <a routerLink="/login" (click)="toggleMobileMenu()"
+       class="block py-3 px-4 text-[#28b16d] font-semibold no-underline hover:bg-green-50 rounded-lg transition-colors">
+      <i class="fa fa-sign-in mr-3"></i>{{ 'NAV.LOGIN' | translate }}
+    </a>
+    }
+  </nav>
+</div>
 
 <router-outlet>
 

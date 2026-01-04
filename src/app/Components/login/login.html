@@ -15,8 +15,12 @@
                         <polyline points="22,6 12,13 2,6"></polyline>
                     </svg>
                     <input type="email" id="email" name="email" [(ngModel)]="email"
-                        placeholder="{{ 'LOGIN.EMAIL_PLACEHOLDER' | translate }}" required autocomplete="email" />
+                        placeholder="{{ 'LOGIN.EMAIL_PLACEHOLDER' | translate }}" required autocomplete="email"
+                        [class.is-invalid]="validationErrors.email" />
                 </div>
+                @if (validationErrors.email) {
+                    <small class="error-message">{{ validationErrors.email }}</small>
+                }
             </div>
 
             <div class="form-group">
@@ -29,8 +33,11 @@
                     </svg>
                     <input type="password" id="password" name="password" [(ngModel)]="password"
                         placeholder="{{ 'LOGIN.PASSWORD_PLACEHOLDER' | translate }}" required
-                        autocomplete="current-password" />
+                        autocomplete="current-password" [class.is-invalid]="validationErrors.password" />
                 </div>
+                @if (validationErrors.password) {
+                    <small class="error-message">{{ validationErrors.password }}</small>
+                }
             </div>
 
             <button type="submit" class="btn-primary">

@@ -25,6 +25,9 @@ export class App implements OnInit {
   private readonly notificationService = inject(NotificationService);
   private readonly cdr = inject(ChangeDetectorRef);
 
+  // Mobile menu state
+  isMobileMenuOpen = false;
+
   // Notification state
   unreadCount = 0;
   notifications: NotificationDto[] = [];
@@ -42,6 +45,7 @@ export class App implements OnInit {
       this.loadUnreadCount();
       // Preload notifications so dropdown opens instantly
       this.loadNotifications();
+
 
       // Refresh count every 10 seconds (faster updates)
       setInterval(() => {
@@ -73,6 +77,10 @@ export class App implements OnInit {
   toggleLanguageDropdown(event: Event) {
     event.stopPropagation();
     this.isLanguageDropdownOpen = !this.isLanguageDropdownOpen;
+  }
+
+  toggleMobileMenu() {
+    this.isMobileMenuOpen = !this.isMobileMenuOpen;
   }
 
   /**

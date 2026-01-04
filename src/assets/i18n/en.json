@@ -49,7 +49,7 @@
         "TITLE": "Create Account",
         "SUBTITLE": "Join Homey to find your perfect property",
         "ROLE_LABEL": "I want to join to...",
-        "ROLE_BUY_SELL_TITLE": "Buy & Sell",
+        "ROLE_BUY_SELL_TITLE": "Looking For Property ?",
         "ROLE_BUY_SELL_DESC": "Find your dream home or sell properties directly",
         "ROLE_AGENT_TITLE": "Become an Agent",
         "ROLE_AGENT_DESC": "List multiple properties and grow your business",
@@ -210,6 +210,7 @@
         "DESCRIPTION_EN": "Description (English)",
         "DESCRIPTION_EN_PLACEHOLDER": "Write a detailed description...",
         "IS_FEATURED": "Featured Property",
+        "FEATURED_NOTE": "Featured listings are limited based on your current package",
         "IS_AGRICULTURAL": "Agricultural Land",
         "IMAGES": "Property Images",
         "IMAGES_NOTE": "Max 6 images. First one is primary.",
@@ -432,7 +433,10 @@
             "SELFIE_DESC": "Take a selfie holding your ID",
             "CHOOSE_FILE": "Choose File",
             "SUBMITTING": "Submitting...",
-            "SUBMIT": "Submit for Verification"
+            "SUBMIT": "Submit for Verification",
+            "VERIFIED_TITLE": "Your Account is Verified",
+            "VERIFIED_MESSAGE": "Your account has been verified successfully and you can now enjoy all platform features",
+            "VERIFIED_BADGE": "Verified Account"
         },
         "CHANGE_PASSWORD": {
             "TITLE": "Change Password",
@@ -445,5 +449,29 @@
             "MIN_LENGTH_HINT": "Must be at least 6 characters",
             "PASSWORDS_MISMATCH": "Passwords do not match"
         }
+    },
+    "VALIDATION": {
+        "VALIDATION_ERROR": "Validation Error",
+        "TITLE_REQUIRED": "Title is required",
+        "DESCRIPTION_REQUIRED": "Description is required",
+        "PROPERTY_TYPE_REQUIRED": "Property type is required",
+        "CITY_REQUIRED": "City is required",
+        "PRICE_REQUIRED": "Price is required and must be greater than zero",
+        "AREA_REQUIRED": "Area is required and must be greater than zero",
+        "PURPOSE_REQUIRED": "Purpose is required (sale or rent)",
+        "IMAGES_REQUIRED": "At least one image is required",
+        "RENT_PRICE_REQUIRED": "Monthly rent price is required for rental properties"
+    },
+    "AUTH_VALIDATION": {
+        "EMAIL_REQUIRED": "Email is required",
+        "EMAIL_INVALID": "Invalid email format",
+        "PASSWORD_REQUIRED": "Password is required",
+        "PASSWORD_MIN_LENGTH": "Password must be at least 6 characters",
+        "NAME_REQUIRED": "Full Name is required",
+        "NAME_MIN_LENGTH": "Name must be at least 3 characters",
+        "PHONE_REQUIRED": "Phone number is required",
+        "PHONE_INVALID": "Phone number must be 11 digits",
+        "CONFIRM_PASSWORD_REQUIRED": "Password confirmation is required",
+        "PASSWORDS_MISMATCH": "Passwords do not match"
     }
 }

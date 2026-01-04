@@ -49,7 +49,7 @@
         "TITLE": "إنشاء حساب",
         "SUBTITLE": "انضم إلى هومي للعثور على عقارك المثالي",
         "ROLE_LABEL": "أريد الانضمام لـ...",
-        "ROLE_BUY_SELL_TITLE": "بيع وشراء",
+        "ROLE_BUY_SELL_TITLE": "هل تبحث عن عقار ؟",
         "ROLE_BUY_SELL_DESC": "ابحث عن منزل أحلامك أو بع عقاراتك مباشرة",
         "ROLE_AGENT_TITLE": "كن وكيلاً",
         "ROLE_AGENT_DESC": "اعرض عقارات متعددة وطور عملك",
@@ -210,6 +210,7 @@
         "DESCRIPTION_EN": "الوصف بالإنجليزية (Description English)",
         "DESCRIPTION_EN_PLACEHOLDER": "Write a detailed description...",
         "IS_FEATURED": "عقار مميز (Featured)",
+        "FEATURED_NOTE": "الإعلانات المميزة محدودة حسب باقتك الحالية",
         "IS_AGRICULTURAL": "أرض زراعية (Agricultural)",
         "IMAGES": "صور العقار (Images)",
         "IMAGES_NOTE": "حد أقصى 6 صور. الصورة الأولى هي الأساسية.",
@@ -432,7 +433,10 @@
             "SELFIE_DESC": "التقط سيلفي وأنت تحمل بطاقتك",
             "CHOOSE_FILE": "اختر ملف",
             "SUBMITTING": "جاري الإرسال...",
-            "SUBMIT": "إرسال للتحقق"
+            "SUBMIT": "إرسال للتحقق",
+            "VERIFIED_TITLE": "حسابك موثق بنجاح",
+            "VERIFIED_MESSAGE": "تم توثيق حسابك ويمكنك الآن الاستفادة من جميع مزايا المنصة",
+            "VERIFIED_BADGE": "حساب موثق"
         },
         "CHANGE_PASSWORD": {
             "TITLE": "تغيير كلمة المرور",
@@ -445,5 +449,29 @@
             "MIN_LENGTH_HINT": "يجب أن تكون 6 أحرف على الأقل",
             "PASSWORDS_MISMATCH": "كلمات المرور غير متطابقة"
         }
+    },
+    "VALIDATION": {
+        "VALIDATION_ERROR": "خطأ في البيانات المدخلة",
+        "TITLE_REQUIRED": "العنوان مطلوب",
+        "DESCRIPTION_REQUIRED": "الوصف مطلوب",
+        "PROPERTY_TYPE_REQUIRED": "نوع العقار مطلوب",
+        "CITY_REQUIRED": "المدينة مطلوبة",
+        "PRICE_REQUIRED": "السعر مطلوب ويجب أن يكون أكبر من صفر",
+        "AREA_REQUIRED": "المساحة مطلوبة ويجب أن تكون أكبر من صفر",
+        "PURPOSE_REQUIRED": "الغرض من البيع مطلوب (بيع أو إيجار)",
+        "IMAGES_REQUIRED": "يجب رفع صورة واحدة على الأقل",
+        "RENT_PRICE_REQUIRED": "سعر الإيجار الشهري مطلوب للعقارات المعروضة للإيجار"
+    },
+    "AUTH_VALIDATION": {
+        "EMAIL_REQUIRED": "البريد الإلكتروني مطلوب",
+        "EMAIL_INVALID": "البريد الإلكتروني غير صحيح",
+        "PASSWORD_REQUIRED": "كلمة المرور مطلوبة",
+        "PASSWORD_MIN_LENGTH": "كلمة المرور يجب أن تكون 6 أحرف على الأقل",
+        "NAME_REQUIRED": "الاسم الكامل مطلوب",
+        "NAME_MIN_LENGTH": "الاسم يجب أن يكون 3 أحرف على الأقل",
+        "PHONE_REQUIRED": "رقم الهاتف مطلوب",
+        "PHONE_INVALID": "رقم الهاتف يجب أن يكون 11 رقم",
+        "CONFIRM_PASSWORD_REQUIRED": "تأكيد كلمة المرور مطلوب",
+        "PASSWORDS_MISMATCH": "كلمتا المرور غير متطابقتين"
     }
 }

@@ -1,4 +1,21 @@
-/* user-profile.css */
-.user-profile-container {
-    /* Ensure it fits nicely */
+/* User Profile Responsive Styles */
+
+@media (max-width: 640px) {
+
+    /* Adjust profile image size on mobile */
+    .w-20.h-20 {
+        width: 4rem;
+        height: 4rem;
+    }
+
+    /* Adjust buttons on mobile to stack if needed */
+    .flex.justify-end.gap-3 button {
+        padding: 0.5rem 1rem;
+        font-size: 0.9rem;
+    }
+
+    /* Verification upload boxes adjustments */
+    .border-dashed {
+        padding: 1rem;
+    }
 }

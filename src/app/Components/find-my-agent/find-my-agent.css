@@ -1,0 +1,40 @@
+/* Find My Agent Responsive Styles */
+
+@media (max-width: 768px) {
+    .agent-actions-wrapper {
+        flex-direction: column;
+        align-items: flex-start !important;
+        gap: 1rem;
+    }
+
+    .agent-actions-container {
+        width: 100%;
+        flex-wrap: wrap;
+    }
+
+    .agent-actions-container a {
+        flex: 1;
+        justify-content: center;
+        white-space: nowrap;
+    }
+
+    /* Target the company logo container */
+    .agent-actions-wrapper>div:last-child {
+        display: none;
+        /* Hide company logo on mobile to save space if needed, or adjust */
+    }
+}
+
+@media (max-width: 640px) {
+    .agent-card-image {
+        height: 200px !important;
+    }
+
+    .agent-actions-container {
+        flex-direction: column;
+    }
+
+    .agent-actions-container a {
+        width: 100%;
+    }
+}
