@@ -91,34 +91,64 @@
             <!-- Properties List -->
             <div class="properties-list">
                 @for (prop of filteredProperties; track prop.id) {
-                <div class="property-card" [routerLink]="['/propertyview', prop.id]" style="cursor: pointer;">
-                    <div class="property-image-container">
-                        <img [src]="prop.mainImageUrl || 'https://placehold.co/600x400?text=No+Image'"
-                            [alt]="prop.title" class="property-image">
-                        @if (prop.isFeatured) {
-                        <span class="hot-badge">{{ 'AGENT_PROFILE.HOT' | translate }}</span>
-                        }
-                        <button class="fav-btn"><i class="far fa-heart"></i></button>
-                    </div>
-                    <div class="property-details">
-                        <h3 class="property-price">EGP {{ prop.price | number }} <span class="period"></span>
-                        </h3>
-                        <p class="property-specs">
-                            <span class="type">{{ getPropertyType(prop) }}</span>
-                            <span class="specs"><i class="fas fa-bed"></i> {{ prop.rooms }}</span>
-                            <span class="specs"><i class="fas fa-bath"></i> {{ prop.bathrooms }}</span>
-                            <span class="area">{{ 'AGENT_PROFILE.AREA' | translate:{value: prop.area} }}</span>
-                        </p>
-                        <!-- <h4 class="property-title">{{ getPropertyTitle(prop) }}</h4> -->
-                        <p class="property-location"><i class="fas fa-map-marker-alt"></i> {{ getPropertyLocation(prop)
-                            }}</p>
+                <div class="property-card bg-white border border-gray-200 rounded-lg overflow-hidden mb-6 flex flex-col sm:flex-row h-auto sm:h-[180px] hover:shadow-lg transition-all duration-300 cursor-pointer group relative"
+                    [routerLink]="['/propertyview', prop.id]">
 
-                        <div class="property-actions">
-                            <button class="prop-action-btn email"><i class="far fa-envelope"></i> {{
-                                'AGENT_PROFILE.EMAIL' | translate }}</button>
-                            <button class="prop-action-btn call"><i class="fas fa-phone-alt"></i> {{
-                                'AGENT_PROFILE.CALL' | translate }}</button>
-                            <button class="prop-action-btn whatsapp"><i class="fab fa-whatsapp"></i></button>
+                    <!-- Image Container -->
+                    <div class="w-full h-48 sm:h-full sm:w-[35%] relative bg-gray-100 overflow-hidden flex-shrink-0">
+                        <img [src]="prop.mainImageUrl || 'https://placehold.co/600x400?text=No+Image'"
+                            [alt]="prop.title"
+                            class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+
+                        @if (prop.isFeatured) {
+                        <span
+                            class="absolute top-3 left-3 z-20 bg-[#ff5722] text-white text-[10px] font-bold px-2 py-0.5 rounded uppercase tracking-wide">{{
+                            'AGENT_PROFILE.HOT' | translate }}</span>
+                        }
+
+                        <button
+                            class="fav-btn absolute bottom-3 right-3 z-20 rounded-full w-8 h-8 flex items-center justify-center bg-white shadow-md hover:scale-110 transition-transform"><i
+                                class="far fa-heart text-gray-400 hover:text-red-500"></i></button>
+                    </div>
+
+                    <!-- Details Container -->
+                    <div class="flex-1 p-4 flex flex-col relative h-full justify-between">
+                        <div>
+                            <div class="flex justify-between items-start mb-1">
+                                <h3
+                                    class="text-base font-bold text-gray-900 leading-tight group-hover:text-[#28b16d] transition-colors line-clamp-2">
+                                    {{ getPropertyTitle(prop) }}</h3>
+                            </div>
+
+                            <p class="text-lg font-bold text-[#28b16d] mb-2">EGP {{ prop.price | number }} <span
+                                    class="period"></span></p>
+
+                            <div class="flex items-center gap-3 text-xs text-gray-500 mb-2">
+                                <span class="capitalize">{{ getPropertyType(prop) }}</span>
+                                <span class="w-px h-3 bg-gray-300"></span>
+                                <span class="flex items-center gap-1"><i class="fas fa-bed"></i> {{ prop.rooms }}</span>
+                                <span class="flex items-center gap-1"><i class="fas fa-bath"></i> {{ prop.bathrooms
+                                    }}</span>
+                                <span class="w-px h-3 bg-gray-300"></span>
+                                <span>{{ 'AGENT_PROFILE.AREA' | translate:{value: prop.area} }}</span>
+                            </div>
+
+                            <p class="text-xs text-gray-500 flex items-center gap-1 truncate mb-3">
+                                <i class="fas fa-map-marker-alt text-gray-400"></i> {{ getPropertyLocation(prop) }}
+                            </p>
+                        </div>
+
+                        <div class="property-actions flex gap-2 mt-auto">
+                            <button
+                                class="prop-action-btn email flex-1 text-xs py-1.5 border border-gray-200 rounded hover:bg-gray-50 transition-colors flex items-center justify-center gap-2"><i
+                                    class="far fa-envelope"></i> {{ 'AGENT_PROFILE.EMAIL' | translate }}</button>
+                            <button
+                                class="prop-action-btn call flex-1 text-xs py-1.5 border border-gray-200 rounded hover:bg-gray-50 transition-colors flex items-center justify-center gap-2"
+                                (click)="$event.stopPropagation(); openCall(prop.agentPhone || agent.phone)"><i
+                                    class="fas fa-phone-alt"></i> {{ 'AGENT_PROFILE.CALL' | translate }}</button>
+                            <button
+                                class="prop-action-btn whatsapp w-8 flex items-center justify-center border border-gray-200 rounded hover:bg-gray-50 transition-colors text-green-500"><i
+                                    class="fab fa-whatsapp"></i></button>
                         </div>
                     </div>
                 </div>
