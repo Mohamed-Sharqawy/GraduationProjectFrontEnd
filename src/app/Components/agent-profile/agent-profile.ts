@@ -34,7 +34,7 @@ export class AgentProfile implements OnInit {
   ngOnInit() {
     // Get current language
     this.currentLang = this.translate.currentLang || this.translate.defaultLang || 'ar';
-    
+
     // Subscribe to language changes
     this.translate.onLangChange.subscribe(event => {
       this.currentLang = event.lang;
@@ -91,12 +91,34 @@ export class AgentProfile implements OnInit {
     }
   }
 
+  // Call Modal State
+  isCallModalOpen = false;
+  selectedAgentPhone: string = '';
+  isCopied = false;
+
   openEmail(email: string) {
     if (email) window.location.href = `mailto:${email}`;
   }
 
   openCall(phone: string) {
-    if (phone) window.location.href = `tel:${phone}`;
+    if (!phone) return;
+    this.selectedAgentPhone = phone;
+    this.isCallModalOpen = true;
+    this.isCopied = false;
+  }
+
+  closeCallModal() {
+    this.isCallModalOpen = false;
+    this.selectedAgentPhone = '';
+  }
+
+  copyPhone() {
+    navigator.clipboard.writeText(this.selectedAgentPhone).then(() => {
+      this.isCopied = true;
+      setTimeout(() => {
+        this.isCopied = false;
+      }, 2000);
+    });
   }
 
   openWhatsApp(number: string) {
@@ -104,31 +126,33 @@ export class AgentProfile implements OnInit {
   }
 
   // Helper methods for localization
+  // ---------------------------------------------------------
+  // Logic: If Arabic -> Show Arabic. Else (En, De, Fr, Es) -> Show English as fallback.
+  // ---------------------------------------------------------
+
   getPropertyTitle(prop: any): string {
-    if (this.currentLang === 'en') {
-      return prop.titleEn || prop.title;
+    if (this.currentLang === 'ar') {
+      return prop.title;
     }
-    return prop.title;
+    // Fallback to English for any other language
+    return prop.titleEn || prop.title;
   }
 
-    getPropertyLocation(prop: any): string {
-    // Debug log
-    // console.log(`Lang: ${this.currentLang}, CityEn: ${prop.cityEn}, DistEn: ${prop.districtEn}`);
-
-    if (this.currentLang === 'en') {
-      // English Mode
-      const city = prop.cityEn || prop.city;
-      // Use DistrictEn if available, otherwise DO NOT fallback to Arabic District
-      const district = prop.districtEn;
-      
+  getPropertyLocation(prop: any): string {
+    // Arabic Mode
+    if (this.currentLang === 'ar') {
+      const city = prop.city;
+      const district = prop.district;
       if (district && city) {
         return `${district}, ${city}`;
       }
       return city || '';
     }
-    // Arabic Mode
-    const city = prop.city;
-    const district = prop.district;
+
+    // International Mode (English data for en, de, fr, es, etc.)
+    const city = prop.cityEn || prop.city;
+    const district = prop.districtEn;
+
     if (district && city) {
       return `${district}, ${city}`;
     }
@@ -136,9 +160,10 @@ export class AgentProfile implements OnInit {
   }
 
   getPropertyType(prop: any): string {
-    if (this.currentLang === 'en') {
-      return prop.propertyTypeEn || prop.propertyType;
+    if (this.currentLang === 'ar') {
+      return prop.propertyType;
     }
-    return prop.propertyType;
+    // Fallback to English for any other language
+    return prop.propertyTypeEn || prop.propertyType;
   }
 }

@@ -29,7 +29,7 @@ export class Propertyview implements OnInit {
   location = '';
   title = '';
   mainImageUrl = '';
-  
+
   specs = {
     beds: 0,
     baths: 0,
@@ -92,7 +92,7 @@ export class Propertyview implements OnInit {
   ngOnInit() {
     // Get current language
     this.currentLang = this.translate.currentLang || this.translate.defaultLang || 'ar';
-    
+
     // Subscribe to language changes
     this.translate.onLangChange.subscribe(event => {
       this.currentLang = event.lang;
@@ -107,15 +107,15 @@ export class Propertyview implements OnInit {
         this.propertyId = Number(id);
         this.loadProperty(this.propertyId);
         this.checkIfSaved(this.propertyId);
-        
+
         // Only increment view count once per component instance (not on refresh/re-render)
         if (!this.hasIncrementedView) {
           this.incrementViewCount(this.propertyId);
           this.hasIncrementedView = true;
         }
-        
+
         this.loadSimilarProperties(this.propertyId);
-        
+
         // Scroll to top when property changes
         if (typeof window !== 'undefined') {
           window.scrollTo(0, 0);
@@ -227,21 +227,22 @@ export class Propertyview implements OnInit {
     if (!this.property) return;
 
     const data = this.property;
-    
-    // Update title and location based on language
-    if (this.currentLang === 'en') {
+
+    // Logic: If Arabic -> Use Arabic. Else -> Use English (Fallback for De, Fr, Es)
+    if (this.currentLang === 'ar') {
+      this.title = data.title;
+      this.location = [data.projectName, data.district, data.city].filter(Boolean).join(', ');
+    } else {
+      // English / German / French / Spanish
       this.title = data.titleEn || data.title;
       const parts = [data.projectNameEn, data.districtEn, data.cityEn].filter(Boolean);
-      // Fallback to default fields if En fields are empty, but prefer En if at least one exists
+
       if (parts.length > 0) {
         this.location = parts.join(', ');
       } else {
-        // If no English location data, fallback to default (likely Arabic) rather than showing nothing
+        // Fallback to default (likely Arabic) if no English location data
         this.location = [data.projectName, data.district, data.city].filter(Boolean).join(', ');
       }
-    } else {
-      this.title = data.title;
-      this.location = [data.projectName, data.district, data.city].filter(Boolean).join(', ');
     }
 
     // Update description based on language
@@ -252,37 +253,37 @@ export class Propertyview implements OnInit {
     this.updatePropertySpecs();
   }
 
-  // ... (keeping other methods same)
-
   // Helper methods for similar properties
   getSimilarPropertyTitle(prop: PropertyListItemDto): string {
-    if (this.currentLang === 'en') {
-      return prop.titleEn || prop.title;
+    if (this.currentLang === 'ar') {
+      return prop.title;
     }
-    return prop.title;
+    return prop.titleEn || prop.title;
   }
 
   getSimilarPropertyLocation(prop: PropertyListItemDto): string {
-    if (this.currentLang === 'en') {
-      // Prioritize English fields over the pre-computed location string (which might be Arabic)
-      const city = prop.cityEn || prop.city;
-      const district = prop.districtEn || prop.district;
-      
-      if (city || district) {
-        return district ? `${district}, ${city}` : city || '';
-      }
-      
-      // Fallback
-      return prop.location || '';
+    if (this.currentLang === 'ar') {
+      return prop.location || prop.city || '';
     }
-    return prop.location || prop.city || '';
+
+    // English Fallback Logic
+    const city = prop.cityEn || prop.city;
+    const district = prop.districtEn || prop.district;
+
+    if (city || district) {
+      return district ? `${district}, ${city}` : city || '';
+    }
+
+    return prop.location || '';
   }
 
   private updatePropertySpecs() {
     if (!this.property) return;
 
     const data = this.property;
-    const propertyType = this.currentLang === 'en' ? (data.propertyTypeEn || data.propertyType) : data.propertyType;
+    const propertyType = (this.currentLang === 'ar')
+      ? data.propertyType
+      : (data.propertyTypeEn || data.propertyType);
 
     this.propertySpecs = [
       { label: this.translate.instant('PROPERTY_VIEW.TYPE_LABEL'), value: propertyType },
@@ -296,10 +297,11 @@ export class Propertyview implements OnInit {
 
   private getDescription(): string {
     if (!this.property) return '';
-    if (this.currentLang === 'en') {
-      return this.property.descriptionEn || this.property.description || '';
+    if (this.currentLang === 'ar') {
+      return this.property.description || '';
     }
-    return this.property.description || '';
+    // Fallback to English for any other language
+    return this.property.descriptionEn || this.property.description || '';
   }
 
   private mapPurpose(val: string | undefined): string {
@@ -321,6 +323,10 @@ export class Propertyview implements OnInit {
     return val;
   }
 
+  // Call Modal State
+  isCallModalOpen = false;
+  isCopied = false;
+
   // Contact Methods with tracking
   callAgent() {
     if (this.agent.phone && this.propertyId) {
@@ -328,7 +334,24 @@ export class Propertyview implements OnInit {
         next: () => console.log('Phone click tracked'),
         error: (err) => console.error('Failed to track phone click:', err)
       });
-      window.open(`tel:${this.agent.phone}`, '_self');
+      // window.open(`tel:${this.agent.phone}`, '_self');
+      this.isCallModalOpen = true;
+      this.isCopied = false;
+    }
+  }
+
+  closeCallModal() {
+    this.isCallModalOpen = false;
+  }
+
+  copyPhone() {
+    if (this.agent.phone) {
+      navigator.clipboard.writeText(this.agent.phone).then(() => {
+        this.isCopied = true;
+        setTimeout(() => {
+          this.isCopied = false;
+        }, 2000);
+      });
     }
   }
 
@@ -412,8 +435,8 @@ export class Propertyview implements OnInit {
 
   previousImage() {
     if (this.property && this.property.images.length > 0) {
-      this.currentImageIndex = this.currentImageIndex === 0 
-        ? this.property.images.length - 1 
+      this.currentImageIndex = this.currentImageIndex === 0
+        ? this.property.images.length - 1
         : this.currentImageIndex - 1;
     }
   }

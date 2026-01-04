@@ -75,6 +75,8 @@
         "ACTIVE_AGENT": "وكيل نشط",
         "EMAIL": "البريد الإلكتروني",
         "CALL": "اتصال",
+        "CALL_AGENT": "اتصال بالوكيل",
+        "CALL_MODAL_DESC": "تواصل مع هذا الوكيل مباشرة عبر الهاتف.",
         "WHATSAPP": "واتساب",
         "ACTIVE_PROPERTIES_TITLE": "العقارات النشطة",
         "SEARCH_PLACEHOLDER": "أدخل الموقع",
@@ -351,7 +353,10 @@
         "AND": "و",
         "SUCCESS": "نجاح",
         "ERROR": "خطأ",
-        "CANCEL": "إلغاء"
+        "CANCEL": "إلغاء",
+        "COPY": "نسخ",
+        "CALL_NOW": "اتصل الآن",
+        "COPIED": "تم النسخ!"
     },
     "USER_PROFILE": {
         "SIDEBAR": {

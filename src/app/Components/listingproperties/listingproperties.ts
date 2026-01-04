@@ -209,50 +209,53 @@ export class Listingproperties implements OnInit {
   }
 
   // ==================== Language-Aware Getters ====================
+  // Updated Logic: If Arabic -> Show Arabic. Else (En, De, Fr, Es) -> Show English as fallback.
 
   getPropertyTitle(prop: Property): string {
-    if (this.currentLang === 'en') {
-      return prop.titleEn || prop.title;
+    if (this.currentLang === 'ar') {
+      return prop.title;
     }
-    return prop.title;
+    return prop.titleEn || prop.title;
   }
 
   getPropertyType(prop: Property): string {
-    if (this.currentLang === 'en') {
-      return prop.propertyTypeEn || prop.propertyType;
+    if (this.currentLang === 'ar') {
+      return prop.propertyType;
     }
-    return prop.propertyType;
+    return prop.propertyTypeEn || prop.propertyType;
   }
 
   getPropertyLocation(prop: Property): string {
-    if (this.currentLang === 'en') {
-      return prop.locationEn || prop.location;
+    if (this.currentLang === 'ar') {
+      return prop.location;
     }
-    return prop.location;
+    return prop.locationEn || prop.location;
   }
 
   getCityName(city: CityDto): string {
-    if (this.currentLang === 'en' && city.nameEn) {
-      return city.nameEn;
+    if (this.currentLang === 'ar') {
+      return city.name;
     }
-    return city.name;
+    return city.nameEn || city.name;
   }
 
   getDistrictName(district: DistrictDto): string {
-    if (this.currentLang === 'en' && district.nameEn) {
-      return district.nameEn;
+    if (this.currentLang === 'ar') {
+      return district.name;
     }
-    return district.name;
+    return district.nameEn || district.name;
   }
 
   getPropertyTypeName(type: PropertyTypeDto): string {
-    if (this.currentLang === 'en' && type.nameEn) {
-      return type.nameEn;
+    if (this.currentLang === 'ar') {
+      return type.name;
     }
-    return type.name;
+    return type.nameEn || type.name;
   }
 
   getPurposeLabel(prop: Property): string {
+    // Uses ngx-translate keys, so it works automatically for all languages 
+    // provided the keys exist in the JSON files.
     if (prop.purpose === 'ForRent' || prop.purpose === 'Rent') {
       return this.translate.instant('LISTING_PROPERTIES.FOR_RENT');
     } else if (prop.purpose === 'Both') {

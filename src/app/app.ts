@@ -34,13 +34,15 @@ export class App implements OnInit {
   pageSize = 10;
   hasMoreNotifications = true;
 
+  isLanguageDropdownOpen = false;
+
   ngOnInit() {
     // Load unread count on init if user is logged in
     if (this.authService.isLoggedIn()) {
       this.loadUnreadCount();
       // Preload notifications so dropdown opens instantly
       this.loadNotifications();
-      
+
       // Refresh count every 10 seconds (faster updates)
       setInterval(() => {
         if (this.authService.isLoggedIn()) {
@@ -62,6 +64,15 @@ export class App implements OnInit {
     if (!target.closest('.notification-container')) {
       this.isNotificationDropdownOpen = false;
     }
+    // Check if click is outside language dropdown
+    if (!target.closest('.language-container')) {
+      this.isLanguageDropdownOpen = false;
+    }
+  }
+
+  toggleLanguageDropdown(event: Event) {
+    event.stopPropagation();
+    this.isLanguageDropdownOpen = !this.isLanguageDropdownOpen;
   }
 
   /**
@@ -87,7 +98,7 @@ export class App implements OnInit {
   toggleNotificationDropdown(event: Event) {
     event.stopPropagation();
     this.isNotificationDropdownOpen = !this.isNotificationDropdownOpen;
-    
+
     // No need to reload if we already have notifications (preloaded)
     // Just mark all as read when opening
     if (this.isNotificationDropdownOpen) {
@@ -163,7 +174,7 @@ export class App implements OnInit {
   onNotificationScroll(event: Event) {
     const element = event.target as HTMLElement;
     const threshold = 100; // Load more when 100px from bottom
-    
+
     if (element.scrollHeight - element.scrollTop - element.clientHeight < threshold) {
       this.loadMoreNotifications();
     }
@@ -171,20 +182,20 @@ export class App implements OnInit {
 
   getTimeAgo(dateString: string): string {
     if (!dateString) return '';
-    
+
     try {
       // Create date object from string (assuming UTC from server)
       // If the string doesn't have 'Z' or timezone, append 'Z' to force UTC interpretation
       const cleanDateStr = dateString.endsWith('Z') ? dateString : `${dateString}Z`;
       const date = new Date(cleanDateStr);
       const now = new Date();
-      
+
       // Check if date is valid
       if (isNaN(date.getTime())) {
         console.warn('Invalid date:', dateString);
         return dateString;
       }
-      
+
       // Calculate difference in seconds
       const seconds = Math.floor((now.getTime() - date.getTime()) / 1000);
       const isArabic = this.translationService.currentLang() === 'ar';
@@ -197,22 +208,22 @@ export class App implements OnInit {
       if (seconds < 60) {
         return isArabic ? 'الآن' : 'Just now';
       }
-      
+
       const minutes = Math.floor(seconds / 60);
       if (seconds < 3600) {
         return isArabic ? `منذ ${minutes} دقيقة` : `${minutes}m ago`;
       }
-      
+
       const hours = Math.floor(seconds / 3600);
       if (seconds < 86400) {
         return isArabic ? `منذ ${hours} ساعة` : `${hours}h ago`;
       }
-      
+
       const days = Math.floor(seconds / 86400);
       if (seconds < 604800) {
         return isArabic ? `منذ ${days} يوم` : `${days}d ago`;
       }
-      
+
       // Format date for older notifications
       return date.toLocaleDateString(isArabic ? 'ar-EG' : 'en-US', {
         month: 'short',

@@ -75,6 +75,8 @@
         "ACTIVE_AGENT": "Active Agent",
         "EMAIL": "Email",
         "CALL": "Call",
+        "CALL_AGENT": "Call Agent",
+        "CALL_MODAL_DESC": "Contact this agent directly via phone.",
         "WHATSAPP": "WhatsApp",
         "ACTIVE_PROPERTIES_TITLE": "Active Properties",
         "SEARCH_PLACEHOLDER": "Enter location",
@@ -351,7 +353,10 @@
         "AND": "and",
         "SUCCESS": "Success",
         "ERROR": "Error",
-        "CANCEL": "Cancel"
+        "CANCEL": "Cancel",
+        "COPY": "Copy",
+        "CALL_NOW": "Call Now",
+        "COPIED": "Copied!"
     },
     "USER_PROFILE": {
         "SIDEBAR": {

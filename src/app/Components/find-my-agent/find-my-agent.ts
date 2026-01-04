@@ -85,6 +85,35 @@ export class FindMyAgentComponent implements OnInit {
     this.isDropdownOpen = false;
   }
 
+  // Call Modal State
+  isCallModalOpen = false;
+  selectedAgentPhone: string = '';
+  selectedAgentName: string = '';
+  isCopied = false;
+
+  openCallModal(agent: Agent) {
+    if (!agent.phone) return;
+    this.selectedAgentPhone = agent.phone;
+    this.selectedAgentName = agent.fullName;
+    this.isCallModalOpen = true;
+    this.isCopied = false;
+  }
+
+  closeCallModal() {
+    this.isCallModalOpen = false;
+    this.selectedAgentPhone = '';
+    this.selectedAgentName = '';
+  }
+
+  copyPhone() {
+    navigator.clipboard.writeText(this.selectedAgentPhone).then(() => {
+      this.isCopied = true;
+      setTimeout(() => {
+        this.isCopied = false;
+      }, 2000);
+    });
+  }
+
   // Encode agent ID for URL
   encodeAgentId(id: string): string {
     return encodeAgentId(id);
