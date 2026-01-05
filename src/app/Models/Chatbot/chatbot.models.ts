@@ -10,12 +10,14 @@ export interface ChatbotWelcomeResponse {
 
 export interface ChatbotAskRequest {
   message: string;
+  sessionId?: string | null; // For continuing conversations
 }
 
 export interface ChatbotAskResponse {
     message: string; // Backend returns 'message'
     properties?: any[]; // For property suggestions in chat
     success?: boolean;
+    sessionId?: string; // Session ID for conversation continuity
 }
 
 export interface SimilarPropertiesResponse {

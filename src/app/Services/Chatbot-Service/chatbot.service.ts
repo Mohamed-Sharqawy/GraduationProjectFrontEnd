@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, timeout } from 'rxjs';
+import { Observable, timeout, tap } from 'rxjs';
 import { environment } from '../../../environments/environments';
 import { ChatbotAskRequest, ChatbotAskResponse, ChatbotWelcomeResponse } from '../../Models/Chatbot/chatbot.models';
 import { TranslationService } from '../Translation-Service/translation.service';
@@ -15,6 +15,9 @@ export class ChatbotService {
 
   private translationService = inject(TranslationService);
 
+  // Store sessionId for conversation continuity
+  private currentSessionId: string | null = null;
+
   /**
    * Get welcome message
    */
@@ -25,12 +28,34 @@ export class ChatbotService {
   }
 
   /**
-   * Send message to AI
+   * Send message to AI with session continuity
    */
   ask(message: string): Observable<ChatbotAskResponse> {
     const headers = { 'Content-Type': 'application/json' };
-    return this.http.post<ChatbotAskResponse>(`${this.apiUrl}/ask`, { message: message }, { headers })
-      .pipe(timeout(120000)); // 2 minutes timeout
+    const body: ChatbotAskRequest = {
+      message: message,
+      sessionId: this.currentSessionId // Send current sessionId if exists
+    };
+    
+    return this.http.post<ChatbotAskResponse>(`${this.apiUrl}/ask`, body, { headers })
+      .pipe(
+        timeout(120000), // 2 minutes timeout
+        tap(response => {
+          // Store sessionId from response for next request
+          if (response.sessionId) {
+            this.currentSessionId = response.sessionId;
+            console.log('Session ID updated:', this.currentSessionId);
+          }
+        })
+      );
+  }
+
+  /**
+   * Clear current session (e.g., when user starts new conversation)
+   */
+  clearSession(): void {
+    this.currentSessionId = null;
+    console.log('Session cleared');
   }
 
   /**
