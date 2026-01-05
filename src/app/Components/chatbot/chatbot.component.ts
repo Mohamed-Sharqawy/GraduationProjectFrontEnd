@@ -1,6 +1,8 @@
+```typescript
 import { Component, inject, OnInit, ViewChild, ElementRef, AfterViewChecked } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 import { ChatbotService } from '../../Services/Chatbot-Service/chatbot.service';
 import { ChatMessage } from '../../Models/Chatbot/chatbot.models';
 import { TranslateModule } from '@ngx-translate/core';
@@ -14,6 +16,7 @@ import { TranslateModule } from '@ngx-translate/core';
 })
 export class ChatbotComponent implements OnInit, AfterViewChecked {
   private chatbotService = inject(ChatbotService);
+  private router = inject(Router);
   @ViewChild('scrollContainer') private scrollContainer!: ElementRef;
 
   isOpen = false;
@@ -99,6 +102,13 @@ export class ChatbotComponent implements OnInit, AfterViewChecked {
           timestamp: new Date()
         });
         this.isLoading = false;
+
+        // ✨ AUTO-NAVIGATE: If backend wants to navigate to a property
+        if (response.navigateToPropertyId) {
+          setTimeout(() => {
+            this.router.navigate(['/propertyview', response.navigateToPropertyId]);
+          }, 800); // Small delay for user to see the message
+        }
       },
       error: (err) => {
         console.error('Failed to send message:', err);
@@ -112,3 +122,4 @@ export class ChatbotComponent implements OnInit, AfterViewChecked {
     });
   }
 }
+```
