@@ -18,7 +18,6 @@ export interface ChatbotAskResponse {
     properties?: any[]; // For property suggestions in chat
     success?: boolean;
     sessionId?: string; // Session ID for conversation continuity
-    navigateToPropertyId?: number; // Property ID to auto-navigate to
 }
 
 export interface SimilarPropertiesResponse {
